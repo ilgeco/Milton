@@ -38,10 +38,10 @@
         "commandCount": "> Nella tua carriera, hai usato {0} volte i miei comandi."
       }
     },
-    "random_path": "/home/luca/Documents/GitHub/Milton/locFiles/random_EN.txt",
-    "randomInfo_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInfo_IT.txt",
-    "hello_path" : "/home/luca/Documents/GitHub/Milton/locFiles/hello_IT.txt",
-    "randomInsult_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInsult_IT.txt"
+    "random_path": "./locFiles/random_EN.txt",
+    "randomInfo_path": "./locFiles/randomInfo_IT.txt",
+    "hello_path" : "./locFiles/hello_IT.txt",
+    "randomInsult_path": "./locFiles/randomInsult_IT.txt"
   },
   "en": {
     "msg": {
@@ -82,9 +82,9 @@
         "commandCount": "> You used my commands {0} times."
       }
     },
-    "random_path": "/home/luca/Documents/GitHub/Milton/locFiles/random_EN.txt",
-    "randomInfo_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInfo_EN.txt",
-    "hello_path" : "/home/luca/Documents/GitHub/Milton/locFiles/hello_EN.txt",
-    "randomInsult_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInsult_EN.txt"
+    "random_path": "./locFiles/random_EN.txt",
+    "randomInfo_path": "./locFiles/randomInfo_EN.txt",
+    "hello_path" : "./locFiles/hello_EN.txt",
+    "randomInsult_path": "./locFiles/randomInsult_EN.txt"
   }
 }

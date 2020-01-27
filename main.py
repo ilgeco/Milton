@@ -1,5 +1,4 @@
 import discord as ds
-import os
 from pathlib import Path
 import tools
 import random
@@ -10,12 +9,18 @@ def main(token, language, options_path):
     print("This is Milton, and I'm initializing.")
     client = ds.Client()
 
-    if options_path == "here":
-        options_path = Path(os.path.dirname(os.path.abspath(__file__)))
-        options_path /= "options.json"
-
-    # Load options, locale and user files
+    # Load options
     opt = tools.load(options_path)
+
+    # Initialize guild and user files if non existent
+    if Path(opt.users_path).exists() is False:
+        print("Making a new users file. I was probably just installed.")
+        tools.initialize_empty(opt.users_path)
+    if Path(opt.guilds_path).exists() is False:
+        print("Making a new guilds file. I was probably just installed.")
+        tools.initialize_empty(opt.guilds_path)
+
+    # Load locale, guild and user files
     gen_loc = tools.load(opt.locale_path)
     available_locales = gen_loc.keys()
     usr = tools.load(opt.users_path, default=None)
@@ -160,7 +165,7 @@ if __name__ == "__main__":
 
     parser.add_argument("token", help="Bot token", type=str)
     parser.add_argument("--optionsPath", "-o", help="Path to config file",
-                        type=str, nargs="?", default="here")
+                        type=str, nargs="?", default="./options.json")
     parser.add_argument("--language", "-a", help="Language",
                         type=str, nargs="?", default="it")
 

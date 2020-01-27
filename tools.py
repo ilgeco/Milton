@@ -32,6 +32,12 @@ def save_users(opt, usr):
     return save(file=opt.users_path, dict=usr)
 
 
+def initialize_empty(path, content="{}"):
+    with Path(path).open("w+") as f:
+        f.write(content)
+    return True
+
+
 class MsgBuilder:
     def __init__(self):
         self.msg = ""
