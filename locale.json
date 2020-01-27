@@ -1,0 +1,90 @@
+{
+  "it": {
+    "msg": {
+      "help": "Questo è il messaggio d'aiuto. I miei comandi sono:"
+    },
+    "commands": {
+      "help": {
+        "id": "aiuto",
+        "showHelp": true,
+        "help": "Mi fà inviare questo messaggio."
+      },
+      "random": {
+        "id": "fatto",
+        "showHelp": true,
+        "help": "Mi fà inviare un interessantissimo fatto reale al 100%."
+      },
+      "changeLang": {
+        "id": "lingua",
+        "showHelp": true,
+        "help": "Solo per il proprietario del canale. Mi fà cambiare la lingua in questo canale. Esempio: $lingua EN",
+        "success": "Fatto! Da ora in poi parlerò in italiano.",
+        "error": "Scusa, {0} non è una lingua disponibile. Posso parlare in {1}."
+      },
+      "roll": {
+        "id": "roll",
+        "showHelp": true,
+        "help": "Mi fà tirare un dado da dX facce. Esempio: $roll d20 - Tira un d20.",
+        "coercionError": "Non ho capito quale dado vuoi tirare.. Prova: {} d20",
+        "result": "Ho tirato un d{sides:d} e ho fatto... {result}."
+      },
+      "userInfo": {
+        "id": "info",
+        "showHelp": true,
+        "help": "Mi fà mostrare informazioni rispetto al tuo account.",
+        "info": "Ecco cosa so su di te:",
+        "userID": "> Il tuo user ID è {}.",
+        "guildID": "> L'ID del tuo server (**{0}**) è {1}.",
+        "commandCount": "> Nella tua carriera, hai usato {0} volte i miei comandi."
+      }
+    },
+    "random_path": "/home/luca/Documents/GitHub/Milton/locFiles/random_EN.txt",
+    "randomInfo_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInfo_IT.txt",
+    "hello_path" : "/home/luca/Documents/GitHub/Milton/locFiles/hello_IT.txt",
+    "randomInsult_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInsult_IT.txt"
+  },
+  "en": {
+    "msg": {
+      "help": "This is the help message. My commands are:"
+    },
+    "commands": {
+      "help": {
+        "id": "help",
+        "showHelp": true,
+        "help": "Makes me send this very message."
+      },
+      "random": {
+        "id": "fact",
+        "showHelp": true,
+        "help": "Makes me send a very interesting, 100% true fact."
+      },
+      "changeLang": {
+        "id": "language",
+        "showHelp": true,
+        "help": "Only for the channel owner. Makes me change what language I speak in this channel. Example: $language EN",
+        "success": "Done! I'll be speaking English from now on.",
+        "error": "Sorry, I cannot speak {0}. I know {1}."
+      },
+      "roll": {
+        "id": "roll",
+        "showHelp": true,
+        "help": "Makes me roll a dX. Example: $roll d20 - Makes me roll a d20.",
+        "coercionError": "I didn't understand what dice you want me to roll. Try {} d20",
+        "result": "I rolled a d{sides:d} and got... {result}."
+      },
+      "userInfo": {
+        "id": "info",
+        "showHelp": true,
+        "help": "Makes me show some information I know about yourself.",
+        "info": "Here's what I know about you:",
+        "userID": "> Your User ID is {}.",
+        "guildID": "> Your server ID (**{0}**) is {1}.",
+        "commandCount": "> You used my commands {0} times."
+      }
+    },
+    "random_path": "/home/luca/Documents/GitHub/Milton/locFiles/random_EN.txt",
+    "randomInfo_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInfo_EN.txt",
+    "hello_path" : "/home/luca/Documents/GitHub/Milton/locFiles/hello_EN.txt",
+    "randomInsult_path": "/home/luca/Documents/GitHub/Milton/locFiles/randomInsult_EN.txt"
+  }
+}

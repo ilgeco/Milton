@@ -1,0 +1,7 @@
+{
+  "users_path" : "/home/luca/Documents/GitHub/Milton/users.json",
+  "locale_path": "/home/luca/Documents/GitHub/Milton/locale.json",
+  "guilds_path": "/home/luca/Documents/GitHub/Milton/guilds.json",
+  "prefix": "$",
+  "insult_threshold": 1000
+}
