@@ -1,7 +1,8 @@
 import discord as ds
-from pathlib import Path
 import tools
+import commands
 import random
+import globals as G
 import munch as mun
 
 
@@ -9,23 +10,8 @@ def main(token, language, options_path):
     print("This is Milton, and I'm initializing.")
     client = ds.Client()
 
-    # Load options
-    opt = tools.load(options_path)
-
-    # Initialize guild and user files if non existent
-    if Path(opt.users_path).exists() is False:
-        print("Making a new users file. I was probably just installed.")
-        tools.initialize_empty(opt.users_path)
-    if Path(opt.guilds_path).exists() is False:
-        print("Making a new guilds file. I was probably just installed.")
-        tools.initialize_empty(opt.guilds_path)
-
-    # Load locale, guild and user files
-    gen_loc = tools.load(opt.locale_path)
-    available_locales = gen_loc.keys()
-    usr = tools.load(opt.users_path, default=None)
-    gld = tools.load(opt.guilds_path, default=None)
-    print("Options, locale and user files loaded. I remembered {0} users.".format(len(usr)))
+    G.initialize(options_path)
+    commands.make_commands()
 
     # Completed loading of Milton message + preliminary activity
     @client.event
@@ -35,16 +21,16 @@ def main(token, language, options_path):
         print("Looking for new members while I was away...")
         i = 0
         for guild in client.guilds:
-            if str(guild.id) not in gld.keys():
+            if str(guild.id) not in G.GLD.keys():
                 defDict = {"language": language}
-                gld[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
-            tools.save(opt.guilds_path, gld)
+                G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
+            tools.save(G.OPT.guilds_path, G.GLD)
             for member in guild.members:
-                if str(member.id) not in usr.keys():
+                if str(member.id) not in G.USR.keys():
                     i += 1
-                    usr[str(member.id)] = mun.Munch()
-                usr[str(member.id)].name = member.name
-        tools.save_users(opt, usr)
+                    G.USR[str(member.id)] = mun.Munch()
+                G.USR[str(member.id)].name = member.name
+        tools.save_users()
         print(f"Found {i} new members")
 
         game = ds.Game("with myself.")
@@ -54,105 +40,49 @@ def main(token, language, options_path):
     # On message
     @client.event
     async def on_message(message):
-        loc = gen_loc[gld[str(message.guild.id)].language]
+        G.updateLOC(G.GLOC[G.GLD[str(message.guild.id)].language])
 
+        # Special checks on the message before parsing commands
+        # Don't reply to yourself
         if message.author == client.user:
-            # Don't reply to yourself
             return
 
-        if message.author == message.guild.owner and\
-                message.content.startswith(opt.prefix + loc.commands.changeLang.id):
-            prefixlength = len((opt.prefix + loc.commands.changeLang.id)) + 1
-            query = message.content[prefixlength:(prefixlength + 2)].lower()
-            if query in available_locales:
-                gld[str(message.guild.id)].language = query
-                loc = gen_loc[gld[str(message.guild.id)].language]
-                tools.save(opt.guilds_path, gld)
-                await message.channel.send(
-                    loc.commands.changeLang.success.format(query.upper())
-                )
-            else:
-                locales = " ".join(available_locales).upper()
-                await message.channel.send(
-                    loc.commands.changeLang.error.format(query, locales)
-                )
-
-        if message.content.startswith(opt.prefix) is False and\
-                opt.insult_threshold is not False and\
+        # Randomly throw out an insult
+        if message.content.startswith(G.OPT.prefix) is False and\
+                G.OPT.insult_threshold is not False and\
                 message.author != client.user:
-            # Randomly throw out an insult
-            if opt.insult_threshold == random.randint(0, opt.insult_threshold):
-                await message.channel.send(tools.get_random_line(loc.randomInsult_path))
+            if G.OPT.insult_threshold == random.randint(0, G.OPT.insult_threshold):
+                await message.channel.send(tools.get_random_line(G.LOC.randomInsult_path))
 
-        if message.content.startswith(opt.prefix):
+        # Count the number of times this person typed a command.
+        if message.content.startswith(G.OPT.prefix):
             # Count the number of times this person typed a command.
-            if usr[str(message.author.id)].commandCount is None:
-                usr[str(message.author.id)].commandCount = 1
+            if G.USR[str(message.author.id)].commandCount is None:
+                G.USR[str(message.author.id)].commandCount = 1
             else:
-                usr[str(message.author.id)].commandCount += 1
-            tools.save_users(opt, usr)
+                G.USR[str(message.author.id)].commandCount += 1
+            tools.save_users()
 
-        if message.content.startswith(opt.prefix + loc.commands.help.id):
-            # Display help message
-            helpmsg = loc.msg.help + "\n"
-            for command in loc.commands.values():
-                if command.showHelp is True:
-                    helpmsg += (
-                        "**" + opt.prefix + command.id + "**:\n\t" + command.help + "\n"
-                    )
-            await message.channel.send(helpmsg)
-
-        if message.content.startswith(opt.prefix + loc.commands.random.id):
-            # Give random fact
-            fact = tools.get_random_line(loc.random_path)
-            await message.channel.send(fact)
-
-        if message.content.startswith(opt.prefix + loc.commands.userInfo.id):
-            # Give user information
-            strings = loc.commands.userInfo
-            out = tools.MsgBuilder()
-            out.add(strings.info)
-            out.add(strings.userID.format(message.author.id))
-            out.add(strings.guildID.format(
-                message.author.guild.name, message.author.guild.id
-            ))
-            out.add(strings.commandCount.format(
-                usr[str(message.author.id)].commandCount
-            ))
-            out.add(("> " + tools.get_random_line(loc.randomInfo_path)))
-            await message.channel.send(out.msg)
-
-        if message.content.startswith(opt.prefix + loc.commands.roll.id):
-            # Roll random number
-            prefixlength = len((opt.prefix + loc.commands.roll.id)) + 2
-            try:
-                print(message.content[prefixlength:])
-                number = int(message.content[prefixlength:])
-                await message.channel.send(loc.commands.roll.result.format(
-                    sides=number,
-                    result=random.randint(1, number)
-                ))
-            except ValueError:
-                await message.channel.send(
-                    loc.commands.roll.coercionError.format(
-                        (opt.prefix + loc.commands.roll.id)
-                    ))
+        # Run normal commands
+        for command in G.COMMANDS:
+            if command.type == "message" and command.permission(message) is True:
+                await message.channel.send(command.logic(message))
 
     async def on_member_join(member):
-        loc = gen_loc[gld[str(member.guild.id)].language]
+        LOC = G.GLOC[G.GLD[str(member.guild.id)].language]
         if member.bot is True:
             # We don't do anything with bot accounts
             return
 
         for channel in member.server.channels:
             if str(channel.name).lower() in ['casa', 'general']:
-                line = tools.get_random_line(loc.hello_path)
+                line = tools.get_random_line(LOC.hello_path)
                 await channel.send(line.format(member.name))
 
-        if member.id not in usr.keys():
-            usr[str(member.id)] = mun.Munch()
-            usr[str(member.id)].name = member.name
-            tools.save_users(opt, usr)
+        if member.id not in G.USR.keys():
+            G.USR[str(member.id)] = mun.Munch()
+            G.USR[str(member.id)].name = member.name
+            tools.save_users()
 
     client.run(token)
     return None

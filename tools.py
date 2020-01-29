@@ -2,6 +2,7 @@ import random
 import json
 from pathlib import Path
 import munch
+import globals as G
 
 
 def get_random_line(file: str) -> str:
@@ -28,8 +29,8 @@ def load(file, default=False):
             return munch.DefaultMunch.fromDict(json.load(file), default)
 
 
-def save_users(opt, usr):
-    return save(file=opt.users_path, dict=usr)
+def save_users():
+    return save(file=G.OPT.users_path, dict=G.USR)
 
 
 def initialize_empty(path, content="{}"):
