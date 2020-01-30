@@ -4,7 +4,7 @@ import random
 
 
 class Command():
-    def __init__(self, logic, ctype, permission):
+    def __init__(self, logic, permission, ctype):
         self.logic = logic
         self.type = ctype
         if permission is False:
@@ -14,7 +14,7 @@ class Command():
 
 
 # help ---------------------------------
-def help_permissions(message):
+def help_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.help.id):
         return True
     return False
@@ -31,7 +31,7 @@ def help_logic(message):
 
 
 # Change Language ---------------------------------
-def changeLang_permissions(message):
+def changeLang_perm(message):
     if message.author == message.guild.owner and\
             message.content.startswith(G.OPT.prefix + G.LOC.commands.changeLang.id):
         return True
@@ -53,18 +53,20 @@ def changeLang_logic(message):
 
 
 # Give random fact ----------------------------------------------------------
-def randomFact_permissions(message):
+def randomFact_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.random.id):
         return True
     return False
 
 
 def randomFact_logic(message):
+    tools.update_stat(message.author.id, stat="factCount", increase=1)
+    tools.save_users()
     return tools.get_random_line(G.LOC.random_path)
 
 
 # Give user info ------------------------------------------------------------
-def userInfo_permissions(message):
+def userInfo_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.userInfo.id):
         return True
     return False
@@ -87,19 +89,27 @@ def userInfo_logic(message):
 
 
 # Roll random number
-def roll_permissions(message):
+def roll_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.roll.id):
         return True
     return False
 
 
 def roll_logic(message):
-    prefixlength = len((G.OPT.prefix + G.LOC.commands.roll.id)) + 2
+    prefixlength = len((G.LOC.commands.roll.id)) + 2
     try:
         number = int(message.content[prefixlength:])
+        outcome = random.randint(1, number)
+        # Check for achievements
+        if number == 20 and outcome == 20:
+            tools.update_stat(message.author.id, stat="gotLucky", set=True)
+            tools.save_users()
+        if number == 20 and outcome == 1:
+            tools.update_stat(message.author.id, stat="gotUnlucky", set=True)
+            tools.save_users()
         return G.LOC.commands.roll.result.format(
             sides=number,
-            result=random.randint(1, number)
+            result=outcome
         )
     except ValueError:
         return G.LOC.commands.roll.coercionError.format(
@@ -107,28 +117,46 @@ def roll_logic(message):
         )
 
 
+# help ---------------------------------
+def help_achieve_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.help_achieve.id):
+        return True
+    return False
+
+
+def help_achieve_logic(message):
+    userInfo = G.USR[str(message.author.id)]
+    helpmsg = tools.MsgBuilder()
+    helpmsg.add(G.LOC.commands.help_achieve.intro)
+    for key, achieve in G.LOC.achievements.items():
+        if achieve.include_help or userInfo[key]:
+            if userInfo[key]:
+                helpmsg.add(G.LOC.msg.format_yes.format(
+                    G.LOC.achievements[key].name,
+                    G.LOC.achievements[key].condition
+                ))
+            else:
+                helpmsg.add(G.LOC.msg.format_no.format(
+                    G.LOC.achievements[key].name,
+                    G.LOC.achievements[key].condition
+                ))
+    return helpmsg.msg
+
+
+def add_command(logic, permission, ctype):
+    G.COMMANDS.append(Command(logic, permission, ctype))
+
+
 def make_commands():
-    help = Command(
-        logic=help_logic, permission=help_permissions, ctype="message"
-    )
-    G.COMMANDS.append(help)
-
-    changeLang = Command(
-        logic=changeLang_logic, permission=changeLang_permissions, ctype="message"
-    )
-    G.COMMANDS.append(changeLang)
-
-    randomFact = Command(
-        logic=randomFact_logic, permission=randomFact_permissions, ctype="message"
-    )
-    G.COMMANDS.append(randomFact)
-
-    userInfo = Command(
-        logic=userInfo_logic, permission=userInfo_permissions, ctype="message"
-    )
-    G.COMMANDS.append(userInfo)
-
-    roll = Command(
-        logic=roll_logic, permission=roll_permissions, ctype="message"
-    )
-    G.COMMANDS.append(roll)
+    add_command(
+        logic=help_logic, permission=help_perm, ctype="message")
+    add_command(
+        logic=help_achieve_logic, permission=help_achieve_perm, ctype="message")
+    add_command(
+        logic=changeLang_logic, permission=changeLang_perm, ctype="message")
+    add_command(
+        logic=randomFact_logic, permission=randomFact_perm, ctype="message")
+    add_command(
+        logic=userInfo_logic, permission=userInfo_perm, ctype="message")
+    add_command(
+        logic=roll_logic, permission=roll_perm, ctype="message")

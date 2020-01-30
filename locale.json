@@ -1,6 +1,46 @@
 {
   "it": {
+    "achievements": {
+      "use_MLA": {
+        "name": "Novizio",
+        "condition": "Usa Milton almeno una volta.",
+        "include_help": true
+      },
+      "use_MLA2": {
+        "name": "Utilizzatore",
+        "condition": "Usa Milton almeno cinquanta volte.",
+        "include_help": true
+      },
+      "use_MLA3": {
+        "name": "Power User",
+        "condition": "Usa Milton almeno cento volte.",
+        "include_help": true
+      },
+      "use_MLA4": {
+        "name": "Veterano",
+        "condition": "Usa Milton almeno mille volte come un vero Veterano.",
+        "include_help": true
+      },
+      "critical_win": {
+        "name": "Lucky 20",
+        "condition": "Tira un 20 naturale. Che fortuna!",
+        "include_help": false
+      },
+      "critical_failure": {
+        "name": "Che sfiga",
+        "condition": "Fai 1 tirando un d20. Better luck next time.",
+        "include_help": false
+      },
+      "many_facts": {
+        "name": "Colto",
+        "condition": "Fatti una cultura.",
+        "include_help": true
+      }
+    },
     "msg": {
+      "on_award": "Congratulazioni! Hai ricevuto:",
+      "format_no": "> [[ {0} ]] - {1}",
+      "format_yes": "> **[[ {0} ]]** - {1}",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:"
     },
     "commands": {
@@ -8,6 +48,12 @@
         "id": "aiuto",
         "showHelp": true,
         "help": "Mi fà inviare questo messaggio."
+      },
+      "help_achieve": {
+        "id": "premi",
+        "showHelp": true,
+        "help": "Mi fà visualizzare tutti gli achievement, e in grassetto quelli che hai già preso.",
+        "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto): "
       },
       "random": {
         "id": "fatto",
@@ -35,7 +81,7 @@
         "info": "Ecco cosa so su di te:",
         "userID": "> Il tuo user ID è {}.",
         "guildID": "> L'ID del tuo server (**{0}**) è {1}.",
-        "commandCount": "> Nella tua carriera, hai usato {0} volte i miei comandi."
+        "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }
     },
     "random_path": "./locFiles/random_EN.txt",
@@ -44,7 +90,47 @@
     "randomInsult_path": "./locFiles/randomInsult_IT.txt"
   },
   "en": {
+    "achievements": {
+      "use_MLA": {
+        "name": "Novice",
+        "condition": "Use Milton at least once.",
+        "include_help": true
+      },
+      "use_MLA2": {
+        "name": "User",
+        "condition": "Use milton at least fifty times.",
+        "include_help": true
+      },
+      "use_MLA3": {
+        "name": "Power User",
+        "condition": "Use Milton at least one hundred times.",
+        "include_help": true
+      },
+      "use_MLA4": {
+        "name": "Veteran",
+        "condition": "Use Milton at least a thousand times, like a true Veteran.",
+        "include_help": true
+      },
+      "critical_win": {
+        "name": "Lucky 20",
+        "condition": "Roll a natural 20. Lucky you!",
+        "include_help": false
+      },
+      "critical_failure": {
+        "name": "Un-luck",
+        "condition": "Roll a natural 1. Better luck next time.",
+        "include_help": false
+      },
+      "many_facts": {
+        "name": "Educated",
+        "condition": "Educate yourself.",
+        "include_help": true
+      }
+    },
     "msg": {
+      "on_award": "Congrats! You achieved:",
+      "format_no": "> [[ {0} ]] - {1}",
+      "format_yes": "> **[[ {0} ]]** - {1}",
       "help": "This is the help message. My commands are:"
     },
     "commands": {
@@ -52,6 +138,12 @@
         "id": "help",
         "showHelp": true,
         "help": "Makes me send this very message."
+      },
+      "help_achieve": {
+        "id": "achieves",
+        "showHelp": true,
+        "help": "Makes me show all available achievements. The ones in bold are those you already achieved.",
+        "intro": "Here are all aviable achievements (bolded ones are those you unlocked already): "
       },
       "random": {
         "id": "fact",
@@ -79,7 +171,7 @@
         "info": "Here's what I know about you:",
         "userID": "> Your User ID is {}.",
         "guildID": "> Your server ID (**{0}**) is {1}.",
-        "commandCount": "> You used my commands {0} times."
+        "commandCount": "> You messaged me {0} times."
       }
     },
     "random_path": "./locFiles/random_EN.txt",

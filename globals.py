@@ -8,6 +8,7 @@ def initialize(options_path):
     global GLOC
     global GLD
     global COMMANDS
+    global ACHIEVES
 
     # Load options
     OPT = tools.load(options_path)
@@ -25,7 +26,9 @@ def initialize(options_path):
     USR = tools.load(OPT.users_path, default=None)
     GLD = tools.load(OPT.guilds_path, default=None)
     print("Options, locale and user files loaded. I remembered {0} users.".format(len(USR)))
+
     COMMANDS = []
+    ACHIEVES = []
 
     return True
 

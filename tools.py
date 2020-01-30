@@ -39,6 +39,21 @@ def initialize_empty(path, content="{}"):
     return True
 
 
+def update_stat(user_id, stat, increase=None, set=None):
+    if increase is None and set is None:
+        raise ValueError("Must specify either increase or set.")
+    if increase is not None and set is not None:
+        raise ValueError("Cannot increase and set at the same time.")
+    if G.USR[str(user_id)][stat] is None:
+        G.USR[str(user_id)][stat] = 0
+    if increase is not None:
+        G.USR[str(user_id)][stat] += increase
+    if set is not None:
+        G.USR[str(user_id)][stat] = set
+    save_users()
+    return True
+
+
 class MsgBuilder:
     def __init__(self):
         self.msg = ""
