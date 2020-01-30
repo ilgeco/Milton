@@ -10,7 +10,7 @@ class Achievement():
     def award(self, user_id):
         G.USR[str(user_id)][self.id] = True
         tools.save_users()
-        return G.LOC.achievements.format_yes.format(
+        return G.LOC.msg.format_yes.format(
             G.LOC.achievements[self.id].name,
             G.LOC.achievements[self.id].condition
         )
@@ -59,7 +59,7 @@ def ac_got_lucky(message):
 
 
 def ac_got_unlucky(message):
-    if G.USR[str(message.author.id)].gotUnucky:
+    if G.USR[str(message.author.id)].gotUnlucky:
         return True
     return False
 
