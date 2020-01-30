@@ -39,7 +39,7 @@ def changeLang_perm(message):
 
 
 def changeLang_logic(message):
-    prefixlength = len((G.OPT.prefix + G.LOC.commands.changeLang.id)) + 1
+    prefixlength = len((G.OPT.prefix + G.LOC.commands.changeLang.id)) + 2
     query = message.content[prefixlength:(prefixlength + 2)].lower()
     available_locales = G.GLOC.keys()
     if query in available_locales:
