@@ -77,5 +77,6 @@ def make_achievements():
     add_achievement(ac_use_MLA4, "use_MLA4")
     add_achievement(ac_got_lucky, "critical_win")
     add_achievement(ac_got_unlucky, "critical_failure")
+    add_achievement(ac_many_facts, "many_facts")
 
     return True
