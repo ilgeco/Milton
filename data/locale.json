@@ -191,7 +191,7 @@
       },
       "use_MLA2": {
         "name": "User",
-        "condition": "Use milton at least fifty times.",
+        "condition": "Use Milton at least fifty times.",
         "include_help": true
       },
       "use_MLA3": {
@@ -201,70 +201,163 @@
       },
       "use_MLA4": {
         "name": "Veteran",
-        "condition": "Use Milton at least a thousand times, like a true Veteran.",
+        "condition": "use Milton at least a thousand times, like a true Veteran.",
         "include_help": true
       },
       "critical_win": {
         "name": "Lucky 20",
-        "condition": "Roll a natural 20. Lucky you!",
+        "condition": "Roll a nat 20. Lucky!",
         "include_help": false
       },
       "critical_failure": {
-        "name": "Un-luck",
-        "condition": "Roll a natural 1. Better luck next time.",
+        "name": "Unlucky 1",
+        "condition": "Roll a natural 1. Better luck next time!",
         "include_help": false
       },
       "many_facts": {
-        "name": "Educated",
+        "name": "Learned",
         "condition": "Educate yourself.",
         "include_help": true
+      },
+      "joules1": {
+        "name": "Photon",
+        "condition": "You have at least 100 Joules. The first one's always free.",
+        "include_help": true
+      },
+      "joules2": {
+        "name": "Sugar Sweet",
+        "condition": "You have at least 17'000 Joules. The same energy in a gram of sugar.",
+        "include_help": true
+      },
+      "joules3": {
+        "name": "Trucker",
+        "condition": "You have at least a million Joules. The same energy of a two-tonne truck travelling at 115 Km an hour. Or a third of a snickers bar.",
+        "include_help": true
+      },
+      "joules_blazeit": {
+        "name": "420blazeit",
+        "condition": "You have at least 4206969 Joules.",
+        "include_help": false
+      },
+      "joules_sixtynine": {
+        "name": "Hehehe",
+        "condition": "You have a number of Joules starting with 69. Hehehe.",
+        "include_help": false
+      },
+      "production1": {
+        "name": "Snail",
+        "condition": "Produce at least 5 Joule per minute. In one hour and a half you'll have enough to make a big apple.",
+        "include_help": true
+      },
+      "production2": {
+        "name": "Lightbulb",
+        "condition": "Produce at least 100 Joules per minute. PYou make in a minute what a 100W lightbulb consumes in a second. Even lightbulbs are better than you.",
+        "include_help": true
+      },
+      "production3": {
+        "name": "Fast Food",
+        "condition": "Produce at least 500 Joules per minute. It's like making an hamburger every three minutes.",
+        "include_help": true
+      },
+      "production_eleveneleven": {
+        "name": "1111",
+        "condition": "01010000 01110010 01101111 01100100 01110101 01100011 01100101 00100000 01100001 01110100 00100000 01101100 01100101 01100001 01110011 01110100 00100000 00110001 00110001 00110001 00110001 00100000 01001010 01101111 01110101 01101100 01100101 01110011 00100000 01110000 01100101 01110010 00100000 01101101 01101001 01101110 01110101 01110100 01100101 00101110 ",
+        "include_help": false
+      },
+      "production_sun": {
+        "name": "Solar Power",
+        "condition": "You produce in a second more Joules than those produced by the sun in the same time! Praise the sun!",
+        "include_help": false
       }
     },
     "msg": {
-      "on_award": "Congrats! You achieved:",
+      "on_award": "Congratulations! You just achieved:",
       "format_no": "> [[ {0} ]] - {1}",
       "format_yes": "> **[[ {0} ]]** - {1}",
-      "help": "This is the help message. My commands are:"
+      "help": "This is the help message. My commands are:",
+      "gameHelp": "> **Energy Idle - Help** \n Produce Joules and energize the multiverse. The commands for the game are:"
     },
     "commands": {
+      "harvest": {
+        "id": "harvest",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Harvest what Joules you have produced since last time.",
+        "firstTime": "It's the first time you harvest Joules! Here are {0} Joules to get you started. You produce {1} Joules per minute.",
+        "overproduced": "You produced more than you could harvest! You should increase the limit. Try {}.",
+        "production": "You produced {0:.0f} Joules while you were away. Now you have a total of {1:.0f} Joules."
+      },
+      "upgrade": {
+        "id": "upgrade",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Upgrade a certain statistic. Example: $upgrade production. Upgradable stats are:",
+        "onsuccess": "You spent {:.0f} Joules to upgrade {}!",
+        "onfailure": "You don't have enough Joules ({:.0f}) to upgrade {}. You'll need {:.0f}.",
+        "notrecognized": "I didn't understand what you want me to upgrade. Try using one of these: {}.",
+        "IDs": {
+          "info": "options",
+          "production": "production",
+          "maxTicks": "time"
+        },
+        "info": "Here's what you can upgrade:",
+        "upgradable": {
+          "maxTicks": "> {} - Maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Price: {:.0f} Joules",
+          "production": "> {} - Production rate.|{} J/min >> {} J/min|Price: {:.0f} Joule."
+        }
+      },
       "help": {
         "id": "help",
         "showHelp": true,
+        "category": ["general"],
+        "help": "Makes me send this very message."
+      },
+      "gameHelp": {
+        "id": "game?",
+        "showHelp": true,
+        "category": ["general"],
         "help": "Makes me send this very message."
       },
       "help_achieve": {
         "id": "achieves",
         "showHelp": true,
-        "help": "Makes me show all available achievements. The ones in bold are those you already achieved.",
-        "intro": "Here are all aviable achievements (bolded ones are those you unlocked already): "
+        "category": ["general"],
+        "help": "Makes me show all achievements, with those you unlocked in **bold**.",
+        "intro": "Here are the achievements. Thoseyou unlocked are in bold. Each unlocked achievement will icnrease Joule production by 3% (stacks multiplicatively): "
       },
       "random": {
         "id": "fact",
         "showHelp": true,
-        "help": "Makes me send a very interesting, 100% true fact."
+        "category": ["general"],
+        "help": "Makes me send a super interesting, 100% true fact."
       },
       "changeLang": {
-        "id": "language",
+        "id": "Language",
         "showHelp": true,
-        "help": "Only for the channel owner. Makes me change what language I speak in this channel. Example: $language EN",
-        "success": "Done! I'll be speaking English from now on.",
-        "error": "Sorry, I cannot speak {0}. I know {1}."
+        "category": ["general"],
+        "help": "Only for the server owner. Makes me change what language I speak in this server. Example: $language IT",
+        "success": "Done! I'll speak in English from now on.",
+        "error": "Sorry, {0} is not an available language. I can speak {1}."
       },
       "roll": {
         "id": "roll",
         "showHelp": true,
-        "help": "Makes me roll a dX. Example: $roll d20 - Makes me roll a d20.",
-        "coercionError": "I didn't understand what dice you want me to roll. Try {} d20",
+        "category": ["general"],
+        "help": "Makes me roll a dX. Example: $roll d20 - Rolls a d20.",
+        "coercionError": "I didn't understand what dice you want me to use. Try: {} d20",
         "result": "I rolled a d{sides:d} and got... {result}."
       },
       "userInfo": {
         "id": "info",
         "showHelp": true,
-        "help": "Makes me show some information I know about yourself.",
+        "category": ["general"],
+        "help": "Makes me show information about your account.",
         "info": "Here's what I know about you:",
-        "userID": "> Your User ID is {}.",
-        "guildID": "> Your server ID (**{0}**) is {1}.",
-        "commandCount": "> You messaged me {0} times."
+        "joules": "> You have {:.0f} Joules.",
+        "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {:.2f} Joules each minute.",
+        "maxTickslevel": "> You upgraded max time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
+        "achieves": "> You have {} achievements, For a total Joule harvest bonus of x{:.2f}.",
+        "commandCount": "> You attempted to call me {0} times."
       }
     },
     "random_path": "./locFiles/random_EN.txt",
