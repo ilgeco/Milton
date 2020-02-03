@@ -78,6 +78,7 @@ def userInfo_logic(message):
     # Give user information
     strings = G.LOC.commands.userInfo
     out = tools.MsgBuilder()
+
     out.add(strings.info)
     out.add(strings.joules.format(G.USR[userID].joules))
     out.add(strings.productionlevel.format(

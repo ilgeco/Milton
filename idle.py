@@ -14,7 +14,7 @@ class Statistic:
         self.name = G.LOC.commands.upgrade.IDs[id]
         self.user = userID
         # The name of the stat is normalized as "stat_level"
-        self.userlevel = G.USR[userID + "_level"]
+        self.statlevel = G.USR[userID][id + "_level"]
         self.scaling = G.IDLE[id]
         self.prices = G.IDLE.prices[id]
 
@@ -22,15 +22,15 @@ class Statistic:
             """Calculate price to upgrade the stat."""
             if self.prices.function == "exponential":
                 return tools.exponential(
-                    self.prices.base, self.prices.mult, self.userlevel
+                    self.prices.base, self.prices.mult, self.statlevel
                 )
             elif self.prices.function == "linear":
                 return tools.linear(
-                    self.prices.base, self.prices.mult, self.userlevel
+                    self.prices.base, self.prices.mult, self.statlevel
                 )
             elif self.prices.function == "log":
                 return tools.logar(
-                    self.prices.base, self.prices.mult, self.userlevel
+                    self.prices.base, self.prices.mult, self.statlevel
                 )
             else:
                 raise ValueError("Unsupported formula type '{}'".format(
@@ -47,17 +47,17 @@ class Statistic:
         if self.scaling.function == "exponential":
             return tools.exponential(
                 self.scaling.base, self.scaling.mult,
-                self.userlevel + increaseLevel
+                self.statlevel + increaseLevel
             )
         elif self.scaling.function == "linear":
             return tools.linear(
                 self.scaling.base, self.scaling.mult,
-                self.userlevel + increaseLevel
+                self.statlevel + increaseLevel
             )
         elif self.scaling.function == "log":
             return tools.logar(
-                self.scaling.base, self.scaling.mult, self.userlevel
-                + increaseLevel
+                self.scaling.base, self.scaling.mult,
+                self.statlevel + increaseLevel
             )
         else:
             raise ValueError("Unsupported formula type '{}'".format(
