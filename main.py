@@ -1,32 +1,43 @@
 import discord as ds
 import tools
 import commands
-import game
+import idle
+import achieves
 import random
 import globals as G
 import munch as mun
 
 
 def main(token, language, options_path):
+    """Main Milton subroutine.
+
+    Loads all modules, memory, and handles incoming messages.
+    """
+
     print("This is Milton, and I'm initializing.")
     client = ds.Client()
 
     G.initialize(options_path)
     commands.make_commands()
-    game.make_achievements()
+    achieves.make_achievements()
+    idle.make_commands()
 
     # Completed loading of Milton message + preliminary activity
     @client.event
     async def on_ready():
         print('We have logged in as {0.user}.'.format(client))
         print('I will be speaking "{0}" as default.'.format(language))
-        print("Looking for new members while I was away...")
+
+        print("Looking for new members/guilds while I was away...")
+        # We search all guilds and users Milton can see and initialize them.
         i = 0
         for guild in client.guilds:
+            # Add new guilds
             if str(guild.id) not in G.GLD.keys():
                 defDict = {"language": language}
                 G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
             tools.save(G.OPT.guilds_path, G.GLD)
+            # Add new members
             for member in guild.members:
                 if str(member.id) not in G.USR.keys():
                     i += 1
@@ -35,7 +46,7 @@ def main(token, language, options_path):
         tools.save_users()
         print(f"Found {i} new members")
 
-        game = ds.Game("with myself.")
+        game = ds.Game("with myself.")  # Update "playing" message, for fun.
         print("Ready!")
         await client.change_presence(status=ds.Status.online, activity=game)
 
@@ -65,7 +76,7 @@ def main(token, language, options_path):
 
         # Run normal commands
         for command in G.COMMANDS:
-            if command.type == "message" and command.permission(message) is True:
+            if command.permission(message) is True:
                 await message.channel.send(command.logic(message))
 
         # Check Achievements
@@ -77,21 +88,21 @@ def main(token, language, options_path):
                     out.add(G.LOC.msg.on_award)
                     achieve_intro = False
                 out.add(achieve.award(message.author.id))
-                await message.channel.send(out.msg)
+                await message.channel.send(out.parse())
 
     async def on_member_join(member):
-        LOC = G.GLOC[G.GLD[str(member.guild.id)].language]
+        G.updateLOC(G.GLOC[G.GLD[str(member.guild.id)].language])
         if member.bot is True:
             # We don't do anything with bot accounts
             return
 
         for channel in member.server.channels:
             if str(channel.name).lower() in ['casa', 'general']:
-                line = tools.get_random_line(LOC.hello_path)
+                line = tools.get_random_line(G.LOC.hello_path)
                 await channel.send(line.format(member.name))
 
         if member.id not in G.USR.keys():
-            G.USR[str(member.id)] = mun.Munch()
+            G.USR[str(member.id)] = mun.DefaultMunch(0)
             G.USR[str(member.id)].name = member.name
             tools.save_users()
 

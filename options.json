@@ -1,7 +1,8 @@
 {
-  "users_path" : "./users.json",
-  "locale_path": "./locale.json",
-  "guilds_path": "./guilds.json",
+  "users_path" : "./data/users.json",
+  "locale_path": "./data/locale.json",
+  "guilds_path": "./data/guilds.json",
+  "idle_path": "./data/idle.json",
   "prefix": "$",
   "insult_threshold": 1000
 }

@@ -1,19 +1,16 @@
 import globals as G
 import tools
+from idle import make_all_stats
 import random
 
-
-class Command():
-    def __init__(self, logic, permission, ctype):
-        self.logic = logic
-        self.type = ctype
-        if permission is False:
-            self.permission = True
-        else:
-            self.permission = permission
+# I divided permissions and command logic due to the necessity of using
+# await in the main script. So I can first check the if (in the loop) and
+# if the if resolves I generate the necassary message using the command logic
+# and send it out using a single await statement.
 
 
 # help ---------------------------------
+# Send help for every command available to Milton
 def help_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.help.id):
         return True
@@ -23,7 +20,7 @@ def help_perm(message):
 def help_logic(message):
     helpmsg = G.LOC.msg.help + "\n"
     for command in G.LOC.commands.values():
-        if command.showHelp is True:
+        if command.showHelp is True and "general" in command.category:
             helpmsg += (
                 "**" + G.OPT.prefix + command.id + "**:\n\t" + command.help + "\n"
             )
@@ -31,6 +28,7 @@ def help_logic(message):
 
 
 # Change Language ---------------------------------
+# Chage Milton's preferred language for this server. Only for server owners.
 def changeLang_perm(message):
     if message.author == message.guild.owner and\
             message.content.startswith(G.OPT.prefix + G.LOC.commands.changeLang.id):
@@ -53,6 +51,7 @@ def changeLang_logic(message):
 
 
 # Give random fact ----------------------------------------------------------
+# Show a random fact from the random text file
 def randomFact_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.random.id):
         return True
@@ -66,6 +65,7 @@ def randomFact_logic(message):
 
 
 # Give user info ------------------------------------------------------------
+# Return information about the user.
 def userInfo_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.userInfo.id):
         return True
@@ -73,22 +73,29 @@ def userInfo_perm(message):
 
 
 def userInfo_logic(message):
+    userID = str(message.author.id)
+    stats = make_all_stats(userID)
     # Give user information
     strings = G.LOC.commands.userInfo
     out = tools.MsgBuilder()
     out.add(strings.info)
-    out.add(strings.userID.format(message.author.id))
-    out.add(strings.guildID.format(
-        message.author.guild.name, message.author.guild.id
+    out.add(strings.joules.format(G.USR[userID].joules))
+    out.add(strings.productionlevel.format(
+        stats.production.userlevel,
+        round(stats.production.value() * 60, 2)
+    ))
+    out.add(strings.maxTickslevel.format(
+        stats.maxTicks.userlevel,
+        round(stats.maxTicks.value() / 3600, 2)
     ))
     out.add(strings.commandCount.format(
         G.USR[str(message.author.id)].commandCount
     ))
     out.add(("> " + tools.get_random_line(G.LOC.randomInfo_path)))
-    return out.msg
+    return out.parse()
 
 
-# Roll random number
+# Roll random number -------------------------------------------------------
 def roll_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.roll.id):
         return True
@@ -117,7 +124,8 @@ def roll_logic(message):
         )
 
 
-# help ---------------------------------
+# Achievement Help ----------------------------------------------------------
+# Give all not-secret achievements descriptions + achieved commands.
 def help_achieve_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.help_achieve.id):
         return True
@@ -140,23 +148,14 @@ def help_achieve_logic(message):
                     G.LOC.achievements[key].name,
                     G.LOC.achievements[key].condition
                 ))
-    return helpmsg.msg
+    return helpmsg.parse()
 
 
-def add_command(logic, permission, ctype):
-    G.COMMANDS.append(Command(logic, permission, ctype))
-
-
+# Package all command checks in one place --------------------------------
 def make_commands():
-    add_command(
-        logic=help_logic, permission=help_perm, ctype="message")
-    add_command(
-        logic=help_achieve_logic, permission=help_achieve_perm, ctype="message")
-    add_command(
-        logic=changeLang_logic, permission=changeLang_perm, ctype="message")
-    add_command(
-        logic=randomFact_logic, permission=randomFact_perm, ctype="message")
-    add_command(
-        logic=userInfo_logic, permission=userInfo_perm, ctype="message")
-    add_command(
-        logic=roll_logic, permission=roll_perm, ctype="message")
+    tools.add_command(logic=help_logic, permission=help_perm,)
+    tools.add_command(logic=help_achieve_logic, permission=help_achieve_perm,)
+    tools.add_command(logic=changeLang_logic, permission=changeLang_perm,)
+    tools.add_command(logic=randomFact_logic, permission=randomFact_perm,)
+    tools.add_command(logic=userInfo_logic, permission=userInfo_perm,)
+    tools.add_command(logic=roll_logic, permission=roll_perm,)

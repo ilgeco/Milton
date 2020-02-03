@@ -2,12 +2,18 @@ import globals as G
 import tools
 
 
+# Define achievements
 class Achievement():
     def __init__(self, trigger, id):
         self.trigger = trigger
         self.id = id
 
     def award(self, user_id):
+        """Award the achievement to the user
+
+        Handles both setting the achieved status to true and giving the correct
+        phrase to give the user upon achieving it.
+        """
         G.USR[str(user_id)][self.id] = True
         tools.save_users()
         return G.LOC.msg.format_yes.format(
@@ -27,7 +33,6 @@ def add_achievement(trigger, id):
 
 
 # -------------------------------------------------------------------
-# Use a single command.
 def ac_use_MLA(message):
     if G.USR[str(message.author.id)].commandCount >= 1:
         return True

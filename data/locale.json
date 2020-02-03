@@ -41,28 +41,67 @@
       "on_award": "Congratulazioni! Hai ricevuto:",
       "format_no": "> [[ {0} ]] - {1}",
       "format_yes": "> **[[ {0} ]]** - {1}",
-      "help": "Questo è il messaggio d'aiuto. I miei comandi sono:"
+      "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
+      "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:"
     },
     "commands": {
+      "harvest": {
+        "id": "raccogli",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Raccogli i Joule che hai prodotto fino a questo momento.",
+        "firstTime": "E' la tua prima volta che raccogli i Joule. Ecco {0} Joule per iniziare. Produci di base {1} Joule al minuto.",
+        "overproduced": "Hai prodotto più del tuo massimo. Dovresti aumentarlo! Prova ad utilizzare {}",
+        "production": "Hai prodotto {0:.0f} Joule mentre eri via. Ora hai un totale di {1:.0f} Joule."
+      },
+      "upgrade": {
+        "id": "aumenta",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Aumenta una certa statistica. Esempio: $aumenta produzione. Le possibili statistiche aumentabili sono:",
+        "onsuccess": "Hai speso {:.0f} Joule per potenziare {}!",
+        "onfailure": "Non hai abbastanza Joule ({:.0f}) per potenziare {}. Te ne servono {:.0f}.",
+        "notrecognized": "Non ho capito cosa vuoi potenziare. Prova ad usare uno di questi specificatori: {}.",
+        "IDs": {
+          "info": "opzioni",
+          "production": "produzione",
+          "maxTicks": "tempo"
+        },
+        "info": "Ecco cosa puoi potenziare:",
+        "upgradable": {
+          "maxTicks": "> {} - Tempo di raccolta massimo.|{:.2f} Ore >> {:.2f} Ore|Costo: {:.0f} Joule",
+          "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {:.0f} Joule."
+        }
+      },
       "help": {
         "id": "aiuto",
         "showHelp": true,
+        "category": ["general"],
+        "help": "Mi fà inviare questo messaggio."
+      },
+      "gameHelp": {
+        "id": "gioco?",
+        "showHelp": true,
+        "category": ["general"],
         "help": "Mi fà inviare questo messaggio."
       },
       "help_achieve": {
         "id": "premi",
         "showHelp": true,
+        "category": ["general"],
         "help": "Mi fà visualizzare tutti gli achievement, e in grassetto quelli che hai già preso.",
         "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto): "
       },
       "random": {
         "id": "fatto",
         "showHelp": true,
+        "category": ["general"],
         "help": "Mi fà inviare un interessantissimo fatto reale al 100%."
       },
       "changeLang": {
         "id": "lingua",
         "showHelp": true,
+        "category": ["general"],
         "help": "Solo per il proprietario del canale. Mi fà cambiare la lingua in questo canale. Esempio: $lingua EN",
         "success": "Fatto! Da ora in poi parlerò in italiano.",
         "error": "Scusa, {0} non è una lingua disponibile. Posso parlare in {1}."
@@ -70,6 +109,7 @@
       "roll": {
         "id": "roll",
         "showHelp": true,
+        "category": ["general"],
         "help": "Mi fà tirare un dado da dX facce. Esempio: $roll d20 - Tira un d20.",
         "coercionError": "Non ho capito quale dado vuoi tirare.. Prova: {} d20",
         "result": "Ho tirato un d{sides:d} e ho fatto... {result}."
@@ -77,10 +117,12 @@
       "userInfo": {
         "id": "info",
         "showHelp": true,
+        "category": ["general"],
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
-        "userID": "> Il tuo user ID è {}.",
-        "guildID": "> L'ID del tuo server (**{0}**) è {1}.",
+        "joules": "> Hai {:.0f} Joule.",
+        "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
+        "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }
     },

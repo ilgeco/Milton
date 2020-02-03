@@ -1,0 +1,27 @@
+{
+  "production": {
+    "base": 0.01667,
+    "mult": 1.25,
+    "function": "linear"
+  },
+  "maxTicks": {
+    "base": 14400,
+    "mult": 3,
+    "function": "log"
+  },
+  "harvest": {
+    "gift": 100
+  },
+  "prices": {
+    "production": {
+      "base": 200,
+      "mult": 2,
+      "function": "exponential"
+    },
+    "maxTicks":{
+      "base": 200,
+      "mult": 1.5,
+      "function": "linear"
+    }
+  }
+}
