@@ -82,11 +82,11 @@ def userInfo_logic(message):
     out.add(strings.info)
     out.add(strings.joules.format(G.USR[userID].joules))
     out.add(strings.productionlevel.format(
-        stats.production.userlevel,
+        stats.production.statlevel,
         round(stats.production.value() * 60, 2)
     ))
     out.add(strings.maxTickslevel.format(
-        stats.maxTicks.userlevel,
+        stats.maxTicks.statlevel,
         round(stats.maxTicks.value() / 3600, 2)
     ))
     out.add(strings.commandCount.format(
