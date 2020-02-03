@@ -1,7 +1,7 @@
 {
   "production": {
     "base": 0.01667,
-    "mult": 1.25,
+    "mult": 1.35,
     "function": "linear"
   },
   "maxTicks": {
@@ -10,11 +10,12 @@
     "function": "log"
   },
   "harvest": {
-    "gift": 100
+    "gift": 100,
+    "achievebonus": 1.03
   },
   "prices": {
     "production": {
-      "base": 200,
+      "base": 100,
       "mult": 2,
       "function": "exponential"
     },

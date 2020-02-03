@@ -84,6 +84,14 @@ def add_command(logic, permission):
     G.COMMANDS.append(Command(logic, permission))
 
 
+def count_achieves(userID):
+    i = 0
+    for achieve in G.LOC.achievements.keys():
+        if G.USR[userID][achieve] is True:
+            i += 1
+    return i
+
+
 class MsgBuilder:
     # Very very simple utility to make messages with newlines.
     def __init__(self):

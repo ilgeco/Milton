@@ -141,6 +141,7 @@ def produceJoules(userID, current_time, last_time):
                 G.OPT.prefix + G.LOC.commands.upgrade.id))
 
         joules_produced = production_time * production.value()
+        joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(userID)
         tools.update_stat(user_id=userID, stat="joules", increase=joules_produced)
         tools.save_users()
         output.add(G.LOC.commands.harvest.production.format(

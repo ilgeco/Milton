@@ -1,5 +1,6 @@
 import globals as G
 import tools
+from idle import Statistic
 
 
 # Define achievements
@@ -75,6 +76,76 @@ def ac_many_facts(message):
     return False
 
 
+def ac_joules1(message):
+    if G.USR[str(message.author.id)].joules >= 100:
+        return True
+    return False
+
+
+def ac_joules2(message):
+    if G.USR[str(message.author.id)].joules >= 17_000:
+        return True
+    return False
+
+
+def ac_joules3(message):
+    if G.USR[str(message.author.id)].joules >= 1_000_000:
+        return True
+    return False
+
+
+def ac_joules_blazeit(message):
+    if G.USR[str(message.author.id)].joules >= 4_206_969:
+        return True
+    return False
+
+
+def ac_joules_sixtynine(message):
+    if str(round(G.USR[str(message.author.id)].joules, 0)).startswith == 69:
+        return True
+    return False
+
+
+def ac_production1(message):
+    userID = str(message.author.id)
+    stat = Statistic("production", userID)
+    if stat.value() * 60 >= 5:
+        return True
+    return False
+
+
+def ac_production2(message):
+    userID = str(message.author.id)
+    stat = Statistic("production", userID)
+    if stat.value() * 60 >= 100:
+        return True
+    return False
+
+
+def ac_production_sun(message):
+    userID = str(message.author.id)
+    stat = Statistic("production", userID)
+    if stat.value() >= 3.84e26:
+        return True
+    return False
+
+
+def ac_production3(message):
+    userID = str(message.author.id)
+    stat = Statistic("production", userID)
+    if stat.value() * 60 >= 500:
+        return True
+    return False
+
+
+def ac_production_eleveneleven(message):
+    userID = str(message.author.id)
+    stat = Statistic("production", userID)
+    if stat.value() * 60 >= 1111:
+        return True
+    return False
+
+
 def make_achievements():
     add_achievement(ac_use_MLA, "use_MLA")
     add_achievement(ac_use_MLA2, "use_MLA2")
@@ -83,5 +154,15 @@ def make_achievements():
     add_achievement(ac_got_lucky, "critical_win")
     add_achievement(ac_got_unlucky, "critical_failure")
     add_achievement(ac_many_facts, "many_facts")
+    add_achievement(ac_joules1, "joules1")
+    add_achievement(ac_joules2, "joules2")
+    add_achievement(ac_joules3, "joules3")
+    add_achievement(ac_joules_blazeit, "joules_blazeit")
+    add_achievement(ac_joules_sixtynine, "joules_sixtynine")
+    add_achievement(ac_production1, "production1")
+    add_achievement(ac_production2, "production2")
+    add_achievement(ac_production3, "production3")
+    add_achievement(ac_production_sun, "production_sun")
+    add_achievement(ac_production_eleveneleven, "production_eleveneleven")
 
     return True

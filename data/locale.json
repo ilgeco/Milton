@@ -35,6 +35,56 @@
         "name": "Colto",
         "condition": "Fatti una cultura.",
         "include_help": true
+      },
+      "joules1": {
+        "name": "Fotone",
+        "condition": "Hai almeno 100 Joule. Il primo è sempre gratis.",
+        "include_help": true
+      },
+      "joules2": {
+        "name": "Zuccherato",
+        "condition": "Hai almeno 17'000 Joule. E' la stessa energia di un grammo di zucchero.",
+        "include_help": true
+      },
+      "joules3": {
+        "name": "Camionista",
+        "condition": "Hai almeno un milione di Joule. E' la stessa energia di un camion di duemila chili che viaggia a 115 Km orari o un terzo di una barretta snicker.",
+        "include_help": true
+      },
+      "joules_blazeit": {
+        "name": "420blazeit",
+        "condition": "Hai almeno 4206969 Joule.",
+        "include_help": false
+      },
+      "joules_sixtynine": {
+        "name": "Hehehe",
+        "condition": "Hai un numero di Joule che inizia per 69. Hehehe.",
+        "include_help": false
+      },
+      "production1": {
+        "name": "Lumaca",
+        "condition": "Produci cinque Joule al minuto. In un'ora e mezza produci quanta energia in una mela grossa.",
+        "include_help": true
+      },
+      "production2": {
+        "name": "Lampadina",
+        "condition": "Produci cento Joule al minuto. Produci in un minuto quello che una lampadina da 100W consuma in un secondo. Persino le lampadine sono meglio di te.",
+        "include_help": true
+      },
+      "production3": {
+        "name": "Fast Food",
+        "condition": "Produci 500 Joule al minuto. Come produrre un hamburger ogni tre minuti. Ci si mette il triplo a cucinarlo!",
+        "include_help": true
+      },
+      "production_eleveneleven": {
+        "name": "1111",
+        "condition": "01010000 01110010 01101111 01100100 01110101 01100011 01101001 00100000 00110001 00110001 00110001 00110001 00100000 01101010 01101111 01110101 01101100 01100101 00100000 01100001 01101100 00100000 01101101 01101001 01101110 01110101 01110100 01101111 00101110",
+        "include_help": false
+      },
+      "production_sun": {
+        "name": "Potenza Solare",
+        "condition": "Produci ogni secondo più Joule di quanti ne produce il sole. Praise the sun!",
+        "include_help": false
       }
     },
     "msg": {
@@ -90,7 +140,7 @@
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà visualizzare tutti gli achievement, e in grassetto quelli che hai già preso.",
-        "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto): "
+        "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto). Ogni achievement che hai sbloccato aumenta i Joule che raccogli del 3% (moltiplicativo): "
       },
       "random": {
         "id": "fatto",
@@ -123,6 +173,7 @@
         "joules": "> Hai {:.0f} Joule.",
         "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
+        "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }
     },

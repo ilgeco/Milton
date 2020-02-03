@@ -91,6 +91,10 @@ def userInfo_logic(message):
     out.add(strings.commandCount.format(
         G.USR[str(message.author.id)].commandCount
     ))
+    out.add(strings.achieves.format(
+        tools.count_achieves(userID),
+        round(G.IDLE.harvest.achievebonus ** tools.count_achieves(userID), 2)
+    ))
     out.add(("> " + tools.get_random_line(G.LOC.randomInfo_path)))
     return out.parse()
 
