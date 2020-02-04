@@ -137,7 +137,7 @@ def produceJoules(userID, current_time, last_time):
         production_time = current_time - last_time
         if production_time > maxTicks.value():
             production_time = maxTicks.value()
-            output.add(G.LOC.harvest.overproduced.format(
+            output.add(G.LOC.commands.harvest.overproduced.format(
                 G.OPT.prefix + G.LOC.commands.upgrade.id))
 
         joules_produced = production_time * production.value()
