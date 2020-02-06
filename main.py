@@ -123,22 +123,23 @@ def main(token, language, options_path):
     # Check if we need to spawn a titan.
     async def generate_titan():
         await client.wait_until_ready()
-        now = time.time()
-        to_hour = G.OPT.titanhours * 3600 - (now % 3600)
-        print(f"I checked when to spawn titans.")
-        print(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
+        while True:
+            now = time.time()
+            to_hour = G.OPT.titanhours * 3600 - (now % 3600)
+            print(f"I checked when to spawn titans.")
+            print(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
 
-        for id, guild in G.GLD.items():
-            if guild.titan_status is not True:
-                G.updateLOC(G.GLOC[G.GLD[str(id)].language])
-                level = idle.spawn_titan(id)
-                titan = idle.Titan(level)
-                channel = client.get_channel(guild.notification_channel)
-                if guild.notification_channel != 0:
-                    await channel.send(G.LOC.msg.generated_titan.format(
-                        level, titan.hp, round((1 - titan.armor) * 100, 2)
-                    ))
-        await asyncio.sleep(to_hour)
+            for id, guild in G.GLD.items():
+                if guild.titan_status is not True:
+                    G.updateLOC(G.GLOC[G.GLD[str(id)].language])
+                    level = idle.spawn_titan(id)
+                    titan = idle.Titan(level)
+                    channel = client.get_channel(guild.notification_channel)
+                    if guild.notification_channel != 0:
+                        await channel.send(G.LOC.msg.generated_titan.format(
+                            level, titan.hp, round((1 - titan.armor) * 100, 2)
+                        ))
+            await asyncio.sleep(to_hour)
 
     client.loop.create_task(generate_titan())
     client.run(token)
