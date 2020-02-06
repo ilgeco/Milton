@@ -196,6 +196,7 @@
         "tokens": "> Hai {:.0f} Token.",
         "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
+        "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai x{:.2f} danni ai Titani.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }

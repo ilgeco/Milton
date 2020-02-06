@@ -109,6 +109,10 @@ def userInfo_logic(message):
         stats.maxTicks.statlevel,
         round(stats.maxTicks.value() / 3600, 2)
     ))
+    out.add(strings.attacklevel.format(
+        stats.maxTicks.statlevel,
+        round(stats.maxTicks.value() / 3600, 2)
+    ))
     out.add(strings.commandCount.format(
         G.USR[str(message.author.id)].commandCount
     ))
