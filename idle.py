@@ -66,14 +66,10 @@ class Statistic:
     def upgrade(self, value=1):
         """Award the player some level in this stat."""
         tools.update_stat(self.user, self.id + "_level", increase=value)
-        tools.save_users()
-        G.USR[self.user + "_level"] += value
 
     def downgrade(self, value=1):
         """Reduce the player level by some value."""
         tools.update_stat(self.user, self.id + "_level", increase=-value)
-        tools.save_users()
-        G.USR[self.user + "_level"] -= value
 
 
 # Game Help ------------------------------------------------------------------
@@ -197,6 +193,8 @@ def upgrade_logic(message):
     elif message.args[0] in stat_names:
         try:
             times = int(message.args[1])
+            if times <= 0:
+                times = 1
         except (ValueError, IndexError):
             times = 1
         i = 0
