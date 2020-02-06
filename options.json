@@ -4,5 +4,6 @@
   "guilds_path": "./data/guilds.json",
   "idle_path": "./data/idle.json",
   "prefix": "$",
-  "insult_threshold": 1000
+  "insult_threshold": 1000,
+  "titanhours": 1
 }

@@ -92,7 +92,8 @@
       "format_no": "> [[ {0} ]] - {1}",
       "format_yes": "> **[[ {0} ]]** - {1}",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
-      "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:"
+      "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:",
+      "generated_titan": "E' arrivato un titano!\n> **[Livello {:.0f}]** - {:.0f} HP | {:.2f}% Armatura."
     },
     "commands": {
       "harvest": {
@@ -108,26 +109,47 @@
         "id": "aumenta",
         "showHelp": true,
         "category": ["idle"],
-        "help": "Aumenta una certa statistica. Esempio: $aumenta produzione. Le possibili statistiche aumentabili sono:",
+        "help": "Aumenta una certa statistica di un certo livello. Esempio: $aumenta produzione 1. Le possibili statistiche aumentabili sono:",
         "onsuccess": "Hai speso {:.0f} Joule per potenziare {}!",
         "onfailure": "Non hai abbastanza Joule ({:.0f}) per potenziare {}. Te ne servono {:.0f}.",
         "notrecognized": "Non ho capito cosa vuoi potenziare. Prova ad usare uno di questi specificatori: {}.",
         "IDs": {
           "info": "opzioni",
           "production": "produzione",
-          "maxTicks": "tempo"
+          "maxTicks": "tempo",
+          "attack": "attacco"
         },
-        "info": "Ecco cosa puoi potenziare:",
+        "info": "Ecco cosa puoi potenziare (Es: $aumenta):",
         "upgradable": {
           "maxTicks": "> {} - Tempo di raccolta massimo.|{:.2f} Ore >> {:.2f} Ore|Costo: {:.0f} Joule",
-          "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {:.0f} Joule."
+          "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {:.0f} Joule.",
+          "attack": "> {} - Moltiplicatore dei danni contro i Titani.|x{} >> x{}|Costo: {:.0f} Joule."
         }
+      },
+      "attack": {
+        "id": "attacca",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Attacca il titano spendendo Joule. Non funziona se non c'è un titano attivo in questo momento. Esempio: $attacca 1000",
+        "onsuccess": "Hai attaccato il titano, infliggendo {:.0f} danni! Ora ha {:.0f} vita, il {:.2f}%.",
+        "onfailure": "Non hai tutti quei Joule! Prova con un ammontare più basso. Ne puoi spendere {:.0f}.",
+        "notrecognized": "Non ho capito quanti Joule vuoi spendere. Prova $attacca 100 - o qualcosa di simile.",
+        "notitan": "Non c'è nessun titano da attaccare. Prova più tardi.",
+        "onkill": "Hai inflitto {:.0f} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
         "id": "aiuto",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà inviare questo messaggio."
+      },
+      "setnotification": {
+        "id": "notifiche",
+        "showHelp": true,
+        "category": ["general"],
+        "help": "Solo per il proprietario del canale. Mi fà inviare le notifiche relative alla gilda in questo canale.",
+        "notificationsenabled": "Ok, mandero le notifiche in questo canale.",
+        "notificationsdisabled": "Ok, sto zitto!"
       },
       "gameHelp": {
         "id": "gioco?",
@@ -171,6 +193,7 @@
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
         "joules": "> Hai {:.0f} Joule.",
+        "tokens": "> Hai {:.0f} Token.",
         "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",

@@ -27,8 +27,27 @@ def help_logic(message):
     return helpmsg
 
 
+# Set notification channel ----------------------------------------------------
+def set_notification_channel_perm(message):
+    if message.author == message.guild.owner and\
+            message.content.startswith(G.OPT.prefix + G.LOC.commands.setnotification.id):
+        return True
+    return False
+
+
+def set_notification_channel_logic(message):
+    if G.GLD[str(message.author.guild.id)].notification_channel != message.channel.id:
+        G.GLD[str(message.author.guild.id)].notification_channel = message.channel.id
+        tools.save_guilds()
+        return G.LOC.commands.setnotification.notificationsenabled
+    else:
+        G.GLD[str(message.author.guild.id)].notification_channel = 0
+        tools.save_guilds()
+        return G.LOC.commands.setnotification.notificationsdisabled
+
+
 # Change Language ---------------------------------
-# Chage Milton's preferred language for this server. Only for server owners.
+# Change Milton's preferred language for this server. Only for server owners.
 def changeLang_perm(message):
     if message.author == message.guild.owner and\
             message.content.startswith(G.OPT.prefix + G.LOC.commands.changeLang.id):
@@ -81,6 +100,7 @@ def userInfo_logic(message):
 
     out.add(strings.info)
     out.add(strings.joules.format(G.USR[userID].joules))
+    out.add(strings.tokens.format(G.USR[userID].tokens))
     out.add(strings.productionlevel.format(
         stats.production.statlevel,
         round(stats.production.value() * 60, 2)
@@ -164,3 +184,4 @@ def make_commands():
     tools.add_command(logic=randomFact_logic, permission=randomFact_perm,)
     tools.add_command(logic=userInfo_logic, permission=userInfo_perm,)
     tools.add_command(logic=roll_logic, permission=roll_perm,)
+    tools.add_command(logic=set_notification_channel_logic, permission=set_notification_channel_perm,)

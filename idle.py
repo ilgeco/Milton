@@ -185,24 +185,40 @@ def upgrade_logic(message):
             round(stats.production.value(1) * 60, 2),
             stats.production.upgrade_price
         ).split("|"))
+        # >> Upgrade attack help
+        out.add(G.LOC.commands.upgrade.upgradable.attack.format(
+            G.LOC.commands.upgrade.IDs.attack,
+            round(stats.attack.value(), 2),
+            round(stats.attack.value(1), 2),
+            stats.attack.upgrade_price
+        ).split("|"))
         return "```" + out.pretty_parse() + "```"
 
     elif message.args[0] in stat_names:
-        stat = [x for x in stats.values() if x.name == message.args[0]][0]
-        if G.USR[userID].joules >= stat.upgrade_price:
-            stat.upgrade()
-            out.add(G.LOC.commands.upgrade.onsuccess.format(
-                stat.upgrade_price,
-                stat.name
-            ))
-            G.USR[userID].joules -= stat.upgrade_price
-            tools.save_users()
-        else:
-            out.add(G.LOC.commands.upgrade.onfailure.format(
-                G.USR[userID].joules,
-                stat.name,
-                stat.upgrade_price
-            ))
+        try:
+            times = int(message.args[1])
+        except (ValueError, IndexError):
+            times = 1
+        i = 0
+        while i < times:
+            stats = make_all_stats(userID)
+            stat = [x for x in stats.values() if x.name == message.args[0]][0]
+            if G.USR[userID].joules >= stat.upgrade_price:
+                stat.upgrade()
+                out.add(G.LOC.commands.upgrade.onsuccess.format(
+                    stat.upgrade_price,
+                    stat.name
+                ))
+                G.USR[userID].joules -= stat.upgrade_price
+                tools.save_users()
+            else:
+                out.add(G.LOC.commands.upgrade.onfailure.format(
+                    G.USR[userID].joules,
+                    stat.name,
+                    stat.upgrade_price
+                ))
+                break
+            i += 1
         return out.parse()
 
     else:
@@ -219,7 +235,91 @@ def make_all_stats(userID):
     return stats
 
 
+# Attack ------------------------------------------------------------------
+
+class Titan():
+    """Used to calculate initial values for titans"""
+    def __init__(self, level):
+        self.level = level
+        self.hp = level ** G.IDLE.titan.level_exp * G.IDLE.titan.base_hp
+        # This is a function that tends to 0 @ level -> inf
+        # The smaller the armor constant the slower the armor grows.
+        b = G.IDLE.titan.armor_constant
+        self.armor = 1 / (b * (self.level ** 2) + 1)
+        self.reward = level ** G.IDLE.titan.reward_constant / self.armor
+
+
+def spawn_titan(guild):
+    """Spawns a titan in the current guild."""
+    if isinstance(G.GLD[guild].titan_status, bool) is False:
+        # We never spawned a titan before, so we start @ titan level = 0
+        G.GLD[guild].titan_level = 0
+    tools.update_guild(guild_id=guild, stat="titan_status", set=True)
+    tools.update_guild(guild_id=guild, stat="titan_level", increase=1)
+    tools.update_guild(guild_id=guild, stat="titan_damage", set=0)
+    return G.GLD[guild].titan_level
+
+
+def attack_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.attack.id):
+        return True
+    return False
+
+
+def attack_logic(message):
+    user_id = str(message.author.id)
+    user_guild = str(message.author.guild.id)
+    # If we don't have any titans, we cannot attack.
+    if G.GLD[user_guild].titan_status is not True:
+        return G.LOC.commands.attack.notitan
+    stats = make_all_stats(user_id)
+    titan = Titan(G.GLD[user_guild].titan_level)
+    args = tools.MsgParser(message.content).args
+    # Attempt to get a value for joules spent
+    try:
+        raw_damage = int(args[0])
+    except (ValueError, IndexError):
+        return G.LOC.commands.attack.notrecognized
+    # If the user doesn't have enough joules, they cannot attack
+    if G.USR[user_id].joules < raw_damage:
+        return G.LOC.commands.attack.onfailure.format(G.USR[user_id].joules)
+    # Remove the joules spent:
+    tools.update_stat(user_id=user_id, stat="joules", increase=-raw_damage)
+
+    if isinstance(G.USR[user_id].attacks, list) is False:
+        # User has never attacked before
+        G.USR[user_id].attacks = []
+    if user_guild not in G.USR[user_id].attacks:
+        G.USR[user_id].attacks.append(user_guild)
+
+    damage = raw_damage * stats.attack.value() * titan.armor
+    tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
+    remaining_hp = titan.hp - G.GLD[user_guild].titan_damage
+
+    if G.GLD[user_guild].titan_damage >= titan.hp:
+        # The titan was killed by this attack
+        tools.update_guild(guild_id=user_guild, stat="titan_status", set=False)
+        for id, user in G.USR.items():
+            if isinstance(user.attacks, list) is False:
+                continue
+            if user_guild in user.attacks:
+                # Award tokens to this player.
+                G.USR[id].tokens += max(round(titan.reward, 0), 1)
+                G.USR[id].attacks.remove(user_guild)
+        tools.save_users()
+        return G.LOC.commands.attack.onkill.format(
+            damage, max(round(titan.reward, 0), 1)
+        )
+    else:
+        return G.LOC.commands.attack.onsuccess.format(
+            damage, remaining_hp, round(remaining_hp / titan.hp * 100, 2)
+        )
+    # We should never get here
+    assert False, "Attack function did not escape correctly"
+
+
 def make_commands():
     tools.add_command(logic=harvest_logic, permission=harvest_perm)
     tools.add_command(logic=gamehelp_logic, permission=gamehelp_perm)
     tools.add_command(logic=upgrade_logic, permission=upgrade_perm)
+    tools.add_command(logic=attack_logic, permission=attack_perm)

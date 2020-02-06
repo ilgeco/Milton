@@ -4,10 +4,21 @@
     "mult": 1.35,
     "function": "linear"
   },
+  "titan":{
+    "base_hp": 1000,
+    "level_exp": 2,
+    "armor_constant": 0.005,
+    "reward_constant": 1.1
+  },
   "maxTicks": {
     "base": 14400,
     "mult": 3,
     "function": "log"
+  },
+  "attack": {
+    "base": 1,
+    "mult": 1.1,
+    "function": "exponential"
   },
   "harvest": {
     "gift": 100,
@@ -23,6 +34,11 @@
       "base": 200,
       "mult": 1.5,
       "function": "linear"
+    },
+    "attack":{
+      "base": 1000,
+      "mult": 1.5,
+      "function": "exponential"
     }
   }
 }

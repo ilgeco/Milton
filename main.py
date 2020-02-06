@@ -1,6 +1,8 @@
 import discord as ds
 import tools
 import commands
+import time
+import asyncio
 import idle
 import achieves
 import random
@@ -35,7 +37,7 @@ def main(token, language, options_path):
             # Add new guilds
             if str(guild.id) not in G.GLD.keys():
                 defDict = {"language": language}
-                G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
+                G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, 0)
             tools.save(G.OPT.guilds_path, G.GLD)
             # Add new members
             for member in guild.members:
@@ -106,6 +108,39 @@ def main(token, language, options_path):
             G.USR[str(member.id)].name = member.name
             tools.save_users()
 
+    async def on_guild_join(guild):
+        if str(guild.id) not in G.GLD.keys():
+            defDict = {"language": language}
+            G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
+        tools.save(G.OPT.guilds_path, G.GLD)
+        # Add new members
+        for member in guild.members:
+            if str(member.id) not in G.USR.keys():
+                G.USR[str(member.id)] = mun.DefaultMunch(0)
+            G.USR[str(member.id)].name = member.name
+        tools.save_users()
+
+    # Check if we need to spawn a titan.
+    async def generate_titan():
+        await client.wait_until_ready()
+        now = time.time()
+        to_hour = G.OPT.titanhours * 3600 - (now % 3600)
+        print(f"I checked when to spawn titans.")
+        print(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
+
+        for id, guild in G.GLD.items():
+            if guild.titan_status is not True:
+                G.updateLOC(G.GLOC[G.GLD[str(id)].language])
+                level = idle.spawn_titan(id)
+                titan = idle.Titan(level)
+                channel = client.get_channel(guild.notification_channel)
+                if guild.notification_channel != 0:
+                    await channel.send(G.LOC.msg.generated_titan.format(
+                        level, titan.hp, round((1 - titan.armor) * 100, 2)
+                    ))
+        await asyncio.sleep(to_hour)
+
+    client.loop.create_task(generate_titan())
     client.run(token)
     return None
 

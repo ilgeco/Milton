@@ -38,6 +38,11 @@ def save_users():
     return save(file=G.OPT.users_path, dict=G.USR)
 
 
+def save_guilds():
+    """Save users to default user.json path"""
+    return save(file=G.OPT.guilds_path, dict=G.GLD)
+
+
 def initialize_empty(path, content="{}"):
     """Create empty .json file to target path."""
     with Path(path).open("w+") as f:
@@ -52,16 +57,28 @@ def update_stat(user_id, stat, increase=None, set=None):
         raise ValueError("Must specify either increase or set.")
     if increase is not None and set is not None:
         raise ValueError("Cannot increase and set at the same time.")
-    # Set to zero if stat is None
-    # TODO: Possibly legacy. Remove?
-    if G.USR[str(user_id)][stat] is None:
-        G.USR[str(user_id)][stat] = 0
     # Set or increase variable:
     if increase is not None:
         G.USR[str(user_id)][stat] += increase
     elif set is not None:
         G.USR[str(user_id)][stat] = set
     save_users()
+    return True
+
+
+def update_guild(guild_id, stat, increase=None, set=None):
+    """Update a single stat in the user file, then save users"""
+    # Simple logic checks
+    if increase is None and set is None:
+        raise ValueError("Must specify either increase or set.")
+    if increase is not None and set is not None:
+        raise ValueError("Cannot increase and set at the same time.")
+    # Set or increase variable:
+    if increase is not None:
+        G.GLD[str(guild_id)][stat] += increase
+    elif set is not None:
+        G.GLD[str(guild_id)][stat] = set
+    save_guilds()
     return True
 
 
@@ -129,7 +146,7 @@ class MsgBuilder:
 
 class MsgParser:
     def __init__(self, message):
-        message = message.split(" ")
+        message = message.split()  # This splits @ one or more whitespaces
         self.command = message[0]
         self.args = message[1:]
 
