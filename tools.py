@@ -151,10 +151,13 @@ class MsgParser:
         self.args = message[1:]
 
 
-class Command():
-    def __init__(self, logic, permission=True):
+class Command:
+    def __init__(self, logic, permission=True, where="channel"):
         # logic is the logic of the command
         # Permission is the checks necessary to see if the command triggers
         # To the command. If not specified, defaults to true (always triggers).
+        # Where is where to send the message, either to the user or the channel
+        assert where in ["channel", "user"]
         self.logic = logic
         self.permission = permission
+        self.where = where

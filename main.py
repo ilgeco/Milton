@@ -79,7 +79,10 @@ def main(token, language, options_path):
         # Run normal commands
         for command in G.COMMANDS:
             if command.permission(message) is True:
-                await message.channel.send(command.logic(message))
+                if command.where == "channel":
+                    await message.channel.send(command.logic(message))
+                elif command.where == "user":
+                    await message.author.dm_channel.send(command.logic(message))
 
         # Check Achievements
         achieve_intro = True

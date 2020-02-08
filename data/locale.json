@@ -85,12 +85,98 @@
         "name": "Potenza Solare",
         "condition": "Produci ogni secondo più Joule di quanti ne produce il sole. Praise the sun!",
         "include_help": false
+      },
+      "attack1": {
+        "name": "Novellino",
+        "condition": "Fai x2 danni ai titani. C'è ancora molt strada da fare, giovane Padawan.",
+        "include_help": true
+      },
+      "attack2": {
+        "name": "Non fare lo stronzo, Shingi",
+        "condition": "Fai x10 danni ai titani. O erano angeli?",
+        "include_help": true
+      },
+      "attack3": {
+        "name": "Monster Hunter",
+        "condition": "Fai x100 danni ai titani. C'è qualcuno per uccidere un Elder Dragon?",
+        "include_help": true
+      },
+      "maxTicks1": {
+        "name": "Buona Notte",
+        "condition": "Puoi raccogliere al massimo 8 ore di produzione. Buona notte!",
+        "include_help": true
+      },
+      "maxTicks2": {
+        "name": "Buon Giorno",
+        "condition": "Puoi raccogliere almeno 24 ore di produzione. Che bella giornata.",
+        "include_help": true
+      },
+      "maxTicks3": {
+        "name": "AFK",
+        "condition": "Puoi raccogliere fino ad una settimana di produzione. Scusate ragazzi, me ne vado un momento.",
+        "include_help": true
+      },
+      "tokens1": {
+        "name": "Buona Notte",
+        "condition": "Puoi raccogliere al massimo 8 ore di produzione. Buona notte!",
+        "include_help": true
+      },
+      "tokens2": {
+        "name": "Buon Giorno",
+        "condition": "Puoi raccogliere almeno 24 ore di produzione. Che bella giornata.",
+        "include_help": true
+      },
+      "tokens3": {
+        "name": "AFK",
+        "condition": "Puoi raccogliere fino ad una settimana di produzione. Scusate ragazzi, me ne vado un momento.",
+        "include_help": true
+      },
+      "damage1": {
+        "name": "Pericoloso",
+        "condition": "Hai fatto 100'000 danni ai titani. Impressionante!",
+        "include_help": true
+      },
+      "damage2": {
+        "name": "Uccidi-Titani",
+        "condition": "Hai fatto 1'000'000 danni ai titani. Sono un sacco di Joule. Non potevi aumentare la produzione?",
+        "include_help": true
+      },
+      "damage3": {
+        "name": "One Punch Man",
+        "condition": "Hai fatto 1'000'000'000 danni ai titani. Come i danni di un *super amped mega charged slash axe mode attack*.",
+        "include_help": true
+      },
+      "damagerecord1": {
+        "name": "Coltellata",
+        "condition": "Hai fatto 6'666 danni in un colpo solo. Impressionante!",
+        "include_help": true
+      },
+      "damagerecord2": {
+        "name": "Mazzata",
+        "condition": "Hai fatto 666'666 danni in un colpo solo. Sono un sacco di Joule. Non potevi aumentare la produzione?",
+        "include_help": true
+      },
+      "damagerecord3": {
+        "name": "Super Amped Elemental Discharge",
+        "condition": "Hai fatto 6'666'666 danni in un colpo solo. Come i danni di un *super amped mega charged slash axe mode attack*.",
+        "include_help": true
+      },
+      "instantkill": {
+        "name": "One Punch Man",
+        "condition": "ONE PUUUUUNCH!!!!",
+        "include_help": false
+      },
+      "onedamage": {
+        "name": "Vergognati",
+        "condition": "Hai fatto un singolo danno al titano. Vergogna.",
+        "include_help": false
       }
     },
     "msg": {
       "on_award": "Congratulazioni! Hai ricevuto:",
       "format_no": "> [[ {0} ]] - {1}",
       "format_yes": "> **[[ {0} ]]** - {1}",
+      "noachieves": "Non hai nessun achievement da mostrare...",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
       "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:",
       "generated_titan": "E' arrivato un titano!\n> **[Livello {:.0f}]** - {:.0f} HP | {:.2f}% Armatura."
@@ -134,7 +220,9 @@
         "onsuccess": "Hai attaccato il titano, infliggendo {:.0f} danni! Ora ha {:.0f} vita, il {:.2f}%.",
         "onfailure": "Non hai tutti quei Joule! Prova con un ammontare più basso. Ne puoi spendere {:.0f}.",
         "notrecognized": "Non ho capito quanti Joule vuoi spendere. Prova $attacca 100 - o qualcosa di simile.",
+        "zerofailure": "Non puoi attaccare spendendo 0 o meno Joule!",
         "notitan": "Non c'è nessun titano da attaccare. Prova più tardi.",
+        "newrecord": "Nuovo record personale di danni!",
         "onkill": "Hai inflitto {:.0f} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
@@ -161,14 +249,30 @@
         "id": "premi",
         "showHelp": true,
         "category": ["general"],
-        "help": "Mi fà visualizzare tutti gli achievement, e in grassetto quelli che hai già preso.",
+        "help": "Ti manderò un messaggio privato con tutti i dettagli degli achievement, e in grassetto quelli che hai già preso.",
         "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto). Ogni achievement che hai sbloccato aumenta i Joule che raccogli del 3% (moltiplicativo): "
+      },
+      "help_achieve_short": {
+        "id": "!achieves",
+        "showHelp": true,
+        "category": ["general"],
+        "help": "Mi fà mandare una lista, ridotta, degli achievement che hai preso. Per far vedere agli altri quanto sei figo.",
+        "intro": "Gli achievement che hai sbloccato sono:"
       },
       "random": {
         "id": "fatto",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà inviare un interessantissimo fatto reale al 100%."
+      },
+      "ascend": {
+        "id": "ascendi",
+        "showHelp": true,
+        "category": ["idle"],
+        "confirm": "Sei sicuro? Riceverai {:.0f} token. Invia il comando di nuovo entro 30 secondi per ascendere.",
+        "success": "Wooosh! Tutto il tuo progresso ({:.0f} joule) è stato sacrificato, e hai ottenuto {:0f} Token.",
+        "notenough": "Non hai ancora abbastanza Joule per ascendere. Te ne servono {:.0f}. Ne dovrai ancora produrre {:.0f}.",
+        "help": "Ascendi per ottendere Token. Scarifichi **tutto** il tuo progresso, ma ottieni token in base ai Joule che hai prodotto in totale nella tua carriera."
       },
       "changeLang": {
         "id": "lingua",
@@ -192,11 +296,12 @@
         "category": ["general"],
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
-        "joules": "> Hai {:.0f} Joule.",
-        "tokens": "> Hai {:.0f} Token.",
+        "joules": "> Hai {:.0f} Joule. Hai prodotto un totale di {:.0f} Joule nella tua carriera.",
+        "tokens": "> Hai {:.0f} Token. Se ascendi ora, otterrai {:.0f} Token.",
         "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
         "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai x{:.2f} danni ai Titani.",
+        "titandamage": "> Hai fatto un totale di {} danni al Titano. Il tuo attacco più potente ha inflitto {} danni.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }
@@ -296,6 +401,7 @@
     },
     "msg": {
       "on_award": "Congratulations! You just achieved:",
+      "format_short": "**[[ {0} ]]**",
       "format_no": "> [[ {0} ]] - {1}",
       "format_yes": "> **[[ {0} ]]** - {1}",
       "help": "This is the help message. My commands are:",
@@ -344,6 +450,13 @@
       },
       "help_achieve": {
         "id": "achieves",
+        "showHelp": true,
+        "category": ["general"],
+        "help": "Makes me show all achievements, with those you unlocked in **bold**.",
+        "intro": "Here are the achievements. Thoseyou unlocked are in bold. Each unlocked achievement will icnrease Joule production by 3% (stacks multiplicatively): "
+      },
+      "help_achieve_short": {
+        "id": "achieves!",
         "showHelp": true,
         "category": ["general"],
         "help": "Makes me show all achievements, with those you unlocked in **bold**.",

@@ -1,4 +1,10 @@
 {
+  "token_power": 0.00003,
+  "ascension": {
+    "exponent": 0.5,
+    "min_joules": 100000,
+    "min_exp": 10
+  },
   "production": {
     "base": 0.01667,
     "mult": 1.35,

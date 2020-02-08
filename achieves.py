@@ -22,9 +22,9 @@ class Achievement():
             G.LOC.achievements[self.id].condition
         )
 
-    def check_trigger(self, message, user_id):
-        if self.trigger(message) is True and \
-                G.USR[str(user_id)][self.id] in [False, None]:
+    def check_trigger(self, user_id):
+        if self.trigger(str(user_id)) is True and \
+                G.USR[str(user_id)][self.id] in [False, None, 0]:
             return True
 
 
@@ -33,136 +33,123 @@ def add_achievement(trigger, id):
     return True
 
 
-# -------------------------------------------------------------------
-def ac_use_MLA(message):
-    if G.USR[str(message.author.id)].commandCount >= 1:
-        return True
-    return False
-
-
-def ac_use_MLA2(message):
-    if G.USR[str(message.author.id)].commandCount >= 50:
-        return True
-    return False
-
-
-def ac_use_MLA3(message):
-    if G.USR[str(message.author.id)].commandCount >= 100:
-        return True
-    return False
-
-
-def ac_use_MLA4(message):
-    if G.USR[str(message.author.id)].commandCount >= 1000:
-        return True
-    return False
-
-
-def ac_got_lucky(message):
-    if G.USR[str(message.author.id)].gotLucky:
-        return True
-    return False
-
-
-def ac_got_unlucky(message):
-    if G.USR[str(message.author.id)].gotUnlucky:
-        return True
-    return False
-
-
-def ac_many_facts(message):
-    if G.USR[str(message.author.id)].factCount >= 30:
-        return True
-    return False
-
-
-def ac_joules1(message):
-    if G.USR[str(message.author.id)].joules >= 100:
-        return True
-    return False
-
-
-def ac_joules2(message):
-    if G.USR[str(message.author.id)].joules >= 17_000:
-        return True
-    return False
-
-
-def ac_joules3(message):
-    if G.USR[str(message.author.id)].joules >= 1_000_000:
-        return True
-    return False
-
-
-def ac_joules_blazeit(message):
-    if G.USR[str(message.author.id)].joules >= 4_206_969:
-        return True
-    return False
-
-
-def ac_joules_sixtynine(message):
-    if str(round(G.USR[str(message.author.id)].joules, 0)).startswith == 69:
-        return True
-    return False
-
-
-def ac_production1(message):
-    userID = str(message.author.id)
-    stat = Statistic("production", userID)
-    if stat.value() * 60 >= 5:
-        return True
-    return False
-
-
-def ac_production2(message):
-    userID = str(message.author.id)
-    stat = Statistic("production", userID)
-    if stat.value() * 60 >= 100:
-        return True
-    return False
-
-
-def ac_production_sun(message):
-    userID = str(message.author.id)
-    stat = Statistic("production", userID)
-    if stat.value() >= 3.84e26:
-        return True
-    return False
-
-
-def ac_production3(message):
-    userID = str(message.author.id)
-    stat = Statistic("production", userID)
-    if stat.value() * 60 >= 500:
-        return True
-    return False
-
-
-def ac_production_eleveneleven(message):
-    userID = str(message.author.id)
-    stat = Statistic("production", userID)
-    if stat.value() * 60 >= 1111:
-        return True
-    return False
-
-
 def make_achievements():
-    add_achievement(ac_use_MLA, "use_MLA")
-    add_achievement(ac_use_MLA2, "use_MLA2")
-    add_achievement(ac_use_MLA3, "use_MLA3")
-    add_achievement(ac_use_MLA4, "use_MLA4")
-    add_achievement(ac_got_lucky, "critical_win")
-    add_achievement(ac_got_unlucky, "critical_failure")
-    add_achievement(ac_many_facts, "many_facts")
-    add_achievement(ac_joules1, "joules1")
-    add_achievement(ac_joules2, "joules2")
-    add_achievement(ac_joules3, "joules3")
-    add_achievement(ac_joules_blazeit, "joules_blazeit")
-    add_achievement(ac_joules_sixtynine, "joules_sixtynine")
-    add_achievement(ac_production1, "production1")
-    add_achievement(ac_production2, "production2")
-    add_achievement(ac_production3, "production3")
-    add_achievement(ac_production_sun, "production_sun")
-    add_achievement(ac_production_eleveneleven, "production_eleveneleven")
+    # Number of commands -----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].commandCount >= 1 else False,
+        "use_MLA")
+    add_achievement(
+        lambda user: True if G.USR[user].commandCount >= 50 else False,
+        "use_MLA2")
+    add_achievement(
+        lambda user: True if G.USR[user].commandCount >= 100 else False,
+        "use_MLA3")
+    add_achievement(
+        lambda user: True if G.USR[user].commandCount >= 1_000 else False,
+        "use_MLA4")
+
+    # Number of Joules -----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].joules >= 100 else False,
+        "joules1")
+    add_achievement(
+        lambda user: True if G.USR[user].joules >= 17_000 else False,
+        "joules2")
+    add_achievement(
+        lambda user: True if G.USR[user].joules >= 1_000_000 else False,
+        "joules3")
+    add_achievement(
+        lambda user: True if G.USR[user].joules >= 4_206_969 else False,
+        "joules_blazeit")
+    add_achievement(
+        lambda user: True if str(round(G.USR[user].joules, 0)).startswith("69") else False,
+        "joules_sixtynine")
+
+    # Production stats -----------------------------------------------------
+    add_achievement(
+        lambda user: True if Statistic("production", user).value() * 60 >= 5 else False,
+        "production1")
+    add_achievement(
+        lambda user: True if Statistic("production", user).value() * 60 >= 100 else False,
+        "production2")
+    add_achievement(
+        lambda user: True if Statistic("production", user).value() * 60 >= 500 else False,
+        "production3")
+    add_achievement(
+        lambda user: True if Statistic("production", user).value() >= 3.84e26 else False,
+        "production_sun")
+    add_achievement(
+        lambda user: True if Statistic("production", user).value() * 60 >= 1111 else False,
+        "production_eleveneleven")
+
+    # Attack stats -----------------------------------------------------
+    add_achievement(
+        lambda user: True if Statistic("attack", user).value() >= 2 else False,
+        "attack1")
+    add_achievement(
+        lambda user: True if Statistic("attack", user).value() >= 10 else False,
+        "attack2")
+    add_achievement(
+        lambda user: True if Statistic("attack", user).value() >= 100 else False,
+        "attack3")
+
+    # Time stat -----------------------------------------------------
+    add_achievement(
+        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= 8 else False,
+        "maxTicks1")
+    add_achievement(
+        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= 24 else False,
+        "maxTicks2")
+    add_achievement(
+        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= (24 * 7) else False,
+        "maxTick3")
+
+    # Titan Damage -----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 1e5 else False,
+        "damage1")
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 1e6 else False,
+        "damage2")
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 1e9 else False,
+        "damage3")
+    add_achievement(
+        lambda user: True if G.USR[user].onedamage else False,
+        "onedamage")
+    add_achievement(
+        lambda user: True if G.USR[user].maximum_damage >= 6_666 else False,
+        "damagerecord1")
+    add_achievement(
+        lambda user: True if G.USR[user].maximum_damage >= 666_666 else False,
+        "damagerecord2")
+    add_achievement(
+        lambda user: True if G.USR[user].maximum_damage >= 6_666_666 else False,
+        "damagerecord3")
+    add_achievement(
+        lambda user: True if G.USR[user].instantkill else False,
+        "instantkill")
+
+    # Tokens -----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 1 else False,
+        "tokens1")
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 100 else False,
+        "tokens2")
+    add_achievement(
+        lambda user: True if G.USR[user].titan_damage >= 1e6 else False,
+        "tokens3")
+
+    # Other -----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].gotLucky else False,
+        "critical_win")
+    add_achievement(
+        lambda user: True if G.USR[user].gotUnlucky else False,
+        "critical_failure")
+    add_achievement(
+        lambda user: True if G.USR[user].factCount >= 1_000 else False,
+        "many_facts")
 
     return True

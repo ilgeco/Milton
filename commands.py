@@ -182,10 +182,10 @@ def help_achieve_logic(message):
 
 # Package all command checks in one place --------------------------------
 def make_commands():
-    tools.add_command(logic=help_logic, permission=help_perm,)
-    tools.add_command(logic=help_achieve_logic, permission=help_achieve_perm,)
-    tools.add_command(logic=changeLang_logic, permission=changeLang_perm,)
-    tools.add_command(logic=randomFact_logic, permission=randomFact_perm,)
-    tools.add_command(logic=userInfo_logic, permission=userInfo_perm,)
-    tools.add_command(logic=roll_logic, permission=roll_perm,)
-    tools.add_command(logic=set_notification_channel_logic, permission=set_notification_channel_perm,)
+    tools.add_command(logic=help_logic, permission=help_perm)
+    tools.add_command(logic=help_achieve_logic, permission=help_achieve_perm, where="user")
+    tools.add_command(logic=changeLang_logic, permission=changeLang_perm)
+    tools.add_command(logic=randomFact_logic, permission=randomFact_perm)
+    tools.add_command(logic=userInfo_logic, permission=userInfo_perm)
+    tools.add_command(logic=roll_logic, permission=roll_perm)
+    tools.add_command(logic=set_notification_channel_logic, permission=set_notification_channel_perm)
