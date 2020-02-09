@@ -156,14 +156,12 @@ def roll_logic(message):
         # Check for achievements
         if number == 20 and outcome == 20:
             tools.update_stat(message.author.id, stat="gotLucky", set=True)
-            tools.save_users()
         if number == 20 and outcome == 1:
             tools.update_stat(message.author.id, stat="gotUnlucky", set=True)
-            tools.save_users()
-            out.add(G.LOC.commands.roll.result.format(
-                sides=number,
-                result=outcome
-            ))
+        out.add(G.LOC.commands.roll.result.format(
+            sides=number,
+            result=outcome
+        ))
         return out.parse()
     except ValueError:
         out.add(G.LOC.commands.roll.coercionError.format(
