@@ -41,11 +41,13 @@ def set_notification_channel_logic(message):
     if G.GLD[str(message.author.guild.id)].notification_channel != message.channel.id:
         G.GLD[str(message.author.guild.id)].notification_channel = message.channel.id
         tools.save_guilds()
-        return out.add(G.LOC.commands.setnotification.notificationsenabled).parse()
+        out.add(G.LOC.commands.setnotification.notificationsenabled)
+        return out.parse()
     else:
         G.GLD[str(message.author.guild.id)].notification_channel = 0
         tools.save_guilds()
-        return out.add(G.LOC.commands.setnotification.notificationsdisabled).parse()
+        out.add(G.LOC.commands.setnotification.notificationsdisabled)
+        return out.parse()
 
 
 # Change Language ---------------------------------
@@ -66,14 +68,16 @@ def changeLang_logic(message):
         G.GLD[str(message.guild.id)].language = query
         tools.save(G.OPT.guilds_path, G.GLD)
         G.updateLOC(G.GLOC[G.GLD[str(message.guild.id)].language])
-        return out.add(
+        out.add(
             G.LOC.commands.changeLang.success.format(query.upper())
-        ).parse()
+        )
+        return out.parse()
     else:
         locales = " ".join(available_locales).upper()
-        return out.add(
+        out.add(
             G.LOC.commands.changeLang.error.format(query, locales)
-        ).parse()
+        )
+        return out.parse()
 
 
 # Give random fact ----------------------------------------------------------
@@ -88,7 +92,8 @@ def randomFact_logic(message):
     out = tools.MsgBuilder()
     tools.update_stat(message.author.id, stat="factCount", increase=1)
     tools.save_users()
-    return out.add(tools.get_random_line(G.LOC.random_path)).parse()
+    out.add(tools.get_random_line(G.LOC.random_path))
+    return out.parse()
 
 
 # Give user info ------------------------------------------------------------
@@ -155,14 +160,16 @@ def roll_logic(message):
         if number == 20 and outcome == 1:
             tools.update_stat(message.author.id, stat="gotUnlucky", set=True)
             tools.save_users()
-        return out.add(G.LOC.commands.roll.result.format(
-            sides=number,
-            result=outcome
-        )).parse()
+            out.add(G.LOC.commands.roll.result.format(
+                sides=number,
+                result=outcome
+            ))
+        return out.parse()
     except ValueError:
-        return out.add(G.LOC.commands.roll.coercionError.format(
+        out.add(G.LOC.commands.roll.coercionError.format(
             (G.OPT.prefix + G.LOC.commands.roll.id)
-        )).parse()
+        ))
+        return out.parse()
 
 
 # Achievement Help ----------------------------------------------------------
