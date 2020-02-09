@@ -174,9 +174,10 @@
     },
     "msg": {
       "on_award": "Congratulazioni! Hai ricevuto:",
-      "format_no": "> [[ {0} ]] - {1}",
-      "format_yes": "> **[[ {0} ]]** - {1}",
+      "format_no": "> :red_circle: [[ {0} ]] - {1}",
+      "format_yes": "> :white_check_mark: **[[ {0} ]]** - {1}",
       "format_short": "**[[ {0} ]]**",
+      "secret_achieves": ":grey_question: Hai ancora {} achievement segreti da sbloccare.",
       "noachieves": "Non hai nessun achievement da mostrare...",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
       "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:",
