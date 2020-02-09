@@ -97,8 +97,23 @@ def logar(base, mult, level):
     return base * log(level + mult, mult)
 
 
-def add_command(logic, permission):
-    G.COMMANDS.append(Command(logic, permission))
+def add_command(logic, permission, where="channel"):
+    G.COMMANDS.append(Command(logic, permission, where))
+
+
+def break_message(message, length=2000):
+    strings = []
+
+    def _split_message(message, length=2000):
+        global strings
+        if len(message) > length:
+            strings.append(message[length:])
+            _split_message(message[length:], length)
+        else:
+            strings.append(message)
+            return True
+
+    return strings
 
 
 def count_achieves(userID):
@@ -119,18 +134,29 @@ class MsgBuilder:
             line = [line]
         self.msg.append(line)
 
-    def append(self, line):
+    def append(self, line, sep=""):
         if self.msg == []:
             self.msg = [line]
         else:
-            self.msg[-1][-1] += line
+            self.msg[-1][-1] += (sep + line)
+
+    def prepend(self, line, sep=""):
+        if self.msg == []:
+            self.msg = [line]
+        else:
+            self.msg[-1][-1] = line + sep + self.msg[-1][-1]
 
     def parse(self):
+        strings = []
         formatted = ""
         for row in self.msg:
-            formatted += " ".join(row)
-            formatted += "\n"
-        return formatted[:-1]  # I do this to remove the trailing newline.
+            if len(formatted + " ".join(row)) <= 2000:
+                formatted += " ".join(row) + "\n"
+            else:
+                strings.append(formatted.rstrip())
+                formatted = " ".join(row) + "\n"
+        strings.append(formatted.rstrip())
+        return strings
 
     def pretty_parse(self, padding=2):
         """If we append lists of words, pretty parses them as columns."""
@@ -141,7 +167,7 @@ class MsgBuilder:
                 (val.ljust(width) for val, width in zip(row, col_widths))
             )
             formatted += "\n"
-        return formatted[:-1]  # I do this to remove the trailing newline.
+        return [formatted[:-1]]  # I do this to remove the trailing newline.
 
 
 class MsgParser:

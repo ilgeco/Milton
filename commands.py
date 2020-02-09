@@ -1,6 +1,6 @@
 import globals as G
 import tools
-from idle import make_all_stats
+from idle import make_all_stats, tokens_from_joules
 import random
 
 # I divided permissions and command logic due to the necessity of using
@@ -18,13 +18,14 @@ def help_perm(message):
 
 
 def help_logic(message):
-    helpmsg = G.LOC.msg.help + "\n"
+    out = tools.MsgBuilder()
+    out.add(G.LOC.msg.help)
     for command in G.LOC.commands.values():
         if command.showHelp is True and "general" in command.category:
-            helpmsg += (
-                "**" + G.OPT.prefix + command.id + "**:\n\t" + command.help + "\n"
+            out.add(
+                "**" + G.OPT.prefix + command.id + "**:\n\t" + command.help
             )
-    return helpmsg
+    return out.parse()
 
 
 # Set notification channel ----------------------------------------------------
@@ -36,14 +37,15 @@ def set_notification_channel_perm(message):
 
 
 def set_notification_channel_logic(message):
+    out = tools.MsgBuilder()
     if G.GLD[str(message.author.guild.id)].notification_channel != message.channel.id:
         G.GLD[str(message.author.guild.id)].notification_channel = message.channel.id
         tools.save_guilds()
-        return G.LOC.commands.setnotification.notificationsenabled
+        return out.add(G.LOC.commands.setnotification.notificationsenabled).parse()
     else:
         G.GLD[str(message.author.guild.id)].notification_channel = 0
         tools.save_guilds()
-        return G.LOC.commands.setnotification.notificationsdisabled
+        return out.add(G.LOC.commands.setnotification.notificationsdisabled).parse()
 
 
 # Change Language ---------------------------------
@@ -59,14 +61,19 @@ def changeLang_logic(message):
     prefixlength = len((G.OPT.prefix + G.LOC.commands.changeLang.id)) + 1
     query = message.content[prefixlength:(prefixlength + 2)].lower()
     available_locales = G.GLOC.keys()
+    out = tools.MsgBuilder()
     if query in available_locales:
         G.GLD[str(message.guild.id)].language = query
         tools.save(G.OPT.guilds_path, G.GLD)
         G.updateLOC(G.GLOC[G.GLD[str(message.guild.id)].language])
-        return G.LOC.commands.changeLang.success.format(query.upper())
+        return out.add(
+            G.LOC.commands.changeLang.success.format(query.upper())
+        ).parse()
     else:
         locales = " ".join(available_locales).upper()
-        return G.LOC.commands.changeLang.error.format(query, locales)
+        return out.add(
+            G.LOC.commands.changeLang.error.format(query, locales)
+        ).parse()
 
 
 # Give random fact ----------------------------------------------------------
@@ -78,9 +85,10 @@ def randomFact_perm(message):
 
 
 def randomFact_logic(message):
+    out = tools.MsgBuilder()
     tools.update_stat(message.author.id, stat="factCount", increase=1)
     tools.save_users()
-    return tools.get_random_line(G.LOC.random_path)
+    return out.add(tools.get_random_line(G.LOC.random_path)).parse()
 
 
 # Give user info ------------------------------------------------------------
@@ -99,8 +107,11 @@ def userInfo_logic(message):
     out = tools.MsgBuilder()
 
     out.add(strings.info)
-    out.add(strings.joules.format(G.USR[userID].joules))
-    out.add(strings.tokens.format(G.USR[userID].tokens))
+    out.add(strings.joules.format(G.USR[userID].joules, G.USR[userID].lifetime_joules))
+    out.add(strings.tokens.format(
+        G.USR[userID].tokens, tokens_from_joules(G.USR[userID].lifetime_joules)))
+    out.add(strings.lifetime.format(
+        G.USR[userID].times_ascended, G.USR[userID].sacrificed_joules))
     out.add(strings.productionlevel.format(
         stats.production.statlevel,
         round(stats.production.value() * 60, 2)
@@ -133,6 +144,7 @@ def roll_perm(message):
 
 def roll_logic(message):
     prefixlength = len((G.OPT.prefix + G.LOC.commands.roll.id)) + 2
+    out = tools.MsgBuilder()
     try:
         number = int(message.content[prefixlength:])
         outcome = random.randint(1, number)
@@ -143,14 +155,14 @@ def roll_logic(message):
         if number == 20 and outcome == 1:
             tools.update_stat(message.author.id, stat="gotUnlucky", set=True)
             tools.save_users()
-        return G.LOC.commands.roll.result.format(
+        return out.add(G.LOC.commands.roll.result.format(
             sides=number,
             result=outcome
-        )
+        )).parse()
     except ValueError:
-        return G.LOC.commands.roll.coercionError.format(
+        return out.add(G.LOC.commands.roll.coercionError.format(
             (G.OPT.prefix + G.LOC.commands.roll.id)
-        )
+        )).parse()
 
 
 # Achievement Help ----------------------------------------------------------
@@ -180,12 +192,31 @@ def help_achieve_logic(message):
     return helpmsg.parse()
 
 
+def short_help_achieve_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.help_achieve_short.id):
+        return True
+    return False
+
+
+def short_help_achieve_logic(message):
+    userInfo = G.USR[str(message.author.id)]
+    helpmsg = tools.MsgBuilder()
+    helpmsg.add(G.LOC.commands.help_achieve_short.intro)
+    for key, achieve in G.LOC.achievements.items():
+        if userInfo[key]:
+            helpmsg.append(G.LOC.msg.format_short.format(
+                G.LOC.achievements[key].name
+            ), sep=" ")
+    return helpmsg.parse()
+
+
 # Package all command checks in one place --------------------------------
 def make_commands():
-    tools.add_command(logic=help_logic, permission=help_perm)
+    tools.add_command(logic=help_logic, permission=help_perm, where="user")
     tools.add_command(logic=help_achieve_logic, permission=help_achieve_perm, where="user")
     tools.add_command(logic=changeLang_logic, permission=changeLang_perm)
     tools.add_command(logic=randomFact_logic, permission=randomFact_perm)
     tools.add_command(logic=userInfo_logic, permission=userInfo_perm)
     tools.add_command(logic=roll_logic, permission=roll_perm)
     tools.add_command(logic=set_notification_channel_logic, permission=set_notification_channel_perm)
+    tools.add_command(logic=short_help_achieve_logic, permission=short_help_achieve_perm)

@@ -76,24 +76,39 @@ def main(token, language, options_path):
         # Count the number of times this person typed a command.
         tools.update_stat(user_id=message.author.id, stat="commandCount", increase=1)
 
+        # Update total joules (remove in a while?):
+        if G.USR[str(message.author.id)].lifetime_joules == 0 and \
+                G.USR[str(message.author.id)].joules > 0:
+            stats = idle.make_all_stats(str(message.author.id))
+            min_joules = G.USR[str(message.author.id)].joules
+            for stat in stats.values():
+                min_joules += stat.recalculate_price(-1)
+            tools.update_stat(str(message.author.id), stat="lifetime_joules", set=min_joules)
+
         # Run normal commands
         for command in G.COMMANDS:
             if command.permission(message) is True:
                 if command.where == "channel":
-                    await message.channel.send(command.logic(message))
+                    for string in command.logic(message):
+                        await message.channel.send(string)
                 elif command.where == "user":
-                    await message.author.dm_channel.send(command.logic(message))
+                    if message.author.dm_channel is None:
+                        await message.author.create_dm()
+                    for string in command.logic(message):
+                        await message.author.dm_channel.send(string)
+                    await message.delete()
 
         # Check Achievements
         achieve_intro = True
         for achieve in G.ACHIEVES:
-            if achieve.check_trigger(message, message.author.id) is True:
+            if achieve.check_trigger(str(message.author.id)) is True:
                 out = tools.MsgBuilder()
                 if achieve_intro:
                     out.add(G.LOC.msg.on_award)
                     achieve_intro = False
                 out.add(achieve.award(message.author.id))
-                await message.channel.send(out.parse())
+                for string in out.parse():
+                    await message.channel.send(string)
 
     async def on_member_join(member):
         G.updateLOC(G.GLOC[G.GLD[str(member.guild.id)].language])

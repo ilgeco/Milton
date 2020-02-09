@@ -115,7 +115,7 @@ def make_achievements():
         lambda user: True if G.USR[user].titan_damage >= 1e9 else False,
         "damage3")
     add_achievement(
-        lambda user: True if G.USR[user].onedamage else False,
+        lambda user: True if G.USR[user].onedamage is True else False,
         "onedamage")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666 else False,
@@ -127,7 +127,7 @@ def make_achievements():
         lambda user: True if G.USR[user].maximum_damage >= 6_666_666 else False,
         "damagerecord3")
     add_achievement(
-        lambda user: True if G.USR[user].instantkill else False,
+        lambda user: True if G.USR[user].instantkill is True else False,
         "instantkill")
 
     # Tokens -----------------------------------------------------
