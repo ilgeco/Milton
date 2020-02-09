@@ -192,7 +192,7 @@ def help_achieve_logic(message):
         i = 0
         if achieve.include_help is False and userInfo[key] in [False, 0]:
             i += 1
-        helpmsg.add(G.LOC.msg.secret_achieves.format(i))
+    helpmsg.add(G.LOC.msg.secret_achieves.format(i))
     return helpmsg.parse()
 
 
