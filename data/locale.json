@@ -142,8 +142,8 @@
         "include_help": true
       },
       "damage3": {
-        "name": "One Punch Man",
-        "condition": "Hai fatto 1'000'000'000 danni ai titani. Come i danni di un *super amped mega charged slash axe mode attack*.",
+        "name": "Attack on Titan?",
+        "condition": "Hai fatto 1'000'000'000 danni ai titani. NON CI FERMEREMO FINCHE' NON ABBIAMO UCCISO TUTTI I GIGANTI!",
         "include_help": true
       },
       "damagerecord1": {
@@ -333,7 +333,7 @@
       },
       "use_MLA4": {
         "name": "Veteran",
-        "condition": "use Milton at least a thousand times, like a true Veteran.",
+        "condition": "Use Miltona t least 1000 times, like a true Veteran",
         "include_help": true
       },
       "critical_win": {
@@ -342,28 +342,28 @@
         "include_help": false
       },
       "critical_failure": {
-        "name": "Unlucky 1",
-        "condition": "Roll a natural 1. Better luck next time!",
+        "name": "Unlucky",
+        "condition": "Roll a nat 1. Better luck next time!",
         "include_help": false
       },
       "many_facts": {
-        "name": "Learned",
-        "condition": "Educate yourself.",
+        "name": "Erudite",
+        "condition": "Learn something.",
         "include_help": true
       },
       "joules1": {
         "name": "Photon",
-        "condition": "You have at least 100 Joules. The first one's always free.",
+        "condition": "You have at least 100 Joules. The firstone is always free.",
         "include_help": true
       },
       "joules2": {
-        "name": "Sugar Sweet",
+        "name": "Sugar",
         "condition": "You have at least 17'000 Joules. The same energy in a gram of sugar.",
         "include_help": true
       },
       "joules3": {
         "name": "Trucker",
-        "condition": "You have at least a million Joules. The same energy of a two-tonne truck travelling at 115 Km an hour. Or a third of a snickers bar.",
+        "condition": "You have at least 1e6 Joules. It's the same energy of a two-tonne truck moving at 115 Km/h or a third of a snickers bar.",
         "include_help": true
       },
       "joules_blazeit": {
@@ -372,120 +372,240 @@
         "include_help": false
       },
       "joules_sixtynine": {
-        "name": "Hehehe",
-        "condition": "You have a number of Joules starting with 69. Hehehe.",
+        "name": "Nice",
+        "condition": "You have a number of joules that starts with 69. Hehehe.",
         "include_help": false
       },
       "production1": {
         "name": "Snail",
-        "condition": "Produce at least 5 Joule per minute. In one hour and a half you'll have enough to make a big apple.",
+        "condition": "You produce 5 Joules per minute. In an hour and a half you'll have the equivalent of a large apple.",
         "include_help": true
       },
       "production2": {
         "name": "Lightbulb",
-        "condition": "Produce at least 100 Joules per minute. PYou make in a minute what a 100W lightbulb consumes in a second. Even lightbulbs are better than you.",
+        "condition": "You produce at least 100 Joules per minute. You produce in a minute what a 100W lightbulb consumnes in a second. You should feel useless, now.",
         "include_help": true
       },
       "production3": {
         "name": "Fast Food",
-        "condition": "Produce at least 500 Joules per minute. It's like making an hamburger every three minutes.",
+        "condition": "You produce 500 Joules per minute. In three minutes, you'll have a burger!",
         "include_help": true
       },
       "production_eleveneleven": {
         "name": "1111",
-        "condition": "01010000 01110010 01101111 01100100 01110101 01100011 01100101 00100000 01100001 01110100 00100000 01101100 01100101 01100001 01110011 01110100 00100000 00110001 00110001 00110001 00110001 00100000 01001010 01101111 01110101 01101100 01100101 01110011 00100000 01110000 01100101 01110010 00100000 01101101 01101001 01101110 01110101 01110100 01100101 00101110 ",
+        "condition": "01011001 01101111 01110101 00100000 01110000 01110010 01101111 01100100 01110101 01100011 01100101 00100000 00110001 00110001 00110001 00110001 00100000 01101010 00101111 01101101 01101001 01101110 00101110 00100000 01001110 01101001 01100011 01100101 00100001 ",
         "include_help": false
       },
       "production_sun": {
-        "name": "Solar Power",
-        "condition": "You produce in a second more Joules than those produced by the sun in the same time! Praise the sun!",
+        "name": "Solar Power!",
+        "condition": "You produce in a second the same output of the sun. Praise the sun!",
+        "include_help": false
+      },
+      "attack1": {
+        "name": "Novice",
+        "condition": "You deal twice the damage to Titans. There's still much to learn, young Padawan.",
+        "include_help": true
+      },
+      "attack2": {
+        "name": "Don't be a dick, Shingi",
+        "condition": "Deal x10 damage to Titans. Or were they angels?",
+        "include_help": true
+      },
+      "attack3": {
+        "name": "Monster Hunter",
+        "condition": "You deal x100 damage to Titans. Anyone around to kill an elder dragon?",
+        "include_help": true
+      },
+      "maxTicks1": {
+        "name": "Good Night",
+        "condition": "You can gather 8 hours of production. Have a good night!",
+        "include_help": true
+      },
+      "maxTicks2": {
+        "name": "Good day!",
+        "condition": "You can gather up to 24 hours of production. Have a nice day!",
+        "include_help": true
+      },
+      "maxTicks3": {
+        "name": "AFK",
+        "condition": "You can gather up to a week of production. Sorry guys, AFK.",
+        "include_help": true
+      },
+      "tokens1": {
+        "name": "Powered Up",
+        "condition": "You have at least one token. Gotta start somewhere!",
+        "include_help": true
+      },
+      "tokens2": {
+        "name": "Expanded",
+        "condition": "You have at least 100 tokens. Do you feel their power?",
+        "include_help": true
+      },
+      "tokens3": {
+        "name": "Divine",
+        "condition": "You have at least one million tokens. You can stop waiting now.",
+        "include_help": true
+      },
+      "damage1": {
+        "name": "Dangerous",
+        "condition": "You dealt 100'000 damage to Titans. Impressive!",
+        "include_help": true
+      },
+      "damage2": {
+        "name": "Titan Slayer",
+        "condition": "You dealt 1'000'000 damage to Titans. A whole lot of Joules. Couldn't you spend them some other way?",
+        "include_help": true
+      },
+      "damage3": {
+        "name": "Attack on Titan?",
+        "condition": "You dealt 1'000'000'000 damage to Titans. WE WILL NOT STOP UNTIL WE HAVE KILLED *ALL* TITANS!",
+        "include_help": true
+      },
+      "damagerecord1": {
+        "name": "Slash",
+        "condition": "You dealt 6'666 damage in a single hit. Impressive!",
+        "include_help": true
+      },
+      "damagerecord2": {
+        "name": "Clubber it",
+        "condition": "You dealt 666'666 damage in a single it. Damn. You gave them a clubbering.",
+        "include_help": true
+      },
+      "damagerecord3": {
+        "name": "Super Amped Elemental Discharge",
+        "condition": "You dealt 6'666'666 damage in a single hit. Like the damage of a *super amped mega charged slash axe mode attack*.",
+        "include_help": true
+      },
+      "instantkill": {
+        "name": "One Punch Man",
+        "condition": "You killed a Titan in a single hit. ONE PUUUUUNCH!!!!",
+        "include_help": false
+      },
+      "onedamage": {
+        "name": "You should be ashamed.",
+        "condition": "You dealt a single damage to the Titan. You should be ashamed.",
         "include_help": false
       }
     },
     "msg": {
-      "on_award": "Congratulations! You just achieved:",
+      "on_award": "Congrats! You received:",
+      "format_no": "> :red_circle: [[ {0} ]] - {1}",
+      "format_yes": "> :white_check_mark: **[[ {0} ]]** - {1}",
       "format_short": "**[[ {0} ]]**",
-      "format_no": "> [[ {0} ]] - {1}",
-      "format_yes": "> **[[ {0} ]]** - {1}",
+      "secret_achieves": ":grey_question: You still have {} secreat achievements you have to unlock.",
+      "noachieves": "You don't have any achievements to show...",
       "help": "This is the help message. My commands are:",
-      "gameHelp": "> **Energy Idle - Help** \n Produce Joules and energize the multiverse. The commands for the game are:"
+      "gameHelp": "> **Energy Idle - Help** \n Produce Joule and give energy to the multiverse:",
+      "generated_titan": "A titan has come!\n> **[Level {:.0f}]** - {:.2e} HP | {:.2f}% Armor."
     },
     "commands": {
       "harvest": {
         "id": "harvest",
         "showHelp": true,
         "category": ["idle"],
-        "help": "Harvest what Joules you have produced since last time.",
-        "firstTime": "It's the first time you harvest Joules! Here are {0} Joules to get you started. You produce {1} Joules per minute.",
-        "overproduced": "You produced more than you could harvest! You should increase the limit. Try {}.",
-        "production": "You produced {0:.0f} Joules while you were away. Now you have a total of {1:.0f} Joules."
+        "help": "Gather the Joules you've generated up to now.",
+        "firstTime": "It's the first time you're gathering. Here are {0} Joules to start with. You produce {1} Joules per minute.",
+        "overproduced": "You produced more than you can gather. You should try to icnrease it. Try using {}!",
+        "production": "You produced {0:.2e} Joules while you were away. You now have {1:.2e} Joules."
       },
       "upgrade": {
         "id": "upgrade",
         "showHelp": true,
         "category": ["idle"],
-        "help": "Upgrade a certain statistic. Example: $upgrade production. Upgradable stats are:",
-        "onsuccess": "You spent {:.0f} Joules to upgrade {}!",
-        "onfailure": "You don't have enough Joules ({:.0f}) to upgrade {}. You'll need {:.0f}.",
-        "notrecognized": "I didn't understand what you want me to upgrade. Try using one of these: {}.",
+        "help": "Increase a certain stat of some level. Example: $upgrade production 1. You can upgrade these stats:",
+        "onsuccess": "You spent {:.2e} Joules to upgrade {}!",
+        "onfailure": "You don't have enough Joules ({:.2e}) to upgrade {}. You'll need {:.2e}.",
+        "notrecognized": "I didn't understand what you want to upgrade. Try to use one of these specifiers: {}.",
         "IDs": {
           "info": "options",
           "production": "production",
-          "maxTicks": "time"
+          "maxTicks": "time",
+          "attack": "attack"
         },
-        "info": "Here's what you can upgrade:",
+        "info": "Here's what you can upgrade (Es: $upgrade attack):",
         "upgradable": {
-          "maxTicks": "> {} - Maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Price: {:.0f} Joules",
-          "production": "> {} - Production rate.|{} J/min >> {} J/min|Price: {:.0f} Joule."
+          "maxTicks": "> {} - Increases maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Cost: {:.2e} Joules",
+          "production": "> {} - Rate of production.|{} J/min >> {} J/min|Cost: {:.2e} Joules.",
+          "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {:.2e} Joule.s"
         }
+      },
+      "attack": {
+        "id": "attack",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Attack the current titan by spending joules. Doesn't work if there is no titan to attack. Example: $attack 1000",
+        "onsuccess": "You attacked the titan, dealing {:.2e} damage! It now has {:.2e} HP, or {:.2f}% of the maximum.",
+        "onfailure": "You don't have all of those Joules. Try with a smaller amount. You can spend {:.2e}.",
+        "notrecognized": "I didn't understand how many Joules you want to spend. Try with something like $attack 1000.",
+        "zerofailure": "You cannot attack by spending 0 or less Joules!",
+        "notitan": "There are no titans to attack. Try again later.",
+        "newrecord": "New personal damage record!",
+        "onkill": "You dealt {:.2e} damage to the Titan, and killed it! All attackers received {:.0f} Tokens as a reward. The next titan will come soon."
       },
       "help": {
         "id": "help",
         "showHelp": true,
         "category": ["general"],
-        "help": "Makes me send this very message."
+        "help": "Makes me send this message."
+      },
+      "setnotification": {
+        "id": "notify",
+        "showHelp": true,
+        "category": ["general"],
+        "help": "Only for the server owner. Makes me send notifications in this channel. Send it again to mute me.",
+        "notificationsenabled": "Ok, I'll send my messages in this channel.",
+        "notificationsdisabled": "Ok, I'll shut up!"
       },
       "gameHelp": {
         "id": "game?",
         "showHelp": true,
         "category": ["general"],
-        "help": "Makes me send this very message."
+        "help": "Makes me send the idle game help message."
       },
       "help_achieve": {
         "id": "achieves",
         "showHelp": true,
         "category": ["general"],
-        "help": "Makes me show all achievements, with those you unlocked in **bold**.",
-        "intro": "Here are the achievements. Thoseyou unlocked are in bold. Each unlocked achievement will icnrease Joule production by 3% (stacks multiplicatively): "
+        "help": "Makes me send a private message with aviable achievements, plus in bold those you unlocked.",
+        "intro": "Here are the achievements. Those you have unlocked are in bold.Each achievement will multiply production by 3% (stacks multiplicatively):"
       },
       "help_achieve_short": {
-        "id": "achieves!",
+        "id": "!achieves",
         "showHelp": true,
         "category": ["general"],
-        "help": "Makes me show all achievements, with those you unlocked in **bold**.",
-        "intro": "Here are the achievements. Thoseyou unlocked are in bold. Each unlocked achievement will icnrease Joule production by 3% (stacks multiplicatively): "
+        "help": "Makes me send in chat a message with all achieves you've unlocked. TO show others how cool you are.",
+        "intro": "The achievements you unlocked are:"
       },
       "random": {
         "id": "fact",
         "showHelp": true,
         "category": ["general"],
-        "help": "Makes me send a super interesting, 100% true fact."
+        "help": "Makes me send a 100% true, accurate fact."
+      },
+      "ascend": {
+        "id": "ascend",
+        "showHelp": true,
+        "category": ["idle"],
+        "confirm": "Are you sure? You'll gain {:.0f} tokens. Send the command again to ascend.",
+        "success": "Wooosh! All you progress ({:.2e} joule) has been sacrificed, but you gained {:.0f} Tokens.",
+        "notenough": "You don't have enough lifetime joules to acend. You need {:.2e}. You still have to produce {:.2e}.",
+        "help": "Ascend to obtain Tokens. Tokens increase almost everything you can do. You will sacrifice **everything** you own, however."
       },
       "changeLang": {
-        "id": "Language",
+        "id": "language",
         "showHelp": true,
         "category": ["general"],
-        "help": "Only for the server owner. Makes me change what language I speak in this server. Example: $language IT",
+        "help": "Only for the server owner. Changes the language I speak. For example: $language IT.",
         "success": "Done! I'll speak in English from now on.",
-        "error": "Sorry, {0} is not an available language. I can speak {1}."
+        "error": "Sorry, {0} is not an aviable language. I know {1}."
       },
       "roll": {
         "id": "roll",
         "showHelp": true,
         "category": ["general"],
         "help": "Makes me roll a dX. Example: $roll d20 - Rolls a d20.",
-        "coercionError": "I didn't understand what dice you want me to use. Try: {} d20",
-        "result": "I rolled a d{sides:d} and got... {result}."
+        "coercionError": "I didn't understand what you want me to roll. Try {} d20",
+        "result": "A rolled a d{sides:d} and got... {result}."
       },
       "userInfo": {
         "id": "info",
@@ -493,11 +613,15 @@
         "category": ["general"],
         "help": "Makes me show information about your account.",
         "info": "Here's what I know about you:",
-        "joules": "> You have {:.0f} Joules.",
+        "joules": "> You have {:.2e} Joules. You produced a total of {:.2e} Joules during this ascension.",
+        "tokens": "> You have {:.0f} Tokens. If you ascend now, you'll obtain {:.0f} Tokens.",
+        "lifetime": "> You ascended {:.0f} times, sacrificing a total of {:.2e} Joules.",
         "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {:.2f} Joules each minute.",
-        "maxTickslevel": "> You upgraded max time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
-        "achieves": "> You have {} achievements, For a total Joule harvest bonus of x{:.2f}.",
-        "commandCount": "> You attempted to call me {0} times."
+        "maxTickslevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
+        "attacklevel": "> You upgraded titan attack {:.0f} times. You deal x{:.2f} damage to Titans.",
+        "titandamage": "> You dealt a total of {:.2e} damage to Titans. Your most powerful attack dealt {:.2e} damage.",
+        "achieves": "> You unlocked {} achievements, For a total Joule production bonus of x{:.2f}.",
+        "commandCount": "> In your career, you called me {0} times."
       }
     },
     "random_path": "./locFiles/random_EN.txt",
