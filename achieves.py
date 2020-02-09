@@ -132,13 +132,13 @@ def make_achievements():
 
     # Tokens -----------------------------------------------------
     add_achievement(
-        lambda user: True if G.USR[user].titan_damage >= 1 else False,
+        lambda user: True if G.USR[user].tokens >= 1 else False,
         "tokens1")
     add_achievement(
-        lambda user: True if G.USR[user].titan_damage >= 100 else False,
+        lambda user: True if G.USR[user].tokens >= 100 else False,
         "tokens2")
     add_achievement(
-        lambda user: True if G.USR[user].titan_damage >= 1e6 else False,
+        lambda user: True if G.USR[user].tokens >= 1e6 else False,
         "tokens3")
 
     # Other -----------------------------------------------------
