@@ -177,6 +177,7 @@ def help_achieve_logic(message):
     userInfo = G.USR[str(message.author.id)]
     helpmsg = tools.MsgBuilder()
     helpmsg.add(G.LOC.commands.help_achieve.intro)
+    i = 0
     for key, achieve in G.LOC.achievements.items():
         if achieve.include_help or userInfo[key]:
             if userInfo[key]:
@@ -189,7 +190,6 @@ def help_achieve_logic(message):
                     G.LOC.achievements[key].name,
                     G.LOC.achievements[key].condition
                 ))
-        i = 0
         if achieve.include_help is False and userInfo[key] in [False, 0]:
             i += 1
     helpmsg.add(G.LOC.msg.secret_achieves.format(i))
