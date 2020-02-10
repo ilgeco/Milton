@@ -112,11 +112,17 @@ def userInfo_logic(message):
     out = tools.MsgBuilder()
 
     out.add(strings.info)
-    out.add(strings.joules.format(G.USR[userID].joules, G.USR[userID].lifetime_joules))
+    out.add(strings.joules.format(
+        tools.fn(G.USR[userID].joules),
+        tools.fn(G.USR[userID].lifetime_joules)))
     out.add(strings.tokens.format(
-        G.USR[userID].tokens, tokens_from_joules(G.USR[userID].lifetime_joules)))
+        tools.fn(G.USR[userID].tokens),
+        tools.fn(tokens_from_joules(G.USR[userID].lifetime_joules))
+    ))
     out.add(strings.lifetime.format(
-        G.USR[userID].times_ascended, G.USR[userID].sacrificed_joules))
+        G.USR[userID].times_ascended,
+        tools.fn(G.USR[userID].sacrificed_joules)
+    ))
     out.add(strings.productionlevel.format(
         stats.production.statlevel,
         round(stats.production.value() * 60, 2)
