@@ -163,7 +163,9 @@ def produceJoules(userID, current_time, last_time):
         tools.update_stat(user_id=userID, stat="lifetime_joules", increase=joules_produced)
         tools.save_users()
         output.add(G.LOC.commands.harvest.production.format(
-            joules_produced, G.USR[userID].joules))
+            tools.fn(joules_produced),
+            tools.fn(G.USR[userID].joules)
+        ))
         return output.parse()
 
 
@@ -185,6 +187,7 @@ def upgrade_logic(message):
     out = tools.MsgBuilder()
     stats = make_all_stats(userID)
     stat_names = [stat.name for stat in stats.values()]
+    current_joules = G.USR[userID].joules
 
     if message.args[0] == G.LOC.commands.upgrade.IDs.info:
         # Send information message
@@ -195,22 +198,28 @@ def upgrade_logic(message):
             G.LOC.commands.upgrade.IDs.maxTicks,
             round(stats.maxTicks.value() / 3600, 2),
             round(stats.maxTicks.value(1) / 3600, 2),
-            stats.maxTicks.upgrade_price
+            tools.fn(stats.maxTicks.upgrade_price)
         ).split("|"))
+        if stats.maxTicks.upgrade_price <= current_joules:
+            out.append(" < OK!")
         # >> Upgrade production help
         out.add(G.LOC.commands.upgrade.upgradable.production.format(
             G.LOC.commands.upgrade.IDs.production,
             round(stats.production.value() * 60, 2),
             round(stats.production.value(1) * 60, 2),
-            stats.production.upgrade_price
+            tools.fn(stats.production.upgrade_price)
         ).split("|"))
+        if stats.production.upgrade_price <= current_joules:
+            out.append(" < OK!")
         # >> Upgrade attack help
         out.add(G.LOC.commands.upgrade.upgradable.attack.format(
             G.LOC.commands.upgrade.IDs.attack,
             round(stats.attack.value(), 2),
             round(stats.attack.value(1), 2),
-            stats.attack.upgrade_price
+            tools.fn(stats.attack.upgrade_price)
         ).split("|"))
+        if stats.attack.upgrade_price <= current_joules:
+            out.append(" < OK!")
         out.append("```")
         return out.pretty_parse()
 
@@ -228,7 +237,7 @@ def upgrade_logic(message):
             if G.USR[userID].joules >= stat.upgrade_price:
                 stat.upgrade()
                 out.add(G.LOC.commands.upgrade.onsuccess.format(
-                    stat.upgrade_price,
+                    tools.fn(stat.upgrade_price),
                     stat.name
                 ))
                 G.USR[userID].joules -= stat.upgrade_price
@@ -237,7 +246,7 @@ def upgrade_logic(message):
                 out.add(G.LOC.commands.upgrade.onfailure.format(
                     G.USR[userID].joules,
                     stat.name,
-                    stat.upgrade_price
+                    tools.fn(stat.upgrade_price)
                 ))
                 break
             i += 1
@@ -312,7 +321,9 @@ def attack_logic(message):
         return out.parse()
 
     if G.USR[user_id].joules < raw_damage:
-        out.add(G.LOC.commands.attack.onfailure.format(G.USR[user_id].joules))
+        out.add(G.LOC.commands.attack.onfailure.format(
+            tools.fn(G.USR[user_id].joules)
+        ))
         return out.parse()
 
     tools.update_stat(user_id=user_id, stat="joules", increase=-raw_damage)
@@ -348,12 +359,13 @@ def attack_logic(message):
                 G.USR[id].attacks.remove(user_guild)
         tools.save_users()
         out.add(G.LOC.commands.attack.onkill.format(
-            damage, max(round(titan.reward, 0), 1)
+            tools.fn(damage), max(round(titan.reward, 0), 1)
         ))
         return out.parse()
     else:
         out.add(G.LOC.commands.attack.onsuccess.format(
-            damage, remaining_hp, round(remaining_hp / titan.hp * 100, 2)
+            tools.fn(damage), tools.fn(remaining_hp),
+            round(remaining_hp / titan.hp * 100, 2)
         ))
         return out.parse()
     # We should never get here
@@ -388,7 +400,7 @@ def ascend_logic(message):
     )
     if lifetime_joules < min_joules:
         out.add(G.LOC.commands.ascend.notenough.format(
-            min_joules, min_joules - lifetime_joules))
+            tools.fn(min_joules), tools.fn(min_joules - lifetime_joules)))
         return out.parse()
 
     if elapsed > 30:
@@ -410,7 +422,7 @@ def ascend_logic(message):
     tools.update_stat(user_id=user_id, stat="times_ascended", increase=1)
 
     out.add(G.LOC.commands.ascend.success.format(
-        lifetime_joules, tokens
+        tools.fn(lifetime_joules), tokens
     ))
     return out.parse()
 

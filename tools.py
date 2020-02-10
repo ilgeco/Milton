@@ -124,6 +124,31 @@ def count_achieves(userID):
     return i
 
 
+def fn(number, threshold=100000, base=1000, decimals=0):
+    """Short for 'format number'.
+
+    Takes a number and formats it into human-readable form.
+    If it's larger than threshold, formats it into a more compact form.
+    """
+    if base % 10 != 0:
+        raise ValueError("Base must be a power of ten.")
+    if decimals > 0:
+        number = round(number, decimals)
+    elif decimals == 0:
+        number = int(number)
+    if number < threshold:
+        return str(number)
+    power_of_ten = round(log(base, 10), 0)
+    print(power_of_ten)
+    exponent = 0
+    while True:
+        if number < base:
+            break
+        number = number / base
+        exponent += 1
+    return str(int(number)) + "e" + str(int(power_of_ten) * exponent)
+
+
 class MsgBuilder:
     # Very very simple utility to make messages with newlines.
     def __init__(self):

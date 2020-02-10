@@ -181,7 +181,7 @@
       "noachieves": "Non hai nessun achievement da mostrare...",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
       "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:",
-      "generated_titan": "E' arrivato un titano!\n> **[Livello {:.0f}]** - {:.2e} HP | {:.2f}% Armatura."
+      "generated_titan": "E' arrivato un titano!\n> **[Livello {:.0f}]** - {} HP | {:.2f}% Armatura."
     },
     "commands": {
       "harvest": {
@@ -191,15 +191,15 @@
         "help": "Raccogli i Joule che hai prodotto fino a questo momento.",
         "firstTime": "E' la tua prima volta che raccogli i Joule. Ecco {0} Joule per iniziare. Produci di base {1} Joule al minuto.",
         "overproduced": "Hai prodotto più del tuo massimo. Dovresti aumentarlo! Prova ad utilizzare {}",
-        "production": "Hai prodotto {0:.2e} Joule mentre eri via. Ora hai un totale di {1:.2e} Joule."
+        "production": "Hai prodotto {0} Joule mentre eri via. Ora hai un totale di {1} Joule."
       },
       "upgrade": {
         "id": "aumenta",
         "showHelp": true,
         "category": ["idle"],
         "help": "Aumenta una certa statistica di un certo livello. Esempio: $aumenta produzione 1. Le possibili statistiche aumentabili sono:",
-        "onsuccess": "Hai speso {:.2e} Joule per potenziare {}!",
-        "onfailure": "Non hai abbastanza Joule ({:.2e}) per potenziare {}. Te ne servono {:.2e}.",
+        "onsuccess": "Hai speso {} Joule per potenziare {}!",
+        "onfailure": "Non hai abbastanza Joule ({}) per potenziare {}. Te ne servono {}.",
         "notrecognized": "Non ho capito cosa vuoi potenziare. Prova ad usare uno di questi specificatori: {}.",
         "IDs": {
           "info": "opzioni",
@@ -209,9 +209,9 @@
         },
         "info": "Ecco cosa puoi potenziare (Es: $aumenta):",
         "upgradable": {
-          "maxTicks": "> {} - Tempo di raccolta massimo.|{:.2f} Ore >> {:.2f} Ore|Costo: {:.2e} Joule",
-          "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {:.2e} Joule.",
-          "attack": "> {} - Moltiplicatore dei danni contro i Titani.|x{} >> x{}|Costo: {:.2e} Joule."
+          "maxTicks": "> {} - Tempo di raccolta massimo.|{:.2f} Ore >> {:.2f} Ore|Costo: {} Joule",
+          "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {} Joule.",
+          "attack": "> {} - Moltiplicatore dei danni contro i Titani.|x{} >> x{}|Costo: {} Joule."
         }
       },
       "attack": {
@@ -219,13 +219,13 @@
         "showHelp": true,
         "category": ["idle"],
         "help": "Attacca il titano spendendo Joule. Non funziona se non c'è un titano attivo in questo momento. Esempio: $attacca 1000",
-        "onsuccess": "Hai attaccato il titano, infliggendo {:.2e} danni! Ora ha {:.2e} vita, il {:.2f}%.",
-        "onfailure": "Non hai tutti quei Joule! Prova con un ammontare più basso. Ne puoi spendere {:.2e}.",
+        "onsuccess": "Hai attaccato il titano, infliggendo {} danni! Ora ha {} vita, il {:.2f}%.",
+        "onfailure": "Non hai tutti quei Joule! Prova con un ammontare più basso. Ne puoi spendere {}.",
         "notrecognized": "Non ho capito quanti Joule vuoi spendere. Prova $attacca 100 - o qualcosa di simile.",
         "zerofailure": "Non puoi attaccare spendendo 0 o meno Joule!",
         "notitan": "Non c'è nessun titano da attaccare. Prova più tardi.",
         "newrecord": "Nuovo record personale di danni!",
-        "onkill": "Hai inflitto {:.2e} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
+        "onkill": "Hai inflitto {} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
         "id": "aiuto",
@@ -272,8 +272,8 @@
         "showHelp": true,
         "category": ["idle"],
         "confirm": "Sei sicuro? Riceverai {:.0f} token. Invia il comando di nuovo entro 30 secondi per ascendere.",
-        "success": "Wooosh! Tutto il tuo progresso ({:.2e} joule) è stato sacrificato, e hai ottenuto {:.0f} Token.",
-        "notenough": "Non hai ancora abbastanza Joule per ascendere. Te ne servono {:.2e}. Ne dovrai ancora produrre {:.2e}.",
+        "success": "Wooosh! Tutto il tuo progresso ({} joule) è stato sacrificato, e hai ottenuto {:.0f} Token.",
+        "notenough": "Non hai ancora abbastanza Joule per ascendere. Te ne servono {}. Ne dovrai ancora produrre {}.",
         "help": "Ascendi per ottendere Token. Scarifichi **tutto** il tuo progresso, ma ottieni token in base ai Joule che hai prodotto in totale nella tua carriera."
       },
       "changeLang": {
@@ -298,13 +298,13 @@
         "category": ["general"],
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
-        "joules": "> Hai {:.2e} Joule. Hai prodotto un totale di {:.2e} Joule in questa ascensione.",
+        "joules": "> Hai {} Joule. Hai prodotto un totale di {} Joule in questa ascensione.",
         "tokens": "> Hai {:.0f} Token. Se ascendi ora, otterrai {:.0f} Token.",
-        "lifetime": "> Sei asceso {:.0f} volte, e hai sacrificato in totale {:.2e} Joule.",
+        "lifetime": "> Sei asceso {:.0f} volte, e hai sacrificato in totale {} Joule.",
         "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
         "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai x{:.2f} danni ai Titani.",
-        "titandamage": "> Hai fatto un totale di {:.2e} danni al Titano. Il tuo attacco più potente ha inflitto {:.2e} danni.",
+        "titandamage": "> Hai fatto un totale di {} danni al Titano. Il tuo attacco più potente ha inflitto {} danni.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
       }
@@ -496,7 +496,7 @@
       "noachieves": "You don't have any achievements to show...",
       "help": "This is the help message. My commands are:",
       "gameHelp": "> **Energy Idle - Help** \n Produce Joule and give energy to the multiverse:",
-      "generated_titan": "A titan has come!\n> **[Level {:.0f}]** - {:.2e} HP | {:.2f}% Armor."
+      "generated_titan": "A titan has come!\n> **[Level {:.0f}]** - {} HP | {:.2f}% Armor."
     },
     "commands": {
       "harvest": {
@@ -506,15 +506,15 @@
         "help": "Gather the Joules you've generated up to now.",
         "firstTime": "It's the first time you're gathering. Here are {0} Joules to start with. You produce {1} Joules per minute.",
         "overproduced": "You produced more than you can gather. You should try to icnrease it. Try using {}!",
-        "production": "You produced {0:.2e} Joules while you were away. You now have {1:.2e} Joules."
+        "production": "You produced {0} Joules while you were away. You now have {1} Joules."
       },
       "upgrade": {
         "id": "upgrade",
         "showHelp": true,
         "category": ["idle"],
         "help": "Increase a certain stat of some level. Example: $upgrade production 1. You can upgrade these stats:",
-        "onsuccess": "You spent {:.2e} Joules to upgrade {}!",
-        "onfailure": "You don't have enough Joules ({:.2e}) to upgrade {}. You'll need {:.2e}.",
+        "onsuccess": "You spent {} Joules to upgrade {}!",
+        "onfailure": "You don't have enough Joules ({}) to upgrade {}. You'll need {}.",
         "notrecognized": "I didn't understand what you want to upgrade. Try to use one of these specifiers: {}.",
         "IDs": {
           "info": "options",
@@ -524,9 +524,9 @@
         },
         "info": "Here's what you can upgrade (Es: $upgrade attack):",
         "upgradable": {
-          "maxTicks": "> {} - Increases maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Cost: {:.2e} Joules",
-          "production": "> {} - Rate of production.|{} J/min >> {} J/min|Cost: {:.2e} Joules.",
-          "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {:.2e} Joule.s"
+          "maxTicks": "> {} - Increases maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Cost: {} Joules",
+          "production": "> {} - Rate of production.|{} J/min >> {} J/min|Cost: {} Joules.",
+          "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {} Joule.s"
         }
       },
       "attack": {
@@ -534,13 +534,13 @@
         "showHelp": true,
         "category": ["idle"],
         "help": "Attack the current titan by spending joules. Doesn't work if there is no titan to attack. Example: $attack 1000",
-        "onsuccess": "You attacked the titan, dealing {:.2e} damage! It now has {:.2e} HP, or {:.2f}% of the maximum.",
-        "onfailure": "You don't have all of those Joules. Try with a smaller amount. You can spend {:.2e}.",
+        "onsuccess": "You attacked the titan, dealing {} damage! It now has {} HP, or {:.2f}% of the maximum.",
+        "onfailure": "You don't have all of those Joules. Try with a smaller amount. You can spend {}.",
         "notrecognized": "I didn't understand how many Joules you want to spend. Try with something like $attack 1000.",
         "zerofailure": "You cannot attack by spending 0 or less Joules!",
         "notitan": "There are no titans to attack. Try again later.",
         "newrecord": "New personal damage record!",
-        "onkill": "You dealt {:.2e} damage to the Titan, and killed it! All attackers received {:.0f} Tokens as a reward. The next titan will come soon."
+        "onkill": "You dealt {} damage to the Titan, and killed it! All attackers received {:.0f} Tokens as a reward. The next titan will come soon."
       },
       "help": {
         "id": "help",
@@ -587,8 +587,8 @@
         "showHelp": true,
         "category": ["idle"],
         "confirm": "Are you sure? You'll gain {:.0f} tokens. Send the command again to ascend.",
-        "success": "Wooosh! All you progress ({:.2e} joule) has been sacrificed, but you gained {:.0f} Tokens.",
-        "notenough": "You don't have enough lifetime joules to acend. You need {:.2e}. You still have to produce {:.2e}.",
+        "success": "Wooosh! All you progress ({} joule) has been sacrificed, but you gained {:.0f} Tokens.",
+        "notenough": "You don't have enough lifetime joules to acend. You need {}. You still have to produce {}.",
         "help": "Ascend to obtain Tokens. Tokens increase almost everything you can do. You will sacrifice **everything** you own, however."
       },
       "changeLang": {
@@ -613,13 +613,13 @@
         "category": ["general"],
         "help": "Makes me show information about your account.",
         "info": "Here's what I know about you:",
-        "joules": "> You have {:.2e} Joules. You produced a total of {:.2e} Joules during this ascension.",
+        "joules": "> You have {} Joules. You produced a total of {} Joules during this ascension.",
         "tokens": "> You have {:.0f} Tokens. If you ascend now, you'll obtain {:.0f} Tokens.",
-        "lifetime": "> You ascended {:.0f} times, sacrificing a total of {:.2e} Joules.",
+        "lifetime": "> You ascended {:.0f} times, sacrificing a total of {} Joules.",
         "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {:.2f} Joules each minute.",
         "maxTickslevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
         "attacklevel": "> You upgraded titan attack {:.0f} times. You deal x{:.2f} damage to Titans.",
-        "titandamage": "> You dealt a total of {:.2e} damage to Titans. Your most powerful attack dealt {:.2e} damage.",
+        "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
         "achieves": "> You unlocked {} achievements, For a total Joule production bonus of x{:.2f}.",
         "commandCount": "> In your career, you called me {0} times."
       }

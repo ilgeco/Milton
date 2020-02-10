@@ -155,7 +155,7 @@ def main(token, language, options_path):
                     channel = client.get_channel(guild.notification_channel)
                     if guild.notification_channel != 0:
                         await channel.send(G.LOC.msg.generated_titan.format(
-                            level, titan.hp, round((1 - titan.armor) * 100, 2)
+                            level, tools.fn(titan.hp), round((1 - titan.armor) * 100, 2)
                         ))
             await asyncio.sleep(to_hour)
 
