@@ -438,17 +438,17 @@ def tierlist_logic(message):
     out = tools.MsgBuilder()
     for member in message.author.guild.members:
         userId = str(member.id)
-        members.append((userId, G.USR[userId].lifetime_joules))
-    members.sort(key=lambda tup: tup[1])
+        members.append((userId, G.USR[userId].name, G.USR[userId].lifetime_joules))
+    members = sorted(members, key=lambda tup: tup[2], reverse=True)
     try:
         out.add(G.LOC.commands.tierlist.rank1.format(
-            members[0][0], tools.fc(members[0][1])
+            members[0][1], tools.fn(members[0][2])
         ))
         out.add(G.LOC.commands.tierlist.rank2.format(
-            members[1][0], tools.fc(members[0][1])
+            members[1][1], tools.fn(members[1][2])
         ))
         out.add(G.LOC.commands.tierlist.rank3.format(
-            members[2][0], tools.fc(members[0][1])
+            members[2][1], tools.fn(members[2][2])
         ))
         top3 = [member[0] for member in members[:3]]
     except IndexError:
@@ -456,11 +456,14 @@ def tierlist_logic(message):
     if str(message.author.id) in top3:
         return out.parse()
     else:
-        you = (str(message.author.id), G.USR[str(message.author.id)].lifetime_joules)
+        you = (str(message.author.id),
+               G.USR[str(message.author.id)].name,
+               G.USR[str(message.author.id)].lifetime_joules)
         out.add(G.LOC.commands.tierlist.rank_you.format(
             members.index(you) + 1,
-            tools.fc(you[1])
+            tools.fn(you[2])
         ))
+        return out.parse()
 
 
 def titan_perm(message):
@@ -482,7 +485,7 @@ def titan_logic(message):
         tools.fn(titan.hp),
         tools.fn(titan.hp - damage_dealt),
         round((titan.hp - damage_dealt) / 100, 2),
-        round(titan.armor * 100),
+        round(100 - titan.armor * 100, 2),
         tools.fn(titan.reward)
     ))
     return out.parse()
