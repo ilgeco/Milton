@@ -310,7 +310,7 @@
       },
       "tierlist": {
         "id": "classifica",
-        "showhelp": true,
+        "showHelp": true,
         "category": ["idle"],
         "help": "Mi fà mostrare i migliori giocatori nel server, e anche la tua posizione.",
         "rank1": "In prima posizione: **{}** con {} Joule totali!",
@@ -320,7 +320,7 @@
       },
       "titan": {
         "id": "titano",
-        "showhelp": true,
+        "showHelp": true,
         "category": ["idle"],
         "help": "Mi fà mostrare informazioni sul titano corrente.",
         "info": "Il Titano corrente è di livello {}.\n> **{}** Hp totali, {} Hp rimanenti ({:.2f} %) e {:.2f}% armatura.\n> Ricompensa: >> {} << Token.",
