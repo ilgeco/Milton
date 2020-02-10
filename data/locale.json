@@ -640,6 +640,24 @@
         "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
         "achieves": "> You unlocked {} achievements, For a total Joule production bonus of x{:.2f}.",
         "commandCount": "> In your career, you called me {0} times."
+      },
+      "tierlist": {
+        "id": "leaderboard",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Makes me show the top players in the server, as well as your position.",
+        "rank1": "In First place: **{}** with {} Joules!",
+        "rank2": "In Second place: **{}** with {} Joules!",
+        "rank3": "In Third place: **{}** with {} Joules!",
+        "rank_you": "You are in position {}, with {} Joules."
+      },
+      "titan": {
+        "id": "titan",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Makes me show information on the current titan.",
+        "info": "We are fighting a level {} titan.\n> **{}** total HP, {} remaining HP ({:.2f} %) and {:.2f}% armor.\n> Reward: >> {} << Tokens.",
+        "notitan": "There are no titans. Try again later."
       }
     },
     "random_path": "./locFiles/random_EN.txt",
