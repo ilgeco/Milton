@@ -427,6 +427,16 @@ def ascend_logic(message):
     return out.parse()
 
 
+def tierlist_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.tierlist.id):
+        return True
+    return False
+
+
+def tierlist_logic(message):
+    pass
+
+
 def make_commands():
     tools.add_command(logic=harvest_logic, permission=harvest_perm)
     tools.add_command(logic=gamehelp_logic, permission=gamehelp_perm, where="user")

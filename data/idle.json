@@ -1,7 +1,7 @@
 {
-  "token_power": 0.000007,
+  "token_power": 0.000008,
   "ascension": {
-    "exponent": 0.08,
+    "exponent": 0.085,
     "min_joules": 10000,
     "min_exp": 10
   },
@@ -13,8 +13,8 @@
   "titan":{
     "base_hp": 1000,
     "level_exp": 2,
-    "armor_constant": 0.05,
-    "reward_constant": 1.008
+    "armor_constant": 0.01,
+    "reward_constant": 1.01
   },
   "maxTicks": {
     "base": 14400,

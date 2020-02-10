@@ -307,6 +307,13 @@
         "titandamage": "> Hai fatto un totale di {} danni al Titano. Il tuo attacco più potente ha inflitto {} danni.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
+      },
+      "tierlist": {
+        "id": "classifica",
+        "showhelp": true,
+        "category": ["idle"],
+        "help": "Mi fà mostrare i migliori giocatori nel server, e anche la tua posizione.",
+        "rank1": ""
       }
     },
     "random_path": "./locFiles/random_EN.txt",
