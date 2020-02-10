@@ -148,7 +148,6 @@ def produceJoules(userID, current_time, last_time):
     if last_time == 0:
         # I give a gift of some joules for the uninitialized user.
         tools.update_stat(user_id=userID, stat="joules", set=G.IDLE.harvest.gift)
-        tools.update_stat(user_id=userID, stat="lifetime_joules", set=G.IDLE.harvest.gift)
         return G.LOC.commands.harvest.firstTime.format(
             G.IDLE.harvest.gift, round((G.IDLE.production.base * 60), 0))
     else:
@@ -244,7 +243,7 @@ def upgrade_logic(message):
                 tools.save_users()
             else:
                 out.add(G.LOC.commands.upgrade.onfailure.format(
-                    G.USR[userID].joules,
+                    tools.fn(G.USR[userID].joules),
                     stat.name,
                     tools.fn(stat.upgrade_price)
                 ))
