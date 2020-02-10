@@ -329,7 +329,7 @@ def attack_logic(message):
     tools.update_stat(user_id=user_id, stat="joules", increase=-raw_damage)
 
     # Check for achievement
-    if raw_damage == 1 and G.USR[user_id].onedamage in [0, False]:
+    if int(raw_damage) == 1:
         tools.update_stat(user_id=user_id, stat="onedamage", set=True)
 
     if isinstance(G.USR[user_id].attacks, list) is False:
