@@ -116,8 +116,8 @@ def userInfo_logic(message):
         tools.fn(G.USR[userID].joules),
         tools.fn(G.USR[userID].lifetime_joules)))
     out.add(strings.tokens.format(
-        tools.fn(G.USR[userID].tokens),
-        tools.fn(tokens_from_joules(G.USR[userID].lifetime_joules))
+        G.USR[userID].tokens,
+        tokens_from_joules(G.USR[userID].lifetime_joules)
     ))
     out.add(strings.lifetime.format(
         G.USR[userID].times_ascended,
