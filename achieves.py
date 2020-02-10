@@ -24,7 +24,7 @@ class Achievement():
 
     def check_trigger(self, user_id):
         if self.trigger(str(user_id)) is True and \
-                G.USR[str(user_id)][self.id] in [False, None, 0]:
+                G.USR[str(user_id)][self.id] is not True:
             return True
 
 
@@ -149,7 +149,7 @@ def make_achievements():
         lambda user: True if G.USR[user].gotUnlucky else False,
         "critical_failure")
     add_achievement(
-        lambda user: True if G.USR[user].factCount >= 1_000 else False,
+        lambda user: True if G.USR[user].factCount >= 20 else False,
         "many_facts")
 
     return True
