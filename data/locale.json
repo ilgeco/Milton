@@ -313,7 +313,18 @@
         "showhelp": true,
         "category": ["idle"],
         "help": "Mi fà mostrare i migliori giocatori nel server, e anche la tua posizione.",
-        "rank1": ""
+        "rank1": "In prima posizione: **{}** con {} Joule totali!",
+        "rank2": "In seconda posizione: **{}** con {} Joule totali!",
+        "rank3": "In terza posizione: **{}** con {} Joule totali!",
+        "rank_you": "Tu sei in {} posizione, con {} Joule totali."
+      },
+      "titan": {
+        "id": "titano",
+        "showhelp": true,
+        "category": ["idle"],
+        "help": "Mi fà mostrare informazioni sul titano corrente.",
+        "info": "Il Titano corrente è di livello {}.\n> **{}** Hp totali, {} Hp rimanenti ({} %).\n> Ricompensa: >> {} << Token.",
+        "notitan": "Non c'è nessun titano. Prova più tardi."
       }
     },
     "random_path": "./locFiles/random_EN.txt",

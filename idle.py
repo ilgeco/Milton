@@ -437,9 +437,33 @@ def tierlist_logic(message):
     pass
 
 
+def titan_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.titan.id):
+        return True
+    return False
+
+
+def titan_logic(message):
+    out = tools.MsgBuilder()
+    if G.GLD[str(message.author.guild.id)].titan_status is False:
+        out.add(G.LOC.commands.titan.notitan)
+        return out.parse()
+    level = G.GLD[str(message.author.guild.id)].titan_level
+    damage_dealt = G.GLD[str(message.author.guild.id)].titan_damage
+    titan = Titan(level)
+    out.add(G.LOC.commands.titan.info.format(
+        level,
+        tools.fn(titan.hp),
+        tools.fn(titan.hp - damage_dealt),
+        round((titan.hp - damage_dealt) / 100, 2),
+        tools.fn(titan.reward)
+    ))
+    return out.parse()
+
 def make_commands():
     tools.add_command(logic=harvest_logic, permission=harvest_perm)
     tools.add_command(logic=gamehelp_logic, permission=gamehelp_perm, where="user")
     tools.add_command(logic=upgrade_logic, permission=upgrade_perm)
     tools.add_command(logic=attack_logic, permission=attack_perm)
     tools.add_command(logic=ascend_logic, permission=ascend_perm)
+    tools.add_command(logic=titan_logic, permission=titan_perm)
