@@ -1,8 +1,8 @@
 {
-  "token_power": 0.000005,
+  "token_power": 0.000007,
   "ascension": {
-    "exponent": 0.05,
-    "min_joules": 100000,
+    "exponent": 0.08,
+    "min_joules": 10000,
     "min_exp": 10
   },
   "production": {
@@ -14,7 +14,7 @@
     "base_hp": 1000,
     "level_exp": 2,
     "armor_constant": 0.05,
-    "reward_constant": 1.005
+    "reward_constant": 1.008
   },
   "maxTicks": {
     "base": 14400,

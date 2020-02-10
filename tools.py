@@ -139,7 +139,6 @@ def fn(number, threshold=100000, base=1000, decimals=0):
     if number < threshold:
         return str(number)
     power_of_ten = round(log(base, 10), 0)
-    print(power_of_ten)
     exponent = 0
     while True:
         if number < base:
