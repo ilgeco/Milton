@@ -483,7 +483,7 @@ def titan_logic(message):
         level,
         tools.fn(titan.hp),
         tools.fn(titan.hp - damage_dealt),
-        round((titan.hp - damage_dealt) / 100, 2),
+        round((titan.hp - damage_dealt) / titan.hp, 2),
         round((1 - titan.armor) * 100, 2),
         tools.fn(titan.reward)
     ))
