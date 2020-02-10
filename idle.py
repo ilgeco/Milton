@@ -434,7 +434,33 @@ def tierlist_perm(message):
 
 
 def tierlist_logic(message):
-    pass
+    members = []
+    out = tools.MsgBuilder()
+    for member in message.author.guild.members:
+        userId = str(member.id)
+        members.append((userId, G.USR[userId].lifetime_joules))
+    members.sort(key=lambda tup: tup[1])
+    try:
+        out.add(G.LOC.commands.tierlist.rank1.format(
+            members[0][0], tools.fc(members[0][1])
+        ))
+        out.add(G.LOC.commands.tierlist.rank2.format(
+            members[1][0], tools.fc(members[0][1])
+        ))
+        out.add(G.LOC.commands.tierlist.rank3.format(
+            members[2][0], tools.fc(members[0][1])
+        ))
+        top3 = [member[0] for member in members[:3]]
+    except IndexError:
+        return out.parse()
+    if str(message.author.id) in top3:
+        return out.parse()
+    else:
+        you = (str(message.author.id), G.USR[str(message.author.id)].lifetime_joules)
+        out.add(G.LOC.commands.tierlist.rank_you.format(
+            members.index(you) + 1,
+            tools.fc(you[1])
+        ))
 
 
 def titan_perm(message):
@@ -456,9 +482,11 @@ def titan_logic(message):
         tools.fn(titan.hp),
         tools.fn(titan.hp - damage_dealt),
         round((titan.hp - damage_dealt) / 100, 2),
+        round(titan.armor * 100),
         tools.fn(titan.reward)
     ))
     return out.parse()
+
 
 def make_commands():
     tools.add_command(logic=harvest_logic, permission=harvest_perm)
@@ -467,3 +495,4 @@ def make_commands():
     tools.add_command(logic=attack_logic, permission=attack_perm)
     tools.add_command(logic=ascend_logic, permission=ascend_perm)
     tools.add_command(logic=titan_logic, permission=titan_perm)
+    tools.add_command(logic=tierlist_logic, permission=tierlist_perm)

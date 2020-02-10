@@ -323,7 +323,7 @@
         "showhelp": true,
         "category": ["idle"],
         "help": "Mi fà mostrare informazioni sul titano corrente.",
-        "info": "Il Titano corrente è di livello {}.\n> **{}** Hp totali, {} Hp rimanenti ({} %).\n> Ricompensa: >> {} << Token.",
+        "info": "Il Titano corrente è di livello {}.\n> **{}** Hp totali, {} Hp rimanenti ({:.2f} %) e {:.2f}% armatura.\n> Ricompensa: >> {} << Token.",
         "notitan": "Non c'è nessun titano. Prova più tardi."
       }
     },
