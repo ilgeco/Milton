@@ -113,7 +113,7 @@ def userInfo_logic(message):
     bonus_tokens = 0
 
     if G.USR[userID].times_ascended <= len(G.IDLE.ascension.bonus):
-        bonus_tokens = G.IDLE.ascension.bonus[G.USR[userID].times_ascended - 1]
+        bonus_tokens = G.IDLE.ascension.bonus[max(G.USR[userID].times_ascended - 1, 0)]
 
     out.add(strings.info)
     out.add(strings.joules.format(

@@ -396,7 +396,7 @@ def ascend_logic(message):
     bonus_tokens = 0
 
     if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
-        bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended - 1]
+        bonus_tokens = G.IDLE.ascension.bonus[max(G.USR[user_id].times_ascended - 1, 0)]
 
     min_joules = (
         G.IDLE.ascension.min_joules *
