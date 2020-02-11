@@ -110,6 +110,10 @@ def userInfo_logic(message):
     # Give user information
     strings = G.LOC.commands.userInfo
     out = tools.MsgBuilder()
+    bonus_tokens = 0
+
+    if G.USR[userID].times_ascended <= len(G.IDLE.ascension.bonus):
+        bonus_tokens = G.IDLE.ascension.bonus[G.USR[userID].times_ascended - 1]
 
     out.add(strings.info)
     out.add(strings.joules.format(
@@ -117,7 +121,8 @@ def userInfo_logic(message):
         tools.fn(G.USR[userID].lifetime_joules)))
     out.add(strings.tokens.format(
         G.USR[userID].tokens,
-        tokens_from_joules(G.USR[userID].lifetime_joules)
+        tokens_from_joules(G.USR[userID].lifetime_joules),
+        bonus_tokens
     ))
     out.add(strings.lifetime.format(
         G.USR[userID].times_ascended,
