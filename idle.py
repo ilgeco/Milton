@@ -179,11 +179,12 @@ def upgrade_perm(message):
 
 def upgrade_logic(message):
     userID = str(message.author.id)
-    if len(message.content.split(" ")) == 1:
-        return G.LOC.commands.upgrade.notrecognized.format(
-            ", ".join(G.LOC.commands.upgrade.IDs.values()).rstrip(', '))
-    message = tools.MsgParser(message.content)
     out = tools.MsgBuilder()
+    if len(message.content.split(" ")) == 1:
+        out.add(G.LOC.commands.upgrade.notrecognized.format(
+            ", ".join(G.LOC.commands.upgrade.IDs.values()).rstrip(', ')))
+        return out.parse()
+    message = tools.MsgParser(message.content)
     stats = make_all_stats(userID)
     stat_names = [stat.name for stat in stats.values()]
     current_joules = G.USR[userID].joules
@@ -392,6 +393,10 @@ def ascend_logic(message):
 
     lifetime_joules = G.USR[user_id].lifetime_joules
     tokens = tokens_from_joules(lifetime_joules)
+    bonus_tokens = 0
+
+    if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
+        bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended - 1]
 
     min_joules = (
         G.IDLE.ascension.min_joules *
@@ -403,7 +408,12 @@ def ascend_logic(message):
         return out.parse()
 
     if elapsed > 30:
-        out.add(G.LOC.commands.ascend.confirm.format(tokens))
+        if bonus_tokens == 0:
+            out.add(G.LOC.commands.ascend.confirm.format(tokens))
+        else:
+            out.add(G.LOC.commands.ascend.confirm_bonus.format(
+                tokens, bonus_tokens
+            ))
         return out.parse()
 
     # Reset all statistics
@@ -416,7 +426,7 @@ def ascend_logic(message):
     tools.update_stat(user_id=user_id, stat="lifetime_joules", set=0)
 
     # increase tokens
-    tools.update_stat(user_id=user_id, stat="tokens", increase=tokens)
+    tools.update_stat(user_id=user_id, stat="tokens", increase=(tokens + bonus_tokens))
 
     tools.update_stat(user_id=user_id, stat="times_ascended", increase=1)
 
@@ -437,7 +447,11 @@ def tierlist_logic(message):
     out = tools.MsgBuilder()
     for member in message.author.guild.members:
         userId = str(member.id)
-        members.append((userId, G.USR[userId].name, G.USR[userId].lifetime_joules))
+        members.append(
+            (userId,
+             G.USR[userId].name,
+             G.USR[userId].lifetime_joules + G.USR[userId].sacrificed_joules)
+        )
     members = sorted(members, key=lambda tup: tup[2], reverse=True)
     try:
         out.add(G.LOC.commands.tierlist.rank1.format(
@@ -457,7 +471,8 @@ def tierlist_logic(message):
     else:
         you = (str(message.author.id),
                G.USR[str(message.author.id)].name,
-               G.USR[str(message.author.id)].lifetime_joules)
+               G.USR[str(message.author.id)].lifetime_joules +
+               G.USR[str(message.author.id)].sacrificed_joules)
         out.add(G.LOC.commands.tierlist.rank_you.format(
             members.index(you) + 1,
             tools.fn(you[2])

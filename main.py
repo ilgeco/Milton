@@ -8,6 +8,13 @@ import achieves
 import random
 import globals as G
 import munch as mun
+import logging
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 
 def main(token, language, options_path):
@@ -129,7 +136,7 @@ def main(token, language, options_path):
     async def on_guild_join(guild):
         if str(guild.id) not in G.GLD.keys():
             defDict = {"language": language}
-            G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, None)
+            G.GLD[str(guild.id)] = mun.DefaultMunch().fromDict(defDict, 0)
         tools.save(G.OPT.guilds_path, G.GLD)
         # Add new members
         for member in guild.members:
@@ -144,8 +151,8 @@ def main(token, language, options_path):
         while True:
             now = time.time()
             to_hour = G.OPT.titanhours * 3600 - (now % 3600)
-            print(f"I checked when to spawn titans.")
-            print(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
+            logger.info("I checked when to spawn titans.")
+            logger.info(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
 
             for id, guild in G.GLD.items():
                 if guild.titan_status is not True:

@@ -272,6 +272,7 @@
         "showHelp": true,
         "category": ["idle"],
         "confirm": "Sei sicuro? Riceverai {:.0f} token. Invia il comando di nuovo entro 30 secondi per ascendere.",
+        "confirm_bonus": "Sei sicuro? Riceverai {:.0f} (+ {:.0f} BONUS!) token. Invia il comando di nuovo entro 30 secondi per ascendere.",
         "success": "Wooosh! Tutto il tuo progresso ({} joule) è stato sacrificato, e hai ottenuto {:.0f} Token.",
         "notenough": "Non hai ancora abbastanza Joule per ascendere. Te ne servono {}. Ne dovrai ancora produrre {}.",
         "help": "Ascendi per ottendere Token. Scarifichi **tutto** il tuo progresso, ma ottieni token in base ai Joule che hai prodotto in totale nella tua carriera."
@@ -605,8 +606,9 @@
         "showHelp": true,
         "category": ["idle"],
         "confirm": "Are you sure? You'll gain {:.0f} tokens. Send the command again to ascend.",
-        "success": "Wooosh! All you progress ({} joule) has been sacrificed, but you gained {:.0f} Tokens.",
-        "notenough": "You don't have enough lifetime joules to acend. You need {}. You still have to produce {}.",
+        "confirm_bonus": "Are you sure? You'll gain {:.0f} (+ {:.0f} BONUS) tokens. Send the command again to ascend.",
+        "success": "Wooosh! All you progress ({} joules) has been sacrificed, but you gained {:.0f} Tokens.",
+        "notenough": "You don't have enough lifetime joules to ascend. You need {}. You still have to produce {}.",
         "help": "Ascend to obtain Tokens. Tokens increase almost everything you can do. You will sacrifice **everything** you own, however."
       },
       "changeLang": {
