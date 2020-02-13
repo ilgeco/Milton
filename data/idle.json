@@ -16,7 +16,8 @@
     "level_exp": 2,
     "armor_constant": 0.01,
     "reward_constant": 1.01,
-    "reward_damage_exponent": 0.5
+    "reward_damage_exponent": 0.5,
+    "min_hours": 24
   },
   "maxTicks": {
     "base": 14400,

@@ -304,6 +304,8 @@ def upgrade_logic(message):
             times = int(message.args[1])
             if times <= 0:
                 times = 1
+            if times > 100:
+                times = 100
         except (ValueError, IndexError):
             times = 1
 
@@ -314,8 +316,6 @@ def upgrade_logic(message):
         stat = [x for x in stats.values() if x.name == message.args[0]][0]
         price = stat.upgrade_price
         while i < times:
-            print(f"Upgrading stat {stat.name}")
-
             if G.USR[user_id].joules >= price:
                 # Enough joules to update
                 stat.upgrade()
@@ -337,7 +337,7 @@ def upgrade_logic(message):
             out.add(G.LOC.commands.upgrade.onfailure.format(
                 tools.fn(G.USR[user_id].joules),
                 stat.name,
-                tools.fn(stat.upgrade_price)
+                tools.fn(price)
             ))
 
         return out.parse()
@@ -409,7 +409,18 @@ def attack_logic(message):
 
     # If we don't have any titans, we cannot attack.
     if G.GLD[user_guild].titan_status is not True:
-        return G.LOC.commands.attack.notitan
+        out.add(G.LOC.commands.attack.notitan)
+        return out.parse()
+
+    # Cannot attack more than once every xx hours:
+    now = time.time()
+    elapsed = now - G.USR[user_id].last_attack
+    if elapsed < G.IDLE.titan.min_hours * 3600:
+        out.add(G.LOC.commands.attack.toosoon.format(
+            round((G.IDLE.titan.min_hours * 3600 - elapsed) / 3600, 2)
+        ))
+        return out.parse()
+    tools.update_user(user_id, "last_attack", set=now)
     stats = make_all_stats(user_id)
     titan = Titan(G.GLD[user_guild].titan_level)
 
@@ -425,10 +436,6 @@ def attack_logic(message):
 
     tools.update_user(user_id=user_id, stat="titan_damage", increase=damage)
     tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
-
-    if G.USR[user_id].maximum_damage < damage:
-        tools.update_user(user_id=user_id, stat="maximum_damage", increase=damage)
-        out.add(G.LOC.commands.attack.newrecord)
 
     remaining_hp = titan.hp - G.GLD[user_guild].titan_damage
 
@@ -447,7 +454,7 @@ def attack_logic(message):
             if user_guild in user.attacks:
                 # Award tokens to this player.
                 G.USR[key].tokens += max(round(titan.base_reward, 0), 1)
-                G.USR[key].tokens += max(calculate_token_reward(G.USR[user_id].joules), 1)
+                G.USR[key].tokens += max(calculate_token_reward(G.USR[user_id].titan_damage), 0)
                 G.USR[key].attacks.remove(user_guild)
         tools.save_users()
         out.add(G.LOC.commands.attack.onkill.format(
@@ -464,7 +471,7 @@ def attack_logic(message):
 
 def calculate_token_reward(joules):
     """Formula used to calculate tokens to reward players when killing titans."""
-    return round(joules ** G.IDLE.titan.reward_damage_constant, 0)
+    return round(joules ** G.IDLE.titan.reward_damage_exponent, 0)
 
 
 # Ascension -----------------------------------------------------------------
@@ -517,7 +524,9 @@ def ascend_logic(message):
     # If we get here, we are ascending.
     # Reset all statistics
     for stat in make_all_stats(user_id).values():
-        stat.reset()
+        if stat.id != "attack":
+            # Don't reset attack statistic
+            stat.reset()
 
     # Reset all idle-related counter
     tools.update_user(user_id=user_id, stat="joules", set=0)

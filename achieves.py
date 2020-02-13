@@ -55,9 +55,9 @@ class Achievement:
             return True
 
 
-def add_achievement(trigger, identifier, *args, **kwargs):
+def add_achievement(trigger, identifier, status="current"):
     """Adds achievement to global achievement list"""
-    G.ACHIEVES.append(Achievement(trigger, identifier, *args, **kwargs))
+    G.ACHIEVES.append(Achievement(trigger, identifier, status))
     return True
 
 
@@ -131,7 +131,7 @@ def make_achievements():
         "maxTicks2")
     add_achievement(
         lambda user: True if Statistic("maxTicks", user).value() / 3600 >= (24 * 7) else False,
-        "maxTick3")
+        "maxTicks3")
 
     # Titan Damage -----------------------------------------------------
     add_achievement(
@@ -148,16 +148,13 @@ def make_achievements():
         "onedamage")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666 else False,
-        "damagerecord1",
-        status="legacy")
+        "damagerecord1", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 666_666 else False,
-        "damagerecord2",
-        status="legacy")
+        "damagerecord2", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666_666 else False,
-        "damagerecord3",
-        status="legacy")
+        "damagerecord3", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].instantkill is True else False,
         "instantkill")

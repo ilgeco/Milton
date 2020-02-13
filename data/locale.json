@@ -239,6 +239,7 @@
         "zerofailure": "Non puoi attaccare spendendo 0 o meno Joule!",
         "notitan": "Non c'è nessun titano da attaccare. Prova più tardi.",
         "newrecord": "Nuovo record personale di danni!",
+        "toosoon": "E' troppo presto per attaccare di nuovo. Devi ancora aspettare {:.2f} ore.",
         "onkill": "Hai inflitto {} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
@@ -604,6 +605,7 @@
         "zerofailure": "You cannot attack by spending 0 or less Joules!",
         "notitan": "There are no titans to attack. Try again later.",
         "newrecord": "New personal damage record!",
+        "toosoon": "It's too soon to attack again. You still have to wait {:.2f} hours.",
         "onkill": "You dealt {} damage to the Titan, and killed it! All attackers received {:.0f} Tokens as a reward. The next titan will come soon."
       },
       "help": {

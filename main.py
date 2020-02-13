@@ -125,6 +125,8 @@ def main(token: str, language: str, options_path: str):
         # Check Achievements
         achieve_intro = True
         for achieve in G.ACHIEVES:
+            if achieve.status == "legacy":
+                continue
             if achieve.check_trigger(str(message.author.id)) is True:
                 out = tools.MsgBuilder()
                 if achieve_intro:
@@ -176,10 +178,10 @@ def main(token: str, language: str, options_path: str):
             logger.info("I checked when to spawn titans.")
             logger.info(f"I'll check when to spawn titans again in {to_hour / 60} minutes.")
 
-            for id, guild in G.GLD.items():
+            for guild_id, guild in G.GLD.items():
                 if guild.titan_status is not True:
-                    G.update_loc(G.GLOC[G.GLD[str(id)].language])
-                    level = idle.spawn_titan(id)
+                    G.update_loc(G.GLD[str(guild_id)].language)
+                    level = idle.spawn_titan(guild_id)
                     titan = idle.Titan(level)
                     channel = client.get_channel(guild.notification_channel)
                     if guild.notification_channel != 0:
