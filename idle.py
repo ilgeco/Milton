@@ -312,11 +312,13 @@ def upgrade_logic(message):
         i = 0
         total_spent = 0
         stopped_early = False
+        upgraded_once = False
         stats = make_all_stats(user_id)
         stat = [x for x in stats.values() if x.name == message.args[0]][0]
         price = stat.upgrade_price
         while i < times:
             if G.USR[user_id].joules >= price:
+                upgraded_once = True
                 # Enough joules to update
                 stat.upgrade()
                 tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
@@ -328,11 +330,12 @@ def upgrade_logic(message):
                 break
             i += 1
 
-        out.add(G.LOC.commands.upgrade.onsuccess.format(
-            tools.fn(total_spent),
-            stat.name,
-            i
-        ))
+        if upgraded_once:
+            out.add(G.LOC.commands.upgrade.onsuccess.format(
+                tools.fn(total_spent),
+                stat.name,
+                i
+            ))
         if stopped_early:
             out.add(G.LOC.commands.upgrade.onfailure.format(
                 tools.fn(G.USR[user_id].joules),
