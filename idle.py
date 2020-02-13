@@ -1,105 +1,173 @@
+"""This module contains all commands for the idle game inside of Milton."""
 import globals as G
 import tools
 import munch
 import time
 
-# Aviable statistics:
-# >> production (mult of time to award joules)
-# >> maxTicks (max allowed seconds of production)
+from items import Inventory
 
 
 class Statistic:
-    def __init__(self, id, userID):
-        self.id = id
-        self.name = G.LOC.commands.upgrade.IDs[id]
-        self.user = userID
+    """Calculate statistics value for a certain player based on the idle game settings.
+
+    Takes into account player level to calculate value and costs.
+    """
+    def apply_items(self, number, level):
+        print(f"Applying stat to stat {self.name} @ level {level}")
+        print(f"Original number: {number}")
+        inventory = Inventory(self.user)
+        if inventory.is_empty is not True:
+            contents = sorted(inventory.content, key=lambda x: x.priority)
+            print(f"inventory contents for user {self.user}: ")
+            print(contents)
+            for item in contents:
+                if self.id in item.affected_stats and item.effect_level == level:
+                    print("I need to update number")
+                    if item.effect_function == "additive":
+                        number += item.base
+                    if item.effect_function == "multiplicative":
+                        number *= item.base
+            print(f"returning {number}")
+        return number
+
+    def __init__(self, identifier, user_id):
+        """Creates statistic.
+
+        Args:
+            identifier: str
+                Id of statistic as seen in the idle.json file.
+            user_id: str
+                Id of user to calculate statistic for - used to access users.json
+        """
+        self.id = identifier
+        self.name = G.LOC.commands.upgrade.IDs[identifier]
+        self.user = user_id
         # The name of the stat is normalized as "stat_level"
-        self.statlevel = G.USR[userID][id + "_level"]
-        self.scaling = G.IDLE[id]
-        self.prices = G.IDLE.prices[id]
-        self.tokens = G.USR[userID].tokens
+        self.stat_level = G.USR[user_id][identifier + "_level"]
+        self.scaling = G.IDLE[identifier]
+        self.prices = G.IDLE.prices[identifier]
+        self.tokens = G.USR[user_id].tokens
 
-        self.token_mult = 1 / (G.IDLE.token_power * self.tokens ** 2 + 1)
+        self.tokens_multiplier = 1 + (self.tokens / 100)
 
-        def _calculate_price(self, increaseLevel=0):
-            """Calculate price to upgrade the stat."""
-            if self.prices.function == "exponential":
+        # Update constants based on items owned
+        self.scaling.base = self.apply_items(number=self.scaling.mult, level="scaling.base")
+        self.scaling.mult = self.apply_items(number=self.scaling.mult, level="scaling.mult")
+
+        self.prices.base = self.apply_items(number=self.scaling.mult, level="prices.base")
+        self.prices.mult = self.apply_items(number=self.scaling.mult, level="prices.mult")
+
+        def _calculate_price(myself, increase_level=0):
+            """Calculate price to upgrade the stat.
+
+            Args:
+                increase_level: int
+                    Increase the player level for the purpose of the calculation.
+                    Defaults to 0.
+            """
+            if myself.prices.function == "exponential":
                 return tools.exponential(
-                    self.prices.base,
-                    self.prices.mult,
-                    max(self.statlevel + increaseLevel, 0)
+                    myself.prices.base,
+                    myself.prices.mult,
+                    max(myself.stat_level + increase_level, 0)
                 )
-            elif self.prices.function == "linear":
+            elif myself.prices.function == "linear":
                 return tools.linear(
-                    self.prices.base,
-                    self.prices.mult,
-                    max(self.statlevel + increaseLevel, 0)
+                    myself.prices.base,
+                    myself.prices.mult,
+                    max(myself.stat_level + increase_level, 0)
                 )
-            elif self.prices.function == "log":
-                return tools.logar(
-                    self.prices.base,
-                    self.prices.mult,
-                    max(self.statlevel + increaseLevel, 0)
+            elif myself.prices.function == "log":
+                return tools.logarithm(
+                    myself.prices.base,
+                    myself.prices.mult,
+                    max(myself.stat_level + increase_level, 0)
+                )
+            elif myself.prices.function == "linear_mult":
+                return tools.linear_multiplier(
+                    myself.prices.base,
+                    myself.prices.mult,
+                    max(myself.stat_level + increase_level, 0),
+                    G.IDLE[myself.id].level_mult,
+                    G.IDLE[myself.id].level_threshold
                 )
             else:
                 raise ValueError("Unsupported formula type '{}'".format(
-                    self.prices.function))
+                    myself.prices.function))
 
         self.upgrade_price = _calculate_price(self)
         self._price_fun = _calculate_price
 
-    def recalculate_price(self, increaselevel=0):
-        return self._price_fun(self, increaselevel)
+    def recalculate_price(self, increase_level=0):
+        return self._price_fun(self, increase_level)
 
-    def value(self, increaseLevel=0):
+    def value(self, increase_level=0):
         """Calculate the value of the statistic.
 
-        increaselevel: int
+        Also takes into account items owned by the user.
+
+        increase_level: int
             Increase the player level for the purpose of the calculation.
+            Defaults to 0.
         """
         if self.scaling.function == "exponential":
-            return tools.exponential(
+            value = tools.exponential(
                 self.scaling.base,
-                self.scaling.mult / self.token_mult,
-                max(self.statlevel + increaseLevel, 0)
+                self.scaling.mult,
+                max(self.stat_level + increase_level, 0)
             )
         elif self.scaling.function == "linear":
-            return tools.linear(
+            value = tools.linear(
                 self.scaling.base,
-                self.scaling.mult / self.token_mult,
-                max(self.statlevel + increaseLevel, 0)
+                self.scaling.mult,
+                max(self.stat_level + increase_level, 0)
             )
         elif self.scaling.function == "log":
-            return tools.logar(
+            value = tools.logarithm(
                 self.scaling.base,
-                self.scaling.mult ** self.token_mult,
-                max(self.statlevel + increaseLevel, 0)
+                self.scaling.mult,
+                max(self.stat_level + increase_level, 0)
+            )
+        elif self.scaling.function == "linear_mult":
+            value = tools.linear_multiplier(
+                self.scaling.base,
+                self.scaling.mult,
+                max(self.stat_level + increase_level, 0),
+                G.IDLE[self.id].level_mult,
+                G.IDLE[self.id].level_threshold
             )
         else:
             raise ValueError("Unsupported formula type '{}'".format(
                 self.prices.function))
 
+        value *= self.tokens_multiplier
+
+        # Apply item effects at value level
+        value = self.apply_items(number=value, level="value")
+
+        return value
+
     def upgrade(self, value=1):
         """Award the player some level in this stat."""
-        tools.update_stat(self.user, self.id + "_level", increase=value)
+        tools.update_user(self.user, self.id + "_level", increase=value)
 
     def downgrade(self, value=1):
         """Reduce the player level by some value."""
-        tools.update_stat(self.user, self.id + "_level", increase=-value)
+        tools.update_user(self.user, self.id + "_level", increase=-value)
 
     def reset(self):
         """Reset this stat to level 0"""
-        tools.update_stat(self.user, self.id + "_level", set=0)
+        tools.update_user(self.user, self.id + "_level", set=0)
 
 
 # Game Help ------------------------------------------------------------------
-def gamehelp_perm(message):
+def game_help_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.gameHelp.id):
         return True
     return False
 
 
-def gamehelp_logic(message):
+def game_help_logic(message):
     out = tools.MsgBuilder()
     out.add(G.LOC.msg.gameHelp)
     for command in G.LOC.commands.values():
@@ -118,49 +186,52 @@ def harvest_perm(message):
 
 
 def harvest_logic(message):
-    """Handles all idle game updates based on time and returns appropriate
-    message to push to chat.
-
-    For now, calculates Joules to add.
-    """
+    """Handles all idle game updates based on time and returns appropriate message to push to chat."""
     # Simplify my life - partial variable unpacking
-    userID = str(message.author.id)
+    user_id = str(message.author.id)
     output = tools.MsgBuilder()
 
     current_time = time.time()
-    last_time = G.USR[userID].last_harvest
-    tools.update_stat(user_id=userID, stat="last_harvest", set=current_time)
+    last_time = G.USR[user_id].last_harvest
+    tools.update_user(user_id=user_id, stat="last_harvest", set=current_time)
 
     # Leave this as clutter free as possible for eventual additional uses
     # >> Produce Joules
-    output.add(produceJoules(userID, current_time, last_time))
+    output.add(produce_joules(user_id, current_time, last_time))
 
     tools.save_users()
     return output.parse()
 
 
-def produceJoules(userID, current_time, last_time):
-    """Handles calculating joules to add as well generating the message."""
+def produce_joules(userID, current_time, last_time):
+    """Handles calculating joules to add as well generating the message to push to chat.
+
+    Also appropriately updates user dictionaries on joules produced.
+    """
     output = tools.MsgBuilder()
+
     production = Statistic("production", userID)
     maxTicks = Statistic("maxTicks", userID)
 
     if last_time == 0:
         # I give a gift of some joules for the uninitialized user.
-        tools.update_stat(user_id=userID, stat="joules", set=G.IDLE.harvest.gift)
+        tools.update_user(user_id=userID, stat="joules", set=G.IDLE.harvest.gift)
         return G.LOC.commands.harvest.firstTime.format(
             G.IDLE.harvest.gift, round((G.IDLE.production.base * 60), 0))
     else:
         production_time = current_time - last_time
+
         if production_time > maxTicks.value():
             production_time = maxTicks.value()
             output.add(G.LOC.commands.harvest.overproduced.format(
                 G.OPT.prefix + G.LOC.commands.upgrade.id))
+
         joules_produced = production_time * production.value()
         joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(userID)
-        tools.update_stat(user_id=userID, stat="joules", increase=joules_produced)
-        tools.update_stat(user_id=userID, stat="lifetime_joules", increase=joules_produced)
-        tools.save_users()
+
+        tools.update_user(user_id=userID, stat="joules", increase=joules_produced)
+        tools.update_user(user_id=userID, stat="lifetime_joules", increase=joules_produced)
+
         output.add(G.LOC.commands.harvest.production.format(
             tools.fn(joules_produced),
             tools.fn(G.USR[userID].joules)
@@ -168,9 +239,7 @@ def produceJoules(userID, current_time, last_time):
         return output.parse()
 
 
-# End of Harvest -------------------------------------------------------------
-
-
+# Upgrade stat -------------------------------------------------------------
 def upgrade_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.upgrade.id):
         return True
@@ -178,22 +247,29 @@ def upgrade_perm(message):
 
 
 def upgrade_logic(message):
-    userID = str(message.author.id)
+    """Used to upgrade a certain statistic's level.
+
+    Should automatically allow increasing level of stat in the idle.json file.
+    """
+    user_id = str(message.author.id)
     out = tools.MsgBuilder()
+
+    # No arguments were given.
+    # TODO: Can change to just use MsgParser? Or just make it send the help message
     if len(message.content.split(" ")) == 1:
         out.add(G.LOC.commands.upgrade.notrecognized.format(
             ", ".join(G.LOC.commands.upgrade.IDs.values()).rstrip(', ')))
         return out.parse()
+
     message = tools.MsgParser(message.content)
-    stats = make_all_stats(userID)
+    stats = make_all_stats(user_id)
     stat_names = [stat.name for stat in stats.values()]
-    current_joules = G.USR[userID].joules
+    current_joules = G.USR[user_id].joules
 
     if message.args[0] == G.LOC.commands.upgrade.IDs.info:
         # Send information message
         out.add(G.LOC.commands.upgrade.info)
         # >> Upgrade max ticks help
-        out.prepend("```")
         out.add(G.LOC.commands.upgrade.upgradable.maxTicks.format(
             G.LOC.commands.upgrade.IDs.maxTicks,
             round(stats.maxTicks.value() / 3600, 2),
@@ -220,55 +296,66 @@ def upgrade_logic(message):
         ).split("|"))
         if stats.attack.upgrade_price <= current_joules:
             out.append(" < OK!")
-        out.append("```")
+
         return out.pretty_parse()
 
     elif message.args[0] in stat_names:
+        # If a correct stat was parsed
         try:
+            # Attempt of getting a number of times to upgrade. If we fail, just upgrade it once.
             times = int(message.args[1])
             if times <= 0:
                 times = 1
         except (ValueError, IndexError):
             times = 1
+
         i = 0
         while i < times:
-            stats = make_all_stats(userID)
+            # I have to recalculate the stats at each iteration, to update the prices.
+            stats = make_all_stats(user_id)
+            # Retrieve the stat to upgrade.
             stat = [x for x in stats.values() if x.name == message.args[0]][0]
-            if G.USR[userID].joules >= stat.upgrade_price:
+
+            if G.USR[user_id].joules >= stat.upgrade_price:
+                # Enough joules to update
                 stat.upgrade()
                 out.add(G.LOC.commands.upgrade.onsuccess.format(
                     tools.fn(stat.upgrade_price),
                     stat.name
                 ))
-                G.USR[userID].joules -= stat.upgrade_price
-                tools.save_users()
+                tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
             else:
                 out.add(G.LOC.commands.upgrade.onfailure.format(
-                    tools.fn(G.USR[userID].joules),
+                    tools.fn(G.USR[user_id].joules),
                     stat.name,
                     tools.fn(stat.upgrade_price)
                 ))
                 break
             i += 1
+
         return out.parse()
 
     else:
+        # If we didn't recognize the stat given.
         out.add(G.LOC.commands.upgrade.notrecognized.format(
             ", ".join(G.LOC.commands.upgrade.IDs.values()).rstrip(', '))
         )
         return out.parse()
 
 
-def make_all_stats(userID):
+def make_all_stats(user_id: str) -> munch:
+    """Generates all statistics that a user can have.
+
+    Uses the available stat names in idle.json (under "prices") in a munch dictionary.
+    """
     stats = munch.Munch()
     for stat in G.IDLE.prices:
-        stats[stat] = Statistic(stat, userID)
+        stats[stat] = Statistic(stat, user_id)
     return stats
 
 
 # Attack ------------------------------------------------------------------
-
-class Titan():
+class Titan:
     """Used to calculate initial values for titans"""
     def __init__(self, level):
         self.level = level
@@ -277,17 +364,23 @@ class Titan():
         # The smaller the armor constant the slower the armor grows.
         b = G.IDLE.titan.armor_constant
         self.armor = 1 / (b * (self.level ** 2) + 1)
-        self.reward = level ** G.IDLE.titan.reward_constant / self.armor
+        self.base_reward = level ** G.IDLE.titan.reward_constant / self.armor
 
 
 def spawn_titan(guild):
-    """Spawns a titan in the current guild."""
+    """Spawns a titan in the current guild.
+
+    Returns:
+        int - Level of the spawned titan.
+    """
     if isinstance(G.GLD[guild].titan_status, bool) is False:
         # We never spawned a titan before, so we start @ titan level = 0
         G.GLD[guild].titan_level = 0
+
     tools.update_guild(guild_id=guild, stat="titan_status", set=True)
     tools.update_guild(guild_id=guild, stat="titan_level", increase=1)
     tools.update_guild(guild_id=guild, stat="titan_damage", set=0)
+
     return G.GLD[guild].titan_level
 
 
@@ -298,6 +391,11 @@ def attack_perm(message):
 
 
 def attack_logic(message):
+    """Handles attacking titans.
+
+    Returns:
+        String to push to chat.
+    """
     user_id = str(message.author.id)
     user_guild = str(message.author.guild.id)
     out = tools.MsgBuilder()
@@ -307,59 +405,46 @@ def attack_logic(message):
         return G.LOC.commands.attack.notitan
     stats = make_all_stats(user_id)
     titan = Titan(G.GLD[user_guild].titan_level)
-    args = tools.MsgParser(message.content).args
-
-    # Attempt to get a value for joules spent
-    try:
-        raw_damage = float(args[0])
-    except (ValueError, IndexError):
-        out.add(G.LOC.commands.attack.notrecognized)
-        return out.parse()
-
-    if raw_damage <= 0:
-        out.add(G.LOC.commands.attack.zerofailure)
-        return out.parse()
-
-    if G.USR[user_id].joules < raw_damage:
-        out.add(G.LOC.commands.attack.onfailure.format(
-            tools.fn(G.USR[user_id].joules)
-        ))
-        return out.parse()
-
-    tools.update_stat(user_id=user_id, stat="joules", increase=-raw_damage)
-
-    # Check for achievement
-    if int(raw_damage) == 1:
-        tools.update_stat(user_id=user_id, stat="onedamage", set=True)
 
     if isinstance(G.USR[user_id].attacks, list) is False:
-        # User has never attacked before
+        # User has never attacked before - initialize them
         G.USR[user_id].attacks = []
+
     if user_guild not in G.USR[user_id].attacks:
+        # Remember that the user attacked.
         G.USR[user_id].attacks.append(user_guild)
 
-    damage = raw_damage * stats.attack.value() * titan.armor
+    damage = stats.attack.value() * titan.armor
+
+    tools.update_user(user_id=user_id, stat="titan_damage", increase=damage)
     tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
+
     if G.USR[user_id].maximum_damage < damage:
-        tools.update_stat(user_id=user_id, stat="maximum_damage", increase=damage)
+        tools.update_user(user_id=user_id, stat="maximum_damage", increase=damage)
         out.add(G.LOC.commands.attack.newrecord)
+
     remaining_hp = titan.hp - G.GLD[user_guild].titan_damage
 
     if G.GLD[user_guild].titan_damage >= titan.hp:
-        if damage >= titan.hp:
-            tools.update_stat(user_id=user_id, stat="instantkill", set=True)
         # The titan was killed by this attack
+        # Check achievement
+        if damage >= titan.hp:
+            tools.update_user(user_id=user_id, stat="instantkill", set=True)
+
         tools.update_guild(guild_id=user_guild, stat="titan_status", set=False)
-        for id, user in G.USR.items():
+
+        # Check all players to see if we need to reward them tokens.
+        for key, user in G.USR.items():
             if isinstance(user.attacks, list) is False:
                 continue
             if user_guild in user.attacks:
                 # Award tokens to this player.
-                G.USR[id].tokens += max(round(titan.reward, 0), 1)
-                G.USR[id].attacks.remove(user_guild)
+                G.USR[key].tokens += max(round(titan.base_reward, 0), 1)
+                G.USR[key].tokens += max(calculate_token_reward(G.USR[user_id].joules), 1)
+                G.USR[key].attacks.remove(user_guild)
         tools.save_users()
         out.add(G.LOC.commands.attack.onkill.format(
-            tools.fn(damage), max(round(titan.reward, 0), 1)
+            tools.fn(damage), max(round(titan.base_reward, 0), 1)
         ))
         return out.parse()
     else:
@@ -368,8 +453,11 @@ def attack_logic(message):
             round(remaining_hp / titan.hp * 100, 2)
         ))
         return out.parse()
-    # We should never get here
-    assert False, "Attack function did not escape correctly"
+
+
+def calculate_token_reward(joules):
+    """Formula used to calculate tokens to reward players when killing titans."""
+    return round(joules ** G.IDLE.titan.reward_damage_constant, 0)
 
 
 # Ascension -----------------------------------------------------------------
@@ -384,30 +472,33 @@ def ascend_perm(message):
 
 
 def ascend_logic(message):
+    """Ascends user and awards tokens."""
     user_id = str(message.author.id)
     out = tools.MsgBuilder()
 
+    # Handles timings (this command should be sent twice quickly)
     last_ascension_time = G.USR[user_id].ascension_time
-    tools.update_stat(user_id=user_id, stat="ascension_time", set=time.time())
+    tools.update_user(user_id=user_id, stat="ascension_time", set=time.time())
     elapsed = G.USR[user_id].ascension_time - last_ascension_time
-
+    # Unpack some variables
     lifetime_joules = G.USR[user_id].lifetime_joules
     tokens = tokens_from_joules(lifetime_joules)
     bonus_tokens = 0
-
+    # Handle awarding bonus tokens as indicated in idle.json (ascension.bonus)
     if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
         bonus_tokens = G.IDLE.ascension.bonus[max(G.USR[user_id].times_ascended - 1, 0)]
-
+    # Calculate minimum number of joules to have when ascending.
     min_joules = (
         G.IDLE.ascension.min_joules *
-        G.IDLE.ascension.min_exp ** (G.USR[user_id].times_ascended + 1)
-    )
+        G.IDLE.ascension.min_exp ** (G.USR[user_id].times_ascended + 1))
     if lifetime_joules < min_joules:
+        # Not enough joules produced.
         out.add(G.LOC.commands.ascend.notenough.format(
             tools.fn(min_joules), tools.fn(min_joules - lifetime_joules)))
         return out.parse()
 
-    if elapsed > 30:
+    if elapsed > G.IDLE.ascension.elapsed:
+        # Command was sent too long ago. Send "Are you sure?"
         if bonus_tokens == 0:
             out.add(G.LOC.commands.ascend.confirm.format(tokens))
         else:
@@ -416,42 +507,51 @@ def ascend_logic(message):
             ))
         return out.parse()
 
+    # If we get here, we are ascending.
     # Reset all statistics
     for stat in make_all_stats(user_id).values():
         stat.reset()
 
     # Reset all idle-related counter
-    tools.update_stat(user_id=user_id, stat="joules", set=0)
-    tools.update_stat(user_id=user_id, stat="sacrificed_joules", increase=lifetime_joules)
-    tools.update_stat(user_id=user_id, stat="lifetime_joules", set=0)
+    tools.update_user(user_id=user_id, stat="joules", set=0)
+    tools.update_user(user_id=user_id, stat="sacrificed_joules", increase=lifetime_joules)
+    tools.update_user(user_id=user_id, stat="lifetime_joules", set=0)
 
     # increase tokens
-    tools.update_stat(user_id=user_id, stat="tokens", increase=(tokens + bonus_tokens))
+    tools.update_user(user_id=user_id, stat="tokens", increase=(tokens + bonus_tokens))
 
-    tools.update_stat(user_id=user_id, stat="times_ascended", increase=1)
+    tools.update_user(user_id=user_id, stat="times_ascended", increase=1)
 
     out.add(G.LOC.commands.ascend.success.format(
         tools.fn(lifetime_joules), tokens
     ))
+
     return out.parse()
 
 
-def tierlist_perm(message):
+# User tier list for a certain server --------------------------------------------------------
+def tier_list_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.tierlist.id):
         return True
     return False
 
 
-def tierlist_logic(message):
+def tier_list_logic(message):
+    """Gives tier list message to push to chat.
+
+    If the user is not in the top-three, also sends their position.
+    """
     members = []
     out = tools.MsgBuilder()
     for member in message.author.guild.members:
-        userId = str(member.id)
+        # Extract all members of the guild for manipulation
+        user_id = str(member.id)
         members.append(
-            (userId,
-             G.USR[userId].name,
-             G.USR[userId].lifetime_joules + G.USR[userId].sacrificed_joules)
+            (user_id,
+             G.USR[user_id].name,
+             G.USR[user_id].lifetime_joules + G.USR[user_id].sacrificed_joules)
         )
+    # Order based on lifetime joules produced.
     members = sorted(members, key=lambda tup: tup[2], reverse=True)
     try:
         out.add(G.LOC.commands.tierlist.rank1.format(
@@ -465,10 +565,13 @@ def tierlist_logic(message):
         ))
         top3 = [member[0] for member in members[:3]]
     except IndexError:
+        # There are less than 3 members in the server, just stop early and parse.
         return out.parse()
     if str(message.author.id) in top3:
+        # The user is already included in the top 3 users.
         return out.parse()
     else:
+        # Also send the user's position in the leader board
         you = (str(message.author.id),
                G.USR[str(message.author.id)].name,
                G.USR[str(message.author.id)].lifetime_joules +
@@ -480,6 +583,7 @@ def tierlist_logic(message):
         return out.parse()
 
 
+# Displays information about titans ------------------------------------------------------------
 def titan_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.titan.id):
         return True
@@ -487,29 +591,36 @@ def titan_perm(message):
 
 
 def titan_logic(message):
+    """Handles retrieving information about titans and giving a message to push to chat."""
     out = tools.MsgBuilder()
+    user_id = str(message.author.id)
+
     if G.GLD[str(message.author.guild.id)].titan_status is False:
+        # There is no titan.
         out.add(G.LOC.commands.titan.notitan)
         return out.parse()
+
     level = G.GLD[str(message.author.guild.id)].titan_level
     damage_dealt = G.GLD[str(message.author.guild.id)].titan_damage
     titan = Titan(level)
+
     out.add(G.LOC.commands.titan.info.format(
         level,
         tools.fn(titan.hp),
         tools.fn(titan.hp - damage_dealt),
-        round((titan.hp - damage_dealt) / titan.hp, 2),
+        round((titan.hp - damage_dealt) / titan.hp * 100, 2),
         round((1 - titan.armor) * 100, 2),
-        tools.fn(titan.reward)
+        tools.fn(titan.base_reward + calculate_token_reward(G.USR[user_id].titan_damage))
     ))
     return out.parse()
 
 
 def make_commands():
+    """Makes all commands relative to this module"""
     tools.add_command(logic=harvest_logic, permission=harvest_perm)
-    tools.add_command(logic=gamehelp_logic, permission=gamehelp_perm, where="user")
+    tools.add_command(logic=game_help_logic, permission=game_help_perm, where="user")
     tools.add_command(logic=upgrade_logic, permission=upgrade_perm)
     tools.add_command(logic=attack_logic, permission=attack_perm)
     tools.add_command(logic=ascend_logic, permission=ascend_perm)
     tools.add_command(logic=titan_logic, permission=titan_perm)
-    tools.add_command(logic=tierlist_logic, permission=tierlist_perm)
+    tools.add_command(logic=tier_list_logic, permission=tier_list_perm)

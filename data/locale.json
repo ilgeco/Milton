@@ -1,5 +1,19 @@
 {
   "it": {
+    "items": {
+      "bead_of_growth":{
+        "name": "Perla della Crescita",
+        "info": "Produci 20 joule in più al minuto."
+      },
+      "bead_of_power":{
+        "name": "Perla della Potenza",
+        "info": "Infliggi 1000 danni in più ad ogni attacco."
+      },
+      "buddha_necklace":{
+        "name": "Collana di Budda",
+        "info": "[perla della crescita + perla della potenza] Sia l'attacco che la produzione sono raddoppiati."
+      }
+    },
     "achievements": {
       "use_MLA": {
         "name": "Novizio",
@@ -302,12 +316,14 @@
         "joules": "> Hai {} Joule. Hai prodotto un totale di {} Joule in questa ascensione.",
         "tokens": "> Hai {:.0f} Token. Se ascendi ora, otterrai {:.0f} (+ {:.0f} bonus) Token.",
         "lifetime": "> Sei asceso {:.0f} volte, e hai sacrificato in totale {} Joule.",
-        "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {:.2f} Joule ogni minuto.",
+        "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {} Joule ogni minuto.",
         "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
-        "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai x{:.2f} danni ai Titani.",
+        "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai {} danni ai Titani.",
         "titandamage": "> Hai fatto un totale di {} danni al Titano. Il tuo attacco più potente ha inflitto {} danni.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
-        "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte."
+        "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte.",
+        "items": "> Nell'inventario hai questi oggetti: {}.",
+        "noitems": "> Non possiedi oggetti."
       },
       "tierlist": {
         "id": "classifica",
@@ -326,6 +342,26 @@
         "help": "Mi fà mostrare informazioni sul titano corrente.",
         "info": "Il Titano corrente è di livello {}.\n> **{}** Hp totali, {} Hp rimanenti ({:.2f} %) e {:.2f}% armatura.\n> Ricompensa: >> {} << Token.",
         "notitan": "Non c'è nessun titano. Prova più tardi."
+      },
+      "buy": {
+        "id": "compra",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Usato per comprare oggetti che aumentano le tue statistiche.",
+        "nospace": "Hai troppi oggetti nell'inventario. Prova a toglierne qualcuno prima di compare oggetti nuovi?",
+        "already_bought": "Hai già {} nell'inventario.",
+        "unknown": "Non ho capito quale oggetto vuoi comprare...",
+        "no_requirements": "Non hai gli oggetti necessari a comprare questo oggetto.",
+        "not_enough": "Non hai abbastanza Token ({}) per comprare questo oggetto. Costa {}.",
+        "success": "Fatto! Hai comprato {} spendendo {} Token!"
+      },
+      "shop": {
+        "id": "negozio",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Mi fà inviare un messaggio privato con quali oggetti ci sono nello shop.",
+        "item_template": "**{}**: {} -- *{} Token*",
+        "intro": "Ecco cosa puoi comprare:"
       }
     },
     "random_path": "./locFiles/random_EN.txt",
@@ -636,9 +672,9 @@
         "joules": "> You have {} Joules. You produced a total of {} Joules during this ascension.",
         "tokens": "> You have {:.0f} Tokens. If you ascend now, you'll obtain {:.0f} (+ {:.0f} bonus) Tokens.",
         "lifetime": "> You ascended {:.0f} times, sacrificing a total of {} Joules.",
-        "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {:.2f} Joules each minute.",
+        "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {} Joules each minute.",
         "maxTickslevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
-        "attacklevel": "> You upgraded titan attack {:.0f} times. You deal x{:.2f} damage to Titans.",
+        "attacklevel": "> You upgraded titan attack {:.0f} times. You deal {} damage to Titans.",
         "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
         "achieves": "> You unlocked {} achievements, For a total Joule production bonus of x{:.2f}.",
         "commandCount": "> In your career, you called me {0} times."

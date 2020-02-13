@@ -8,23 +8,54 @@ import globals as G
 
 
 def get_random_line(file: str) -> str:
-    """Returns a random line in a file."""
+    """Returns a random line in a file.
+
+    Args:
+        file: str
+            Path to target file
+
+    Returns: str
+        Random line from the target file.
+    """
     path = Path(file)
     with path.open("r") as file:
         items = [a for a in file if a != ""]
     return random.choice(items)
 
 
-def save(file: Path, dict):
-    """Write target json dict to file"""
+def save(file: Path, dictionary: dict) -> True:
+    """Write target dictionary to JSON file.
+
+    Doesn't sort keys as it often breaks.
+
+    Args:
+        file: str
+            Path to target file
+        dictionary: dict
+            Dictionary to write to file
+    Returns:
+        True
+    """
     file = Path(file)
     with file.open("w+") as file:
-        json.dump(obj=dict, fp=file, indent=2)
+        # Don't make this sort keys as it breaks, for some reason
+        json.dump(obj=dictionary, fp=file, indent=2)
     return True
 
 
-def load(file, default=False):
-    """Load target json dict from file, and munchify it"""
+def load(file, default: bool = False):
+    """Load target json dict from file, and munch-ify it.
+
+    Args:
+        file: str
+            Path to target file to load
+        default: False or any
+            If false, dictionary doesn't have a default. Otherwise, the dictionary has this value
+            as default
+
+    Returns:
+        Munch dictionary
+    """
     file = Path(file)
     with file.open("r") as file:
         if default is False:
@@ -34,24 +65,25 @@ def load(file, default=False):
 
 
 def save_users():
-    """Save users to default user.json path"""
-    return save(file=G.OPT.users_path, dict=G.USR)
+    """Save user dictionary to default user.json path"""
+    return save(file=G.OPT.users_path, dictionary=G.USR)
 
 
 def save_guilds():
-    """Save users to default user.json path"""
-    return save(file=G.OPT.guilds_path, dict=G.GLD)
+    """Save guild dictionary to default guilds.json path"""
+    return save(file=G.OPT.guilds_path, dictionary=G.GLD)
 
 
-def initialize_empty(path, content="{}"):
+def initialize_empty(path: str, content="{}") -> True:
     """Create empty .json file to target path."""
     with Path(path).open("w+") as f:
         f.write(content)
     return True
 
 
-def update_stat(user_id, stat, increase=None, set=None):
-    """Update a single stat in the user file, then save users"""
+def update_user(user_id, stat, increase=None, set=None) -> True:
+    """Update a value in the user file, then save users"""
+    # TODO: This shadows "set()" - change?
     # Simple logic checks
     if increase is None and set is None:
         raise ValueError("Must specify either increase or set.")
@@ -66,8 +98,8 @@ def update_stat(user_id, stat, increase=None, set=None):
     return True
 
 
-def update_guild(guild_id, stat, increase=None, set=None):
-    """Update a single stat in the user file, then save users"""
+def update_guild(guild_id, stat, increase=None, set=None) -> True:
+    """Update a value in the guild file, then save users"""
     # Simple logic checks
     if increase is None and set is None:
         raise ValueError("Must specify either increase or set.")
@@ -82,26 +114,39 @@ def update_guild(guild_id, stat, increase=None, set=None):
     return True
 
 
-def exponential(base, mult, level):
+def exponential(base, multiplier, level):
     """Simple exponential formula"""
-    return base * (mult ** level)
+    return base * (multiplier ** level)
 
 
-def linear(base, mult, level):
+def linear(base, multiplier, level):
     """Simple linear formula"""
-    return base * mult * (level + 1)
+    return base * multiplier * (level + 1)
 
 
-def logar(base, mult, level):
+def logarithm(base, multiplier, level):
     """Simple log formula"""
-    return base * log(level + mult, mult)
+    return base * log(level + multiplier, multiplier)
+
+
+def linear_multiplier(base, multiplier, level, level_multiplier, level_threshold):
+    """Linear scaling with bonus multiplier at X levels"""
+    base_value = base * multiplier * (level + 1)
+    multiplier_times = (level // level_threshold)
+    return base_value * (level_multiplier ** multiplier_times)
 
 
 def add_command(logic, permission, where="channel"):
+    """Adds command to global command list"""
     G.COMMANDS.append(Command(logic, permission, where))
 
 
 def break_message(message, length=2000):
+    """Breaks a long message into substrings.
+
+    The default value is @ 2000 characters, as discord can only send 2k-long messages.
+    """
+    # TODO: This is full of errors but works. Maybe there's a better way to do this?
     strings = []
 
     def _split_message(message, length=2000):
@@ -116,19 +161,38 @@ def break_message(message, length=2000):
     return strings
 
 
-def count_achieves(userID):
+def count_achieves(user_id: str) -> int:
+    """Count the number of achievements unlocked by this user."""
     i = 0
     for achieve in G.LOC.achievements.keys():
-        if G.USR[userID][achieve] is True:
+        if G.USR[user_id][achieve] is True:
             i += 1
     return i
 
 
-def fn(number, threshold=100000, base=1000, decimals=0):
+def fn(number: float,
+       threshold: int = 100_000,
+       base: int = 1_000,
+       decimals: int = 0) -> str:
     """Short for 'format number'.
 
     Takes a number and formats it into human-readable form.
     If it's larger than threshold, formats it into a more compact form.
+
+    Args:
+        number: float or int
+            Number to format
+        threshold: int
+            Threshold under which not to format. Defaults at 100_000
+        base: int
+            Base to divide with when giving exponents. Must be a multiple of 10.
+            Defaults at 1_000
+        decimals: int
+            Number of decimal places to give to the number before formatting.
+            Uses round() to remove decimal places. Defaults at 0
+
+    Returns:
+        String with formatted number.
     """
     if base % 10 != 0:
         raise ValueError("Base must be a power of ten.")
@@ -149,41 +213,76 @@ def fn(number, threshold=100000, base=1000, decimals=0):
 
 
 class MsgBuilder:
-    # Very very simple utility to make messages with newlines.
+    """Class to build messages to push to chat.
+
+    Parses lists containing messages to send to chat. It contains them inside a list of lists.
+    """
     def __init__(self):
+        # When adding to msg, remember to only add lists of one or more strings
         self.msg = []
 
-    def add(self, line):
+    def add(self, line: str):
+        """Add a new line to be parsed."""
         if isinstance(line, str):
             line = [line]
         self.msg.append(line)
 
     def append(self, line, sep=""):
-        if self.msg == []:
-            self.msg = [line]
+        """Appends line to the end of last string in the message.
+
+        Args:
+            line: str
+                String to append.
+            sep: str
+                Separator between string and string to be appended.
+        """
+        if not self.msg:
+            self.add(line)
         else:
             self.msg[-1][-1] += (sep + line)
 
     def prepend(self, line, sep=""):
-        if self.msg == []:
-            self.msg = [line]
+        """Prepends line to the start of last string in the message.
+
+        Args:
+            line: str
+                String to append.
+            sep: str
+                Separator between string and string to be prepended.
+        """
+        if not self.msg:
+            self.add(line)
         else:
             self.msg[-1][-1] = line + sep + self.msg[-1][-1]
 
     def parse(self):
-        strings = []
+        """Parses itself as a list of the fewest number of strings possible.
+
+        Doesn't exceed 2000 characters while creating strings to push to chat.
+        """
+        messages = []
         formatted = ""
         for row in self.msg:
             if len(formatted + " ".join(row)) <= 2000:
                 formatted += " ".join(row) + "\n"
             else:
-                strings.append(formatted.rstrip())
+                messages.append(formatted.rstrip())
                 formatted = " ".join(row) + "\n"
-        strings.append(formatted.rstrip())
-        return strings
+        messages.append(formatted.rstrip())
+        return messages
 
     def pretty_parse(self, padding=2):
-        """If we append lists of words, pretty parses them as columns."""
+        """Pretty parse the list of words as columns.
+
+        Handles giving each string the correct number of spaces, plus adds the back-ticks
+        to mark this message as code.
+
+        Args:
+            padding: int
+                Spaces to add in addition to those to make columns equal.
+                Defaults to 2
+        """
+        # TODO: This doesn't check for the 2k character limit.
         col_widths = [max(map(len, col)) for col in zip_longest(*self.msg, fillvalue="")]
         formatted = ""
         for row in self.msg:
@@ -191,10 +290,11 @@ class MsgBuilder:
                 (val.ljust(width) for val, width in zip(row, col_widths))
             )
             formatted += "\n"
-        return [formatted[:-1]]  # I do this to remove the trailing newline.
+        return ["```" + formatted.rstrip() + "```"]
 
 
 class MsgParser:
+    """Small utility to parse messages and grab arguments separated by spaces."""
     def __init__(self, message):
         message = message.split()  # This splits @ one or more whitespaces
         self.command = message[0]
@@ -203,10 +303,19 @@ class MsgParser:
 
 class Command:
     def __init__(self, logic, permission=True, where="channel"):
-        # logic is the logic of the command
-        # Permission is the checks necessary to see if the command triggers
-        # To the command. If not specified, defaults to true (always triggers).
-        # Where is where to send the message, either to the user or the channel
+        """Class to package all command logic and permissions inside.
+
+        Args:
+            logic: fun
+                Logic of the command. We expect it to return a string to push to chat.
+            permission: fun or bool
+                Permission function to check if logic should trigger. If set to True,
+                command triggers at each message.
+            where: str
+            Either "channel" or "user". Where to send the message, the channel where the command
+            was invoked, or directly to the user who sent it.
+            Not used directly by this class.
+        """
         assert where in ["channel", "user"]
         self.logic = logic
         self.permission = permission
