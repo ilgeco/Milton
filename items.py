@@ -77,7 +77,7 @@ def buy_item_logic(message):
         # Search for the item in the localization file.
         if arg == item.name.lower():
             identifier = key
-            item = Item(identifier)
+            new_item = Item(identifier)
             break
     else:
         out.add(G.LOC.commands.buy.unknown)
@@ -113,8 +113,8 @@ def buy_item_logic(message):
         return out.parse()
 
     # If we get here, all requirements to buy the item are fulfilled
-    tools.update_user(user_id=user_id, stat="tokens", increase=-item.cost)
-    inventory.add_item(item.id)
+    tools.update_user(user_id=user_id, stat="tokens", increase=-new_item.cost)
+    inventory.add_item(new_item.id)
 
     if G.IDLE["items"][identifier].builds_from is not None:
         # Remove required items
@@ -122,11 +122,11 @@ def buy_item_logic(message):
             if item.id in G.IDLE["items"][identifier].builds_from:
                 inventory.remove_item(item.id)
 
-    inventory.update_content() # Probably useless
+    inventory.update_content()  # Probably useless
 
     out.add(G.LOC.commands.buy.success.format(
-        item.name,
-        tools.fn(item.cost)
+        new_item.name,
+        tools.fn(new_item.cost)
     ))
     return out.parse()
 
