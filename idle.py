@@ -458,8 +458,10 @@ def attack_logic(message):
             if user_guild in user.attacks:
                 # Award tokens to this player.
                 G.USR[key].tokens += max(round(titan.base_reward, 0), 1)
-                G.USR[key].tokens += max(calculate_token_reward(G.USR[user_id].titan_damage), 0)
+                G.USR[key].tokens += max(calculate_token_reward(G.USR[key].titan_damage), 0)
+                G.USR[key].titan_damage = 0
                 G.USR[key].attacks.remove(user_guild)
+
         tools.save_users()
         out.add(G.LOC.commands.attack.onkill.format(
             tools.fn(damage), max(round(titan.base_reward, 0), 1)
