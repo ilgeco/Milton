@@ -1,19 +1,40 @@
+"""Contains all functions to check for achievements"""
+
 import globals as G
 import tools
 from idle import Statistic
 
 
 # Define achievements
-class Achievement():
-    def __init__(self, trigger, id):
+class Achievement:
+    """Class that represents an achievement
+
+    Args:
+        trigger: fun
+            Function that checks if the achievement is to be awarded.
+        identifier : str
+            Achievement ID present in locale to retrieve strings.
+        status: str
+            Either "current" or "legacy", affects how the achievement is counted in the help messages.
+            Legacy achievements are not included in any way except if unlocked.
+    """
+    def __init__(self, trigger, identifier, status="current"):
         self.trigger = trigger
-        self.id = id
+        self.id = identifier
+        self.status = status
 
     def award(self, user_id):
         """Award the achievement to the user
 
         Handles both setting the achieved status to true and giving the correct
         phrase to give the user upon achieving it.
+
+        Args:
+            user_id: str
+                User to award achievement to.
+
+        Returns:
+            String containing response to push to chat.
         """
         G.USR[str(user_id)][self.id] = True
         tools.save_users()
@@ -23,17 +44,25 @@ class Achievement():
         )
 
     def check_trigger(self, user_id):
+        """Checks if achievement has to be given.
+
+        Args:
+            user_id: str
+                User to check if achievement has to be given.
+        """
         if self.trigger(str(user_id)) is True and \
                 G.USR[str(user_id)][self.id] is not True:
             return True
 
 
-def add_achievement(trigger, id):
-    G.ACHIEVES.append(Achievement(trigger, id))
+def add_achievement(trigger, identifier, status="current"):
+    """Adds achievement to global achievement list"""
+    G.ACHIEVES.append(Achievement(trigger, identifier, status))
     return True
 
 
 def make_achievements():
+    """Adds all achievements to global achievement list"""
     # Number of commands -----------------------------------------------------
     add_achievement(
         lambda user: True if G.USR[user].commandCount >= 1 else False,
@@ -84,13 +113,13 @@ def make_achievements():
 
     # Attack stats -----------------------------------------------------
     add_achievement(
-        lambda user: True if Statistic("attack", user).value() >= 2 else False,
+        lambda user: True if Statistic("attack", user).value() >= 300 else False,
         "attack1")
     add_achievement(
-        lambda user: True if Statistic("attack", user).value() >= 10 else False,
+        lambda user: True if Statistic("attack", user).value() >= 10000 else False,
         "attack2")
     add_achievement(
-        lambda user: True if Statistic("attack", user).value() >= 100 else False,
+        lambda user: True if Statistic("attack", user).value() >= 123456 else False,
         "attack3")
 
     # Time stat -----------------------------------------------------
@@ -102,7 +131,7 @@ def make_achievements():
         "maxTicks2")
     add_achievement(
         lambda user: True if Statistic("maxTicks", user).value() / 3600 >= (24 * 7) else False,
-        "maxTick3")
+        "maxTicks3")
 
     # Titan Damage -----------------------------------------------------
     add_achievement(
@@ -119,13 +148,13 @@ def make_achievements():
         "onedamage")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666 else False,
-        "damagerecord1")
+        "damagerecord1", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 666_666 else False,
-        "damagerecord2")
+        "damagerecord2", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666_666 else False,
-        "damagerecord3")
+        "damagerecord3", status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].instantkill is True else False,
         "instantkill")

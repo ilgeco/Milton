@@ -1,9 +1,23 @@
+"""UNSAFE FOR IMPORT
+Contains all global memory dictionaries. Has to be initialized through initialize()
+"""
+
 from pathlib import Path
 import tools
 
 
-def initialize(options_path):
-    """Initialize all global variables for usage in different modules"""
+def initialize(options_path: str) -> True:
+    """Initialize all global variables for usage in different modules.
+
+    Uses Munch() to give java-style access to dicts. Initializes empty files if none are found.
+
+    Vars:
+        options_path: str
+        String path that points to options json file.
+
+    Returns:
+        True
+    """
     global OPT
     global USR
     global GLOC
@@ -36,14 +50,26 @@ def initialize(options_path):
     return True
 
 
-def reload_users():
+def reload_users() -> True:
+    """Forces dictionary reload for users from file.
+
+    Returns:
+        True
+    """
     global USR
     USR = tools.load(OPT.users_path, default=0)
-
     return True
 
 
-def updateLOC(loc):
+def update_loc(locale: str) -> True:
+    """Updates locale dictionary used by Milton to some language.
+
+    Args:
+        locale: str
+        The locale to be used. Must be a valid key in locales.json
+    """
     global LOC
-    LOC = loc
+    global GLOC
+    assert locale in GLOC.keys()
+    LOC = GLOC[locale]
     return True

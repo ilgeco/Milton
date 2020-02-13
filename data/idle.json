@@ -1,9 +1,9 @@
 {
-  "token_power": 0.000007,
   "ascension": {
     "exponent": 0.09,
     "min_joules": 10000,
     "min_exp": 10,
+    "elapsed": 30,
     "bonus": [10, 15, 25, 35, 50, 60, 65, 70, 75, 100]
   },
   "production": {
@@ -15,7 +15,9 @@
     "base_hp": 1000,
     "level_exp": 2,
     "armor_constant": 0.01,
-    "reward_constant": 1.01
+    "reward_constant": 1.01,
+    "reward_damage_exponent": 0.5,
+    "min_hours": 24
   },
   "maxTicks": {
     "base": 14400,
@@ -23,9 +25,11 @@
     "function": "log"
   },
   "attack": {
-    "base": 1,
-    "mult": 3.5,
-    "function": "log"
+    "base": 100,
+    "mult": 2,
+    "level_threshold": 10,
+    "level_mult": 2,
+    "function": "linear_mult"
   },
   "harvest": {
     "gift": 100,
@@ -46,6 +50,39 @@
       "base": 1000,
       "mult": 1.5,
       "function": "exponential"
+    }
+  },
+  "max_items": 6,
+  "items": {
+    "bead_of_growth":{
+      "builds_from": null,
+      "affected_stats": ["production"],
+      "effect_level": "value",
+      "effect_function": "additive",
+      "base": 20,
+      "cost": 10,
+      "resell": 5,
+      "priority": 20
+    },
+    "bead_of_power":{
+      "builds_from": null,
+      "affected_stats": ["attack"],
+      "effect_level": "value",
+      "effect_function": "additive",
+      "base": 1000,
+      "cost": 10,
+      "resell": 5,
+      "priority": 20
+    },
+    "buddha_necklace":{
+      "builds_from": ["bead_of_growth", "bead_of_power"],
+      "affected_stats": ["attack", "production"],
+      "effect_level": "value",
+      "effect_function": "multiplicative",
+      "base": 2,
+      "cost": 50,
+      "resell": 10,
+      "priority": 10
     }
   }
 }
