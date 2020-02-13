@@ -407,7 +407,8 @@
       "buddha_necklace":{
         "name": "Buddha necklace",
         "info": "[Bead of Growth + Bead of Power] Both attack and production are doubled."
-      },
+      }
+    },
     "achievements": {
       "use_MLA": {
         "name": "Novice",
