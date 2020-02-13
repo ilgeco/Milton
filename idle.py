@@ -13,21 +13,18 @@ class Statistic:
     Takes into account player level to calculate value and costs.
     """
     def apply_items(self, number, level):
-        print(f"Applying stat to stat {self.name} @ level {level}")
-        print(f"Original number: {number}")
+        a = number
         inventory = Inventory(self.user)
         if inventory.is_empty is not True:
             contents = sorted(inventory.content, key=lambda x: x.priority)
-            print(f"inventory contents for user {self.user}: ")
-            print(contents)
             for item in contents:
                 if self.id in item.affected_stats and item.effect_level == level:
-                    print("I need to update number")
                     if item.effect_function == "additive":
                         number += item.base
-                    if item.effect_function == "multiplicative":
+                    elif item.effect_function == "multiplicative":
                         number *= item.base
-            print(f"returning {number}")
+                    else:
+                        pass
         return number
 
     def __init__(self, identifier, user_id):
@@ -51,11 +48,11 @@ class Statistic:
         self.tokens_multiplier = 1 + (self.tokens / 100)
 
         # Update constants based on items owned
-        self.scaling.base = self.apply_items(number=self.scaling.mult, level="scaling.base")
+        self.scaling.base = self.apply_items(number=self.scaling.base, level="scaling.base")
         self.scaling.mult = self.apply_items(number=self.scaling.mult, level="scaling.mult")
 
-        self.prices.base = self.apply_items(number=self.scaling.mult, level="prices.base")
-        self.prices.mult = self.apply_items(number=self.scaling.mult, level="prices.mult")
+        self.prices.base = self.apply_items(number=self.prices.base, level="prices.base")
+        self.prices.mult = self.apply_items(number=self.prices.mult, level="prices.mult")
 
         def _calculate_price(myself, increase_level=0):
             """Calculate price to upgrade the stat.
@@ -69,19 +66,19 @@ class Statistic:
                 return tools.exponential(
                     myself.prices.base,
                     myself.prices.mult,
-                    max(myself.stat_level + increase_level, 0)
+                    myself.stat_level + increase_level
                 )
             elif myself.prices.function == "linear":
                 return tools.linear(
                     myself.prices.base,
                     myself.prices.mult,
-                    max(myself.stat_level + increase_level, 0)
+                    myself.stat_level + increase_level
                 )
             elif myself.prices.function == "log":
                 return tools.logarithm(
                     myself.prices.base,
                     myself.prices.mult,
-                    max(myself.stat_level + increase_level, 0)
+                    myself.stat_level + increase_level
                 )
             elif myself.prices.function == "linear_mult":
                 return tools.linear_multiplier(
@@ -96,6 +93,7 @@ class Statistic:
                     myself.prices.function))
 
         self.upgrade_price = _calculate_price(self)
+        self.upgrade_price = self.apply_items(self.upgrade_price, level="price")
         self._price_fun = _calculate_price
 
     def recalculate_price(self, increase_level=0):
@@ -272,8 +270,8 @@ def upgrade_logic(message):
         # >> Upgrade max ticks help
         out.add(G.LOC.commands.upgrade.upgradable.maxTicks.format(
             G.LOC.commands.upgrade.IDs.maxTicks,
-            round(stats.maxTicks.value() / 3600, 2),
-            round(stats.maxTicks.value(1) / 3600, 2),
+            tools.fn(stats.maxTicks.value() / 3600),
+            tools.fn(stats.maxTicks.value(1) / 3600),
             tools.fn(stats.maxTicks.upgrade_price)
         ).split("|"))
         if stats.maxTicks.upgrade_price <= current_joules:
@@ -281,8 +279,8 @@ def upgrade_logic(message):
         # >> Upgrade production help
         out.add(G.LOC.commands.upgrade.upgradable.production.format(
             G.LOC.commands.upgrade.IDs.production,
-            round(stats.production.value() * 60, 2),
-            round(stats.production.value(1) * 60, 2),
+            tools.fn(stats.production.value() * 60),
+            tools.fn(stats.production.value(1) * 60),
             tools.fn(stats.production.upgrade_price)
         ).split("|"))
         if stats.production.upgrade_price <= current_joules:
@@ -290,8 +288,8 @@ def upgrade_logic(message):
         # >> Upgrade attack help
         out.add(G.LOC.commands.upgrade.upgradable.attack.format(
             G.LOC.commands.upgrade.IDs.attack,
-            round(stats.attack.value(), 2),
-            round(stats.attack.value(1), 2),
+            tools.fn(stats.attack.value()),
+            tools.fn(stats.attack.value(1)),
             tools.fn(stats.attack.upgrade_price)
         ).split("|"))
         if stats.attack.upgrade_price <= current_joules:
@@ -310,28 +308,37 @@ def upgrade_logic(message):
             times = 1
 
         i = 0
+        total_spent = 0
+        stopped_early = False
+        stats = make_all_stats(user_id)
+        stat = [x for x in stats.values() if x.name == message.args[0]][0]
+        price = stat.upgrade_price
         while i < times:
-            # I have to recalculate the stats at each iteration, to update the prices.
-            stats = make_all_stats(user_id)
-            # Retrieve the stat to upgrade.
-            stat = [x for x in stats.values() if x.name == message.args[0]][0]
+            print(f"Upgrading stat {stat.name}")
 
-            if G.USR[user_id].joules >= stat.upgrade_price:
+            if G.USR[user_id].joules >= price:
                 # Enough joules to update
                 stat.upgrade()
-                out.add(G.LOC.commands.upgrade.onsuccess.format(
-                    tools.fn(stat.upgrade_price),
-                    stat.name
-                ))
                 tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
+                total_spent += price
+                price = stat.recalculate_price(increase_level=(i + 1))
             else:
-                out.add(G.LOC.commands.upgrade.onfailure.format(
-                    tools.fn(G.USR[user_id].joules),
-                    stat.name,
-                    tools.fn(stat.upgrade_price)
-                ))
+                # I don't add the out.add() command here for the order of the messages (I'm lazy)
+                stopped_early = True
                 break
             i += 1
+
+        out.add(G.LOC.commands.upgrade.onsuccess.format(
+            tools.fn(total_spent),
+            stat.name,
+            i
+        ))
+        if stopped_early:
+            out.add(G.LOC.commands.upgrade.onfailure.format(
+                tools.fn(G.USR[user_id].joules),
+                stat.name,
+                tools.fn(stat.upgrade_price)
+            ))
 
         return out.parse()
 

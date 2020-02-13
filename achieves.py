@@ -55,9 +55,9 @@ class Achievement:
             return True
 
 
-def add_achievement(trigger, identifier):
+def add_achievement(trigger, identifier, *args, **kwargs):
     """Adds achievement to global achievement list"""
-    G.ACHIEVES.append(Achievement(trigger, identifier))
+    G.ACHIEVES.append(Achievement(trigger, identifier, *args, **kwargs))
     return True
 
 
@@ -148,13 +148,16 @@ def make_achievements():
         "onedamage")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666 else False,
-        "damagerecord1")
+        "damagerecord1",
+        status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 666_666 else False,
-        "damagerecord2")
+        "damagerecord2",
+        status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].maximum_damage >= 6_666_666 else False,
-        "damagerecord3")
+        "damagerecord3",
+        status="legacy")
     add_achievement(
         lambda user: True if G.USR[user].instantkill is True else False,
         "instantkill")

@@ -131,6 +131,44 @@ def buy_item_logic(message):
     return out.parse()
 
 
+# Sell items---------------------------------------------------------------------------
+def sell_item_perm(message):
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.sell.id):
+        return True
+    return False
+
+
+def sell_item_logic(message):
+    # Grab from message the name and id of the item
+    user_id = str(message.author.id)
+    inventory = Inventory(user_id)
+    arg = str(message.content[len(G.OPT.prefix) + len(G.LOC.commands.sell.id) + 1:])
+    arg = arg.lower()
+    out = tools.MsgBuilder()
+
+    for key, item in G.LOC["items"].items():
+        # Search for the item in the localization file.
+        if arg == item.name.lower():
+            identifier = key
+            new_item = Item(identifier)
+            break
+    else:
+        out.add(G.LOC.commands.sell.unknown)
+        return out.parse()
+
+    if identifier not in [x.id for x in inventory.content]:
+        out.add(G.LOC.commands.sell.noitem.format(new_item.name))
+        return out.parse()
+
+    # Remove the item
+    inventory.remove_item(identifier)
+    # Refund tokens
+    tools.update_user(user_id, "tokens", increase=new_item.resell)
+
+    out.add(G.LOC.commands.sell.success.format(new_item.name, tools.fn(new_item.resell)))
+    return out.parse()
+
+
 # Show shop with available items ------------------------------------------------------
 def show_shop_perm(message):
     if message.content.startswith(G.OPT.prefix + G.LOC.commands.shop.id):
@@ -159,3 +197,4 @@ def make_commands():
     """Makes all commands relative to this module"""
     tools.add_command(logic=buy_item_logic, permission=buy_item_perm)
     tools.add_command(logic=show_shop_logic, permission=show_shop_perm, where="user")
+    tools.add_command(logic=sell_item_logic, permission=sell_item_perm)

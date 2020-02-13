@@ -220,6 +220,9 @@ def help_achieve_logic(message):
     help_msg.add(G.LOC.commands.help_achieve.intro)
     i = 0
     for key, achieve in G.LOC.achievements.items():
+        if achieve.status == "legacy" is True and user_info[key] is False:
+            # We ignore legacy achievements that have not been unlocked by the user.
+            continue
         if achieve.include_help or user_info[key]:
             if user_info[key]:
                 help_msg.add(G.LOC.msg.format_yes.format(

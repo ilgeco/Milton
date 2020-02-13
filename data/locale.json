@@ -102,17 +102,17 @@
       },
       "attack1": {
         "name": "Novellino",
-        "condition": "Fai x2 danni ai titani. C'è ancora molta strada da fare, giovane Padawan.",
+        "condition": "Fai 300 danni ai titani ad ogni colpo. C'è ancora molta strada da fare, giovane Padawan.",
         "include_help": true
       },
       "attack2": {
         "name": "Non fare lo stronzo, Shingi",
-        "condition": "Fai x10 danni ai titani. O erano angeli?",
+        "condition": "Fai 10e3 danni ai titani ad ogni colpo. O erano angeli?",
         "include_help": true
       },
       "attack3": {
         "name": "Monster Hunter",
-        "condition": "Fai x100 danni ai titani. C'è qualcuno per uccidere un Elder Dragon?",
+        "condition": "Fai 123456 danni ai titani ad ogni colpo. C'è qualcuno per uccidere un Elder Dragon? Io mi sono dimenticato di mangiare...",
         "include_help": true
       },
       "maxTicks1": {
@@ -212,8 +212,8 @@
         "showHelp": true,
         "category": ["idle"],
         "help": "Aumenta una certa statistica di un certo livello. Esempio: $aumenta produzione 1. Le possibili statistiche aumentabili sono:",
-        "onsuccess": "Hai speso {} Joule per potenziare {}!",
-        "onfailure": "Non hai abbastanza Joule ({}) per potenziare {}. Te ne servono {}.",
+        "onsuccess": "Hai speso {} Joule per potenziare {} di {} livello/i!",
+        "onfailure": "Non hai abbastanza Joule ({}) per potenziare {} ancora. Te ne servono {}.",
         "notrecognized": "Non ho capito cosa vuoi potenziare. Prova ad usare uno di questi specificatori: {}.",
         "IDs": {
           "info": "opzioni",
@@ -221,11 +221,11 @@
           "maxTicks": "tempo",
           "attack": "attacco"
         },
-        "info": "Ecco cosa puoi potenziare (Es: $aumenta):",
+        "info": "Ecco cosa puoi potenziare:",
         "upgradable": {
-          "maxTicks": "> {} - Tempo di raccolta massimo.|{:.2f} Ore >> {:.2f} Ore|Costo: {} Joule",
+          "maxTicks": "> {} - Tempo di raccolta massimo.|{} Ore >> {} Ore|Costo: {} Joule",
           "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {} Joule.",
-          "attack": "> {} - Moltiplicatore dei danni contro i Titani.|x{} >> x{}|Costo: {} Joule."
+          "attack": "> {} - Danni inflitti ai Titani.|{} >> {}|Costo: {} Joule."
         }
       },
       "attack": {
@@ -354,6 +354,15 @@
         "no_requirements": "Non hai gli oggetti necessari a comprare questo oggetto.",
         "not_enough": "Non hai abbastanza Token ({}) per comprare questo oggetto. Costa {}.",
         "success": "Fatto! Hai comprato {} spendendo {} Token!"
+      },
+      "sell": {
+        "id": "vendi",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Usato per vendere oggetti dal tuo inventario in cambio di Token.",
+        "unknown": "Non ho capito quale oggetto vuoi vendere...",
+        "noitem": "Non hai {} nel tuo inventario.",
+        "success": "Fatto! Hai venduto {} per {} Token!"
       },
       "shop": {
         "id": "negozio",
