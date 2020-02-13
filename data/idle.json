@@ -59,7 +59,7 @@
       "affected_stats": ["production"],
       "effect_level": "value",
       "effect_function": "additive",
-      "base": 20,
+      "base": 0.333,
       "cost": 10,
       "resell": 5,
       "priority": 20
