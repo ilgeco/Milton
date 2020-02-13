@@ -104,11 +104,11 @@ def buy_item_logic(message):
         out.add(G.LOC.commands.buy.nospace.format(G.IDLE.max_items))
         return out.parse()
 
-    if G.USR[user_id].tokens <= item.cost:
+    if G.USR[user_id].tokens <= new_item.cost:
         # Cannot buy if we don't have enough tokens
         out.add(G.LOC.commands.buy.not_enough.format(
             tools.fn(G.USR[user_id].tokens),
-            tools.fn(item.cost)
+            tools.fn(new_item.cost)
         ))
         return out.parse()
 
