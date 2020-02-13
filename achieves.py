@@ -159,6 +159,21 @@ def make_achievements():
         lambda user: True if G.USR[user].instantkill is True else False,
         "instantkill")
 
+    # Times attacked ---------------------------------------------------------------------------
+
+    add_achievement(
+        lambda user: True if G.USR[user].times_attacked >= 1 else False,
+        "times_attacked1"
+    )
+    add_achievement(
+        lambda user: True if G.USR[user].times_attacked >= 10 else False,
+        "times_attacked2"
+    )
+    add_achievement(
+        lambda user: True if G.USR[user].times_attacked >= 365 else False,
+        "times_attacked3"
+    )
+
     # Tokens -----------------------------------------------------
     add_achievement(
         lambda user: True if G.USR[user].tokens >= 1 else False,

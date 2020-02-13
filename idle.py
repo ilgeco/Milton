@@ -436,6 +436,7 @@ def attack_logic(message):
 
     tools.update_user(user_id=user_id, stat="titan_damage", increase=damage)
     tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
+    tools.update_user(user_id=user_id, stat="times_attacked", increase=1)
 
     remaining_hp = titan.hp - G.GLD[user_guild].titan_damage
 

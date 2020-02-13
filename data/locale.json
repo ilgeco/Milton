@@ -184,6 +184,21 @@
         "name": "Vergognati",
         "condition": "Hai fatto un singolo danno al titano. Vergogna.",
         "include_help": false
+      },
+      "times_attacked1": {
+        "name": "Caddetto",
+        "condition": "Hai attaccato una volta i titani. Forza e coraggio!",
+        "include_help": true
+      },
+      "times_attacked2": {
+        "name": "Soldato",
+        "condition": "Hai attaccato i titani cento volte. DOBBIAMO UCCIDERE I GIGANTI!!",
+        "include_help": true
+      },
+      "times_attacked3": {
+        "name": "Gran Maestro",
+        "condition": "Hai attaccato i titani 365 volte. Puoi smettere ora.",
+        "include_help": false
       }
     },
     "msg": {
@@ -380,6 +395,19 @@
     "randomInsult_path": "./locFiles/randomInsult_IT.txt"
   },
   "en": {
+    "items": {
+      "bead_of_growth":{
+        "name": "Bead of Growth",
+        "info": "Increases Joule production by a flat 20 Joule/minute."
+      },
+      "bead_of_power":{
+        "name": "Bead of Power",
+        "info": "Increases attack by a flat 1000."
+      },
+      "buddha_necklace":{
+        "name": "Buddha necklace",
+        "info": "[Bead of Growth + Bead of Power] Both attack and production are doubled."
+      },
     "achievements": {
       "use_MLA": {
         "name": "Novice",
@@ -550,6 +578,21 @@
         "name": "You should be ashamed.",
         "condition": "You dealt a single damage to the Titan. You should be ashamed.",
         "include_help": false
+      },
+      "times_attacked1": {
+        "name": "Cadet",
+        "condition": "You attacked titans one time. The first of many, I hope.",
+        "include_help": true
+      },
+      "times_attacked2": {
+        "name": "Soldier",
+        "condition": "You attacked titans one hundred times. WE MUST KILL THE GIANTS!!!",
+        "include_help": true
+      },
+      "times_attacked3": {
+        "name": "Grand master",
+        "condition": "You attacked titans 365 times. You can stop now.",
+        "include_help": false
       }
     },
     "msg": {
@@ -578,7 +621,7 @@
         "showHelp": true,
         "category": ["idle"],
         "help": "Increase a certain stat of some level. Example: $upgrade production 1. You can upgrade these stats:",
-        "onsuccess": "You spent {} Joules to upgrade {}!",
+        "onsuccess": "You spent {} Joules to upgrade {} of {} level(s)!",
         "onfailure": "You don't have enough Joules ({}) to upgrade {}. You'll need {}.",
         "notrecognized": "I didn't understand what you want to upgrade. Try to use one of these specifiers: {}.",
         "IDs": {
@@ -687,6 +730,8 @@
         "maxTickslevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
         "attacklevel": "> You upgraded titan attack {:.0f} times. You deal {} damage to Titans.",
         "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
+        "items": "> You have these items in your inventory: {}.",
+        "noitems": "> You don't have any items.",
         "achieves": "> You unlocked {} achievements, For a total Joule production bonus of x{:.2f}.",
         "commandCount": "> In your career, you called me {0} times."
       },
@@ -707,6 +752,35 @@
         "help": "Makes me show information on the current titan.",
         "info": "We are fighting a level {} titan.\n> **{}** total HP, {} remaining HP ({:.2f} %) and {:.2f}% armor.\n> Reward: >> {} << Tokens.",
         "notitan": "There are no titans. Try again later."
+      },
+      "buy": {
+        "id": "buy",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Used to buy items that increase your statistics.",
+        "nospace": "You have too many items in your inventory! You cannot buy anymore.",
+        "already_bought": "You already have {} in your inventory.",
+        "unknown": "I didn't understand which item you're trying to buy...",
+        "no_requirements": "You lack the prerequisite items to buy this item.",
+        "not_enough": "You don't have enough tokens ({}) to buy this object. It costs {}.",
+        "success": "Done! You bought {} with {} Tokens!"
+      },
+      "sell": {
+        "id": "sell",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Used to sell items in exchange of tokens.",
+        "unknown": "I didn't understand which item you're trying to sell...",
+        "noitem": "You don't have {} in your inventory.",
+        "success": "Done! you sold {} for {} Tokens!"
+      },
+      "shop": {
+        "id": "shop",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Makes me send a private message with the items available to buy.",
+        "item_template": "**{}**: {} -- *{} Tokens*",
+        "intro": "Here's what I have on offer:"
       }
     },
     "random_path": "./locFiles/random_EN.txt",
