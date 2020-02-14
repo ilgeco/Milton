@@ -116,7 +116,7 @@ def user_info_logic(message):
     inventory = Inventory(user_id)
 
     if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
-        bonus_tokens = G.IDLE.ascension.bonus[max(G.USR[user_id].times_ascended - 1, 0)]
+        bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended]
 
     # Introduction to help message
     out.add(strings.info)
