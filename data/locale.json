@@ -12,6 +12,32 @@
       "buddha_necklace":{
         "name": "Collana di Budda",
         "info": "[perla della crescita + perla della potenza] Sia l'attacco che la produzione sono raddoppiati."
+      },
+      "hedmad_stone":{
+        "name": "Pietra di Hedmad",
+        "info": "[Perla della Crescita] L'effetto di aumentare le statistiche è potenziato del 50%."
+      },
+      "frugality_leaf":{
+        "name": "Foglia della Frugalita",
+        "info": "I prezzi per potenziare le statistiche sono dimezzati."
+      },
+      "beggar_horn":{
+        "name": "Corno del Mendicante",
+        "info": "[Foglia della Frugalità] La crescita dei prezzi di tutte le statistiche è dimezzata."
+      },
+      "hand_of_midas":{
+        "name": "Mano di Mida",
+        "info": "[Perla della Potenza] Quando attacchi, ottieni metà dei danni inflitti come Joule.",
+        "activation": "Hai ottenuto {} Joule dalla tua Mano di Mida."
+      },
+      "sword_of_storms":{
+        "name": "Spada della Tempesta",
+        "info": "[Perla della Potenza] Puoi attaccare dieci volte più in fretta, ma fai un quarto dei danni."
+      },
+      "joules_bonsai":{
+        "name": "Bonsai dei Joule",
+        "info": "Produce un ventesimo della tua produzione di Joule, ma non è limitata dalla tua statistica di tempo.",
+        "activation": "Il tuo bonsai ha prodotto {} Joules."
       }
     },
     "achievements": {
@@ -199,6 +225,11 @@
         "name": "Gran Maestro",
         "condition": "Hai attaccato i titani 365 volte. Puoi smettere ora.",
         "include_help": false
+      },
+      "full_inventory": {
+        "name": "Attrezzato",
+        "condition": "Hai l'inventario pieno - o, come si dice in gergo, *full build*.",
+        "include_help": true
       }
     },
     "msg": {
@@ -407,6 +438,32 @@
       "buddha_necklace":{
         "name": "Buddha necklace",
         "info": "[Bead of Growth + Bead of Power] Both attack and production are doubled."
+      },
+      "hedmad_stone":{
+        "name": "Hedmad's Stone",
+        "info": "[Bead of Growth] Increases the multiplier exponent by 50%."
+      },
+      "frugality_leaf":{
+        "name": "Frugality Leaf",
+        "info": "Cuts all prices for upgrading stats in half."
+      },
+      "beggar_horn":{
+        "name": "Beggar's Horn",
+        "info": "[Frugality Leaf] Makes prices grow half as fast."
+      },
+      "hand_of_midas":{
+        "name": "Mida's Hand",
+        "info": "[Bead of Power] When you attack, you gain half of your damage as joules.",
+        "activation": "You obtained {} Joules from your Mida's Hand."
+      },
+      "sword_of_storms":{
+        "name": "Sword of Storms",
+        "info": "[Bead of Power] You can attack ten times as often, but your attack damage is divided by 4."
+      },
+      "joules_bonsai":{
+        "name": "Joule Bonsai",
+        "info": "This bonsai produces a twentieth of your normal joule production, but is not limited by your time stat.",
+        "activation": "Your Bonsai produced {} Joules."
       }
     },
     "achievements": {
@@ -594,6 +651,11 @@
         "name": "Grand master",
         "condition": "You attacked titans 365 times. You can stop now.",
         "include_help": false
+      },
+      "full_inventory": {
+        "name": "Packed",
+        "condition": "Your inventory is full. That was a pretty good shopping spree!",
+        "include_help": true
       }
     },
     "msg": {

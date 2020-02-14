@@ -3,6 +3,7 @@
 import globals as G
 import tools
 from idle import Statistic
+from items import Inventory
 
 
 # Define achievements
@@ -184,6 +185,11 @@ def make_achievements():
     add_achievement(
         lambda user: True if G.USR[user].tokens >= 1e6 else False,
         "tokens3")
+
+    # Inventory -------------------------------------------------
+    add_achievement(
+        lambda user: True if len(Inventory(user).content) == G.IDLE.max_items else False,
+        "full_inventory")
 
     # Other -----------------------------------------------------
     add_achievement(

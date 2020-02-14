@@ -83,6 +83,66 @@
       "cost": 50,
       "resell": 10,
       "priority": 10
+    },
+    "hedmad_stone":{
+      "builds_from": ["bead_of_growth"],
+      "affected_stats": ["production"],
+      "effect_level": "scaling.mult",
+      "effect_function": "multiplicative",
+      "base": 1.50,
+      "cost": 99,
+      "resell": 45,
+      "priority": 10
+    },
+    "frugality_leaf":{
+      "builds_from": null,
+      "affected_stats": ["production", "attack", "time"],
+      "effect_level": "price",
+      "effect_function": "multiplicative",
+      "base": 0.5,
+      "cost": 20,
+      "resell": 5,
+      "priority": 10
+    },
+    "beggar_horn":{
+      "builds_from": ["frugality_leaf"],
+      "affected_stats": ["production", "attack", "time"],
+      "effect_level": "prices.mult",
+      "effect_function": "multiplicative",
+      "base": 0.5,
+      "cost": 20,
+      "resell": 5,
+      "priority": 10
+    },
+    "hand_of_midas":{
+      "builds_from": ["bead_of_power"],
+      "affected_stats": ["special"],
+      "effect_level": "special",
+      "effect_function": "special",
+      "base": 1,
+      "cost": 35,
+      "resell": 15,
+      "priority": 10
+    },
+    "sword_of_storms":{
+      "builds_from": ["bead_of_power"],
+      "affected_stats": ["attack"],
+      "effect_level": "value",
+      "effect_function": "multiplicative",
+      "base": 0.10,
+      "cost": 100,
+      "resell": 20,
+      "priority": 10
+    },
+    "joules_bonsai":{
+      "builds_from": null,
+      "affected_stats": ["special"],
+      "effect_level": "special",
+      "effect_function": "special",
+      "base": 0.05,
+      "cost": 15,
+      "resell": 5,
+      "priority": 10
     }
   }
 }

@@ -47,6 +47,11 @@ class Inventory:
             if is_owned:
                 self.content.append(Item(key))
 
+        if len(self.content) > 0:
+            self.is_empty = False
+        else:
+            self.is_empty = True
+
     def add_item(self, key):
         G.USR[self.user_id].inventory[key] = True
         tools.save_users()
@@ -56,6 +61,16 @@ class Inventory:
         G.USR[self.user_id].inventory[key] = False
         tools.save_users()
         self.update_content()
+
+    def contains(self, item_id):
+        if self.is_empty:
+            return False
+
+        for item in self.content:
+            if item.id == item_id:
+                return True
+        else:
+            return False
 
 
 # Buy an item with Tokens ----------------------------------------------------------------------
@@ -99,7 +114,7 @@ def buy_item_logic(message):
     else:
         required_items = set()
 
-    if len(inventory.content) >= (G.IDLE.max_items - len(required_items)):
+    if len(inventory.content) >= (G.IDLE.max_items + len(required_items)):
         # Cannot buy an item if inventory is full
         out.add(G.LOC.commands.buy.nospace.format(G.IDLE.max_items))
         return out.parse()

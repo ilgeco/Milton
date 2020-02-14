@@ -201,23 +201,25 @@ def harvest_logic(message):
     return output.parse()
 
 
-def produce_joules(userID, current_time, last_time):
+def produce_joules(user_id, current_time, last_time):
     """Handles calculating joules to add as well generating the message to push to chat.
 
     Also appropriately updates user dictionaries on joules produced.
     """
     output = tools.MsgBuilder()
+    inventory = Inventory(user_id)
 
-    production = Statistic("production", userID)
-    maxTicks = Statistic("maxTicks", userID)
+    production = Statistic("production", user_id)
+    maxTicks = Statistic("maxTicks", user_id)
 
     if last_time == 0:
         # I give a gift of some joules for the uninitialized user.
-        tools.update_user(user_id=userID, stat="joules", set=G.IDLE.harvest.gift)
+        tools.update_user(user_id=user_id, stat="joules", set=G.IDLE.harvest.gift)
         return G.LOC.commands.harvest.firstTime.format(
             G.IDLE.harvest.gift, round((G.IDLE.production.base * 60), 0))
     else:
         production_time = current_time - last_time
+        bonsai_time = production_time
 
         if production_time > maxTicks.value():
             production_time = maxTicks.value()
@@ -225,14 +227,20 @@ def produce_joules(userID, current_time, last_time):
                 G.OPT.prefix + G.LOC.commands.upgrade.id))
 
         joules_produced = production_time * production.value()
-        joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(userID)
+        joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
+        if inventory.contains("joules_bonsai"):
+            bonsai_joules = bonsai_time * G.IDLE["items"].joules_bonsai.base * production.value()\
+                               * G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
+            out.add(G.LOC["items"].joules_bonsai.activation.format(
+                tools.fn(bonsai_joules)
+            ))
 
-        tools.update_user(user_id=userID, stat="joules", increase=joules_produced)
-        tools.update_user(user_id=userID, stat="lifetime_joules", increase=joules_produced)
+        tools.update_user(user_id=user_id, stat="joules", increase=joules_produced)
+        tools.update_user(user_id=user_id, stat="lifetime_joules", increase=joules_produced)
 
         output.add(G.LOC.commands.harvest.production.format(
             tools.fn(joules_produced),
-            tools.fn(G.USR[userID].joules)
+            tools.fn(G.USR[user_id].joules)
         ))
         return output.parse()
 
@@ -407,6 +415,7 @@ def attack_logic(message):
         String to push to chat.
     """
     user_id = str(message.author.id)
+    inventory = Inventory(user_id)
     user_guild = str(message.author.guild.id)
     out = tools.MsgBuilder()
 
@@ -418,9 +427,12 @@ def attack_logic(message):
     # Cannot attack more than once every xx hours:
     now = time.time()
     elapsed = now - G.USR[user_id].last_attack
-    if elapsed < G.IDLE.titan.min_hours * 3600:
+    wait_time = G.IDLE.titan.min_hours * 3600
+    if inventory.contains("sword_of_storms"):
+        wait_time /= 10
+    if elapsed < wait_time:
         out.add(G.LOC.commands.attack.toosoon.format(
-            round((G.IDLE.titan.min_hours * 3600 - elapsed) / 3600, 2)
+            round((wait_time - elapsed) / 3600, 2)
         ))
         return out.parse()
     tools.update_user(user_id, "last_attack", set=now)
@@ -436,6 +448,12 @@ def attack_logic(message):
         G.USR[user_id].attacks.append(user_guild)
 
     damage = stats.attack.value() * titan.armor
+
+    if inventory.contains("hand_of_midas"):
+        tools.update_user(user_id, "joules", increase=damage/2)
+        out.add(G.LOC["items"].hand_of_midas.activation.format(
+            tools.fn(damage/2)
+        ))
 
     tools.update_user(user_id=user_id, stat="titan_damage", increase=damage)
     tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
