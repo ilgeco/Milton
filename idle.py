@@ -450,9 +450,10 @@ def attack_logic(message):
     damage = stats.attack.value() * titan.armor
 
     if inventory.contains("hand_of_midas"):
-        tools.update_user(user_id, "joules", increase=damage/2)
+        midas_mult = G.IDLE["items"].hand_of_midas.base
+        tools.update_user(user_id, "joules", increase=damage*midas_mult)
         out.add(G.LOC["items"].hand_of_midas.activation.format(
-            tools.fn(damage/2)
+            tools.fn(damage * midas_mult)
         ))
 
     tools.update_user(user_id=user_id, stat="titan_damage", increase=damage)
@@ -524,7 +525,7 @@ def ascend_logic(message):
     bonus_tokens = 0
     # Handle awarding bonus tokens as indicated in idle.json (ascension.bonus)
     if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
-        bonus_tokens = G.IDLE.ascension.bonus[max(G.USR[user_id].times_ascended - 1, 0)]
+        bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended]
     # Calculate minimum number of joules to have when ascending.
     min_joules = (
         G.IDLE.ascension.min_joules *

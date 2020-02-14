@@ -23,11 +23,11 @@
       },
       "beggar_horn":{
         "name": "Corno del Mendicante",
-        "info": "[Foglia della Frugalità] La crescita dei prezzi di tutte le statistiche è dimezzata."
+        "info": "[Foglia della Frugalità] La crescita dei prezzi di tutte le statistiche è ridotta del 10%."
       },
       "hand_of_midas":{
         "name": "Mano di Mida",
-        "info": "[Perla della Potenza] Quando attacchi, ottieni metà dei danni inflitti come Joule.",
+        "info": "[Perla della Potenza] Quando attacchi, ottieni il x1.5 dei danni inflitti come Joule.",
         "activation": "Hai ottenuto {} Joule dalla tua Mano di Mida."
       },
       "sword_of_storms":{
@@ -449,16 +449,16 @@
       },
       "beggar_horn":{
         "name": "Beggar's Horn",
-        "info": "[Frugality Leaf] Makes prices grow half as fast."
+        "info": "[Frugality Leaf] Makes prices grow 10% slower."
       },
       "hand_of_midas":{
         "name": "Mida's Hand",
-        "info": "[Bead of Power] When you attack, you gain half of your damage as joules.",
+        "info": "[Bead of Power] When you attack, you gain x1.5 of the damage done as joules.",
         "activation": "You obtained {} Joules from your Mida's Hand."
       },
       "sword_of_storms":{
         "name": "Sword of Storms",
-        "info": "[Bead of Power] You can attack ten times as often, but your attack damage is divided by 4."
+        "info": "[Bead of Power] You can attack ten times as often, but your attack damage is divided by 2."
       },
       "joules_bonsai":{
         "name": "Joule Bonsai",

@@ -1,10 +1,10 @@
 {
   "ascension": {
-    "exponent": 0.09,
+    "exponent": 0.2,
     "min_joules": 10000,
     "min_exp": 10,
     "elapsed": 30,
-    "bonus": [10, 15, 25, 35, 50, 60, 65, 70, 75, 100]
+    "bonus": [10, 45, 100, 250, 450, 500, 500, 500, 500, 1000]
   },
   "production": {
     "base": 0.05,
@@ -109,8 +109,8 @@
       "affected_stats": ["production", "attack", "time"],
       "effect_level": "prices.mult",
       "effect_function": "multiplicative",
-      "base": 0.5,
-      "cost": 20,
+      "base": 0.9,
+      "cost": 30,
       "resell": 5,
       "priority": 10
     },
@@ -119,7 +119,7 @@
       "affected_stats": ["special"],
       "effect_level": "special",
       "effect_function": "special",
-      "base": 1,
+      "base": 1.5,
       "cost": 35,
       "resell": 15,
       "priority": 10
@@ -129,7 +129,7 @@
       "affected_stats": ["attack"],
       "effect_level": "value",
       "effect_function": "multiplicative",
-      "base": 0.10,
+      "base": 0.5,
       "cost": 100,
       "resell": 20,
       "priority": 10
