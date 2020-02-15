@@ -201,5 +201,11 @@ def make_achievements():
     add_achievement(
         lambda user: True if G.USR[user].factCount >= 20 else False,
         "many_facts")
+    add_achievement(
+        lambda user: True if G.USR[user].konami else False,
+        "konami")
+    add_achievement(
+        lambda user: True if G.USR[user].cheat else False,
+        "cheat")
 
     return True

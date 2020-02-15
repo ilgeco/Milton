@@ -230,6 +230,16 @@
         "name": "Attrezzato",
         "condition": "Hai l'inventario pieno - o, come si dice in gergo, *full build*.",
         "include_help": true
+      },
+      "konami": {
+        "name": "The Konami Code",
+        "condition": "E' in qualunque gioco.",
+        "include_help": false
+      },
+      "full_inventory": {
+        "name": "Baro",
+        "condition": "Smettila di barare!.",
+        "include_help": false
       }
     },
     "msg": {
@@ -656,6 +666,16 @@
         "name": "Packed",
         "condition": "Your inventory is full. That was a pretty good shopping spree!",
         "include_help": true
+      },
+      "konami": {
+        "name": "The Konami Code",
+        "condition": "It's in any game.",
+        "include_help": false
+      },
+      "full_inventory": {
+        "name": "Cheat",
+        "condition": "Stop cheating!.",
+        "include_help": false
       }
     },
     "msg": {

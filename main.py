@@ -122,6 +122,15 @@ def main(token: str, language: str, options_path: str):
                         await message.author.dm_channel.send(string)
                     await message.delete()
 
+        # Achievements that contain strings:
+        if message.content.startswith(G.OPT.prefix + "upupdowndownleftrightleftrightbastart"):
+            tools.update_user(str(message.author.id), "konami", set=True)
+            await message.delete()
+
+        if message.content.startswith(G.OPT.prefix + "cheat"):
+            tools.update_user(str(message.author.id), "cheat", set=True)
+            await message.delete()
+
         # Check Achievements
         achieve_intro = True
         for achieve in G.ACHIEVES:

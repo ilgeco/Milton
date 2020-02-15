@@ -1,3 +1,4 @@
+import math
 import random
 import json
 from pathlib import Path
@@ -199,7 +200,7 @@ def fn(number: float,
     if decimals > 0:
         number = round(number, decimals)
     elif decimals == 0:
-        number = int(number)
+        number = math.floor(number)
     if number < threshold:
         return str(number)
     power_of_ten = round(log(base, 10), 0)
