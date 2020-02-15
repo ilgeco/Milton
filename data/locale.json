@@ -236,7 +236,7 @@
         "condition": "E' in qualunque gioco.",
         "include_help": false
       },
-      "full_inventory": {
+      "cheat": {
         "name": "Baro",
         "condition": "Smettila di barare!.",
         "include_help": false
@@ -672,7 +672,7 @@
         "condition": "It's in any game.",
         "include_help": false
       },
-      "full_inventory": {
+      "cheat": {
         "name": "Cheat",
         "condition": "Stop cheating!.",
         "include_help": false
