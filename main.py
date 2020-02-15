@@ -123,7 +123,7 @@ def main(token: str, language: str, options_path: str):
                     await message.delete()
 
         # Achievements that contain strings:
-        if message.content.startswith(G.OPT.prefix + "upupdowndownleftrightleftrightbastart"):
+        if message.content.startswith(G.OPT.prefix + "^^vv><><ba"):
             tools.update_user(str(message.author.id), "konami", set=True)
             await message.delete()
 
