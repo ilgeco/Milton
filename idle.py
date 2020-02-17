@@ -361,7 +361,6 @@ def upgrade_logic(message):
                 # Enough joules to update
                 stat.upgrade()
                 tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
-                G.USR[user_id].joules -= price
                 total_spent += price
                 price = stat.recalculate_price(increase_level=(i + 1))
             else:
