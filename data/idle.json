@@ -22,14 +22,14 @@
   },
   "time": {
     "base": 1.0,
-    "mult": 1.1,
+    "mult": 0.1,
     "level_threshold": 5,
     "level_mult": 1.5,
     "function": "linear_mult"
   },
   "attack": {
     "base": 100,
-    "mult": 2,
+    "mult": 150,
     "level_threshold": 10,
     "level_mult": 2,
     "function": "linear_mult"
@@ -41,7 +41,7 @@
   "prices": {
     "production": {
       "base": 100,
-      "mult": 1.85,
+      "mult": 2,
       "function": "exponential"
     },
     "time":{
@@ -92,7 +92,7 @@
       "affected_stats": ["production"],
       "effect_level": "scaling.mult",
       "effect_function": "multiplicative",
-      "base": 1.1,
+      "base": 1.20,
       "cost": 99,
       "resell": 45,
       "priority": 10

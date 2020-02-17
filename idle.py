@@ -3,7 +3,7 @@ import globals as G
 import tools
 import munch
 import time
-import math
+import copy
 from mpmath import *
 
 from items import Inventory
@@ -15,7 +15,6 @@ class Statistic:
     Takes into account player level to calculate value and costs.
     """
     def apply_items(self, number, level):
-        a = number
         inventory = Inventory(self.user)
         if inventory.is_empty is not True:
             contents = sorted(inventory.content, key=lambda x: x.priority)
@@ -45,8 +44,8 @@ class Statistic:
         # The name of the stat is normalized as "stat_level"
         self.stat_level = G.USR[user_id][identifier + "_level"]
 
-        self.prices = G.IDLE[identifier]
-        self.scaling = G.IDLE.prices[identifier]
+        self.scaling = copy.deepcopy(G.IDLE[identifier])
+        self.prices = copy.deepcopy(G.IDLE.prices[identifier])
 
         self.prices.base = mpf(self.prices.base)
         self.prices.mult = mpf(self.prices.mult)
@@ -56,7 +55,7 @@ class Statistic:
         self.tokens = G.USR[user_id].tokens
 
         if self.id == "production":
-            self.tokens_multiplier = 1 + (math.log(1 + self.tokens, 10))
+            self.tokens_multiplier = 1 + (log(1 + self.tokens, 10))
         else:
             self.tokens_multiplier = 1
 
@@ -221,7 +220,6 @@ def produce_joules(user_id, current_time, last_time):
     """
     output = tools.MsgBuilder()
     inventory = Inventory(user_id)
-
     production = Statistic("production", user_id)
     time_stat = Statistic("time", user_id)
     max_time = G.IDLE.production.max_hours * 3600
@@ -241,7 +239,7 @@ def produce_joules(user_id, current_time, last_time):
         if production_time > max_time:
             production_time = max_time
             output.add(G.LOC.commands.harvest.overproduced.format(
-                max_time / 60))
+                max_time / 3600))
 
         joules_produced = production_time * production.value()
         joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
@@ -363,6 +361,7 @@ def upgrade_logic(message):
                 # Enough joules to update
                 stat.upgrade()
                 tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
+                G.USR[user_id].joules -= price
                 total_spent += price
                 price = stat.recalculate_price(increase_level=(i + 1))
             else:
@@ -463,13 +462,16 @@ def attack_logic(message):
     elapsed = now - G.USR[user_id].last_attack
     elapsed *= time_stat.value()
     wait_time = G.IDLE.titan.min_hours * 3600
+
     if inventory.contains("sword_of_storms"):
         wait_time /= 2
+
     if elapsed < wait_time:
         out.add(G.LOC.commands.attack.toosoon.format(
             round((wait_time - elapsed) / 3600, 2)
         ))
         return out.parse()
+
     tools.update_user(user_id, "last_attack", set=now)
     stats = make_all_stats(user_id)
     titan = Titan(G.GLD[user_guild].titan_level)
@@ -482,7 +484,7 @@ def attack_logic(message):
         # Remember that the user attacked.
         G.USR[user_id].attacks.append(user_guild)
 
-    damage = stats.attack.value() * titan.armor
+    damage = mpf(stats.attack.value() * titan.armor)
 
     if inventory.contains("hand_of_midas"):
         midas_mult = G.IDLE["items"].hand_of_midas.base
@@ -495,9 +497,9 @@ def attack_logic(message):
     tools.update_guild(guild_id=user_guild, stat="titan_damage", increase=damage)
     tools.update_user(user_id=user_id, stat="times_attacked", increase=1)
 
-    remaining_hp = titan.hp - G.GLD[user_guild].titan_damage
+    remaining_hp = mpf(titan.hp) - mpf(G.GLD[user_guild].titan_damage)
 
-    if G.GLD[user_guild].titan_damage >= titan.hp:
+    if mpf(G.GLD[user_guild].titan_damage) >= titan.hp:
         # The titan was killed by this attack
         # Check achievement
         if damage >= titan.hp:
@@ -536,7 +538,7 @@ def calculate_token_reward(joules):
 
 # Ascension -----------------------------------------------------------------
 def tokens_from_joules(joules):
-    return power(log(joules), G.IDLE.ascension.exponent)
+    return power(log(1 + joules), G.IDLE.ascension.exponent)
 
 
 def ascend_perm(message):

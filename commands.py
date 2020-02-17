@@ -116,9 +116,6 @@ def user_info_logic(message):
     bonus_tokens = 0
     inventory = Inventory(user_id)
 
-    for stat in stats.values():
-        print(stat.value())
-
     if G.USR[user_id].times_ascended <= len(G.IDLE.ascension.bonus):
         bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended]
 
@@ -126,13 +123,14 @@ def user_info_logic(message):
     out.add(strings.info)
     # Information about joules and lifetime joules
     out.add(strings.joules.format(
-        tools.fn(G.USR[user_id].joules),
-        tools.fn(G.USR[user_id].lifetime_joules)))
+        tools.fn(G.USR[user_id].joules, decimals=2),
+        tools.fn(G.USR[user_id].lifetime_joules, decimals=2))
+    )
     # Information about tokens, token effects, and tokens gained on ascension.
     out.add(strings.tokens.format(
-        tools.fn(G.USR[user_id].tokens),
+        tools.fn(G.USR[user_id].tokens, decimals=1),
         tools.fn(tokens_from_joules(G.USR[user_id].lifetime_joules)),
-        tools.fn(bonus_tokens, decimals=0)
+        tools.fn(bonus_tokens, decimals=1)
     ))
     # Information about lifetime statistics
     out.add(strings.lifetime.format(
@@ -142,17 +140,17 @@ def user_info_logic(message):
     # Information about "production" stat
     out.add(strings.productionlevel.format(
         stats.production.stat_level,
-        tools.fn(stats.production.value() * 60)
+        tools.fn(stats.production.value() * 60, decimals=1)
     ))
     # Information about "time" stat
     out.add(strings.timelevel.format(
         stats.time.stat_level,
-        tools.fn(round(stats.time.value(), 2))
+        tools.fn(stats.time.value())
     ))
     # Information about "attack" stat
     out.add(strings.attacklevel.format(
         stats.attack.stat_level,
-        tools.fn(tools.fn(stats.attack.value()))
+        tools.fn(stats.attack.value(), decimals=0)
     ))
     # Information about "commandCount" stat
     out.add(strings.commandCount.format(

@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import munch
 from itertools import zip_longest
-from math import log
 import globals as G
 from mpmath import *
 
@@ -120,6 +119,8 @@ def update_guild(guild_id, stat, increase=None, set=None) -> True:
         raise ValueError("Cannot increase and set at the same time.")
     # Set or increase variable:
     if increase is not None:
+        if isinstance(G.GLD[str(guild_id)][stat], str):
+            G.GLD[str(guild_id)][stat] = mpf(G.GLD[str(guild_id)][stat])
         G.GLD[str(guild_id)][stat] += increase
     elif set is not None:
         G.GLD[str(guild_id)][stat] = set
@@ -185,8 +186,7 @@ def count_achieves(user_id: str) -> int:
 
 def fn(number: float,
        threshold: int = 100_000,
-       base: int = 1_000,
-       decimals: int = 3) -> str:
+       decimals: int = 2) -> str:
     """Short for 'format number'.
 
     Takes a number and formats it into human-readable form.
@@ -209,7 +209,7 @@ def fn(number: float,
     """
     number = mpf(number)
     if number < threshold:
-        return str(number)
+        return str(round(float(number), decimals))
     return nstr(number, decimals)
 
 

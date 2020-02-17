@@ -207,5 +207,8 @@ def make_achievements():
     add_achievement(
         lambda user: True if G.USR[user].cheat else False,
         "cheat")
+    add_achievement(
+        lambda user: False,
+        "joulepocalipse")
 
     return True
