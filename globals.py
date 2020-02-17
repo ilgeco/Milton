@@ -4,6 +4,7 @@ Contains all global memory dictionaries. Has to be initialized through initializ
 
 from pathlib import Path
 import tools
+from mpmath import mpf
 
 
 def initialize(options_path: str) -> True:
@@ -40,6 +41,12 @@ def initialize(options_path: str) -> True:
     # Load locale, guild and user files
     GLOC = tools.load(OPT.locale_path)
     USR = tools.load(OPT.users_path, default=0)
+    for key, user in USR.items():
+        for inner_key, value in user.items():
+            if inner_key == "name":
+                continue
+            if isinstance(value, str):
+                USR[key][inner_key] = mpf(value)
     GLD = tools.load(OPT.guilds_path, default=0)
     IDLE = tools.load(OPT.idle_path)
     print("Options, locale and user files loaded. I remembered {0} users.".format(len(USR)))
@@ -58,6 +65,12 @@ def reload_users() -> True:
     """
     global USR
     USR = tools.load(OPT.users_path, default=0)
+    for key, user in USR.items():
+        for inner_key, value in user.items():
+            if inner_key == "name":
+                continue
+            if isinstance(value, str):
+                USR[key][inner_key] = mpf(value)
     return True
 
 

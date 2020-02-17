@@ -5,6 +5,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Microblog" />
+    <orderEntry type="module" module-name="HugeInt" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="GOOGLE" />

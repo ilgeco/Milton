@@ -3,6 +3,8 @@ import globals as G
 import tools
 import munch
 import time
+import math
+from mpmath import *
 
 from items import Inventory
 
@@ -36,16 +38,27 @@ class Statistic:
             user_id: str
                 Id of user to calculate statistic for - used to access users.json
         """
+        mp.dps = 16
         self.id = identifier
         self.name = G.LOC.commands.upgrade.IDs[identifier]
         self.user = user_id
         # The name of the stat is normalized as "stat_level"
         self.stat_level = G.USR[user_id][identifier + "_level"]
-        self.scaling = G.IDLE[identifier]
-        self.prices = G.IDLE.prices[identifier]
+
+        self.prices = G.IDLE[identifier]
+        self.scaling = G.IDLE.prices[identifier]
+
+        self.prices.base = mpf(self.prices.base)
+        self.prices.mult = mpf(self.prices.mult)
+        self.scaling.base = mpf(self.scaling.base)
+        self.scaling.mult = mpf(self.scaling.mult)
+
         self.tokens = G.USR[user_id].tokens
 
-        self.tokens_multiplier = 1 + (self.tokens / 100)
+        if self.id == "production":
+            self.tokens_multiplier = 1 + (math.log(1 + self.tokens, 10))
+        else:
+            self.tokens_multiplier = 1
 
         # Update constants based on items owned
         self.scaling.base = self.apply_items(number=self.scaling.base, level="scaling.base")
@@ -210,7 +223,10 @@ def produce_joules(user_id, current_time, last_time):
     inventory = Inventory(user_id)
 
     production = Statistic("production", user_id)
-    maxTicks = Statistic("maxTicks", user_id)
+    time_stat = Statistic("time", user_id)
+    max_time = G.IDLE.production.max_hours * 3600
+    if Inventory(user_id).contains("quill_of_math"):
+        max_time *= 2
 
     if last_time == 0:
         # I give a gift of some joules for the uninitialized user.
@@ -219,19 +235,20 @@ def produce_joules(user_id, current_time, last_time):
             G.IDLE.harvest.gift, round((G.IDLE.production.base * 60), 0))
     else:
         production_time = current_time - last_time
+        production_time *= time_stat.value()
         bonsai_time = production_time
 
-        if production_time > maxTicks.value():
-            production_time = maxTicks.value()
+        if production_time > max_time:
+            production_time = max_time
             output.add(G.LOC.commands.harvest.overproduced.format(
-                G.OPT.prefix + G.LOC.commands.upgrade.id))
+                max_time / 60))
 
         joules_produced = production_time * production.value()
         joules_produced *= G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
         if inventory.contains("joules_bonsai"):
             bonsai_joules = bonsai_time * G.IDLE["items"].joules_bonsai.base * production.value()\
                                * G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
-            out.add(G.LOC["items"].joules_bonsai.activation.format(
+            output.add(G.LOC["items"].joules_bonsai.activation.format(
                 tools.fn(bonsai_joules)
             ))
 
@@ -243,6 +260,22 @@ def produce_joules(user_id, current_time, last_time):
             tools.fn(G.USR[user_id].joules)
         ))
         return output.parse()
+
+
+def produce_matter(user_id):
+    """Produce matter from joules"""
+    matter_constant = 6.6e+08
+    out = tools.MsgBuilder
+
+    matter_produced = G.USR[user_id].joules // matter_constant
+    leftover_joules = G.USR[user_id].joules % matter_constant
+
+    tools.update_user(user_id, "matter", increase=matter_produced)
+    tools.update_user(user_id, "joules", set=leftover_joules)
+
+    out.add(G.LOC.commands.harvest.created_matter.format(
+        tools.format_matter(user_id)
+    ))
 
 
 # Upgrade stat -------------------------------------------------------------
@@ -276,13 +309,13 @@ def upgrade_logic(message):
         # Send information message
         out.add(G.LOC.commands.upgrade.info)
         # >> Upgrade max ticks help
-        out.add(G.LOC.commands.upgrade.upgradable.maxTicks.format(
-            G.LOC.commands.upgrade.IDs.maxTicks,
-            tools.fn(stats.maxTicks.value() / 3600),
-            tools.fn(stats.maxTicks.value(1) / 3600),
-            tools.fn(stats.maxTicks.upgrade_price)
+        out.add(G.LOC.commands.upgrade.upgradable.time.format(
+            G.LOC.commands.upgrade.IDs.time,
+            tools.fn(stats.time.value()),
+            tools.fn(stats.time.value(1)),
+            tools.fn(stats.time.upgrade_price)
         ).split("|"))
-        if stats.maxTicks.upgrade_price <= current_joules:
+        if stats.time.upgrade_price <= current_joules:
             out.append(" < OK!")
         # >> Upgrade production help
         out.add(G.LOC.commands.upgrade.upgradable.production.format(
@@ -426,10 +459,12 @@ def attack_logic(message):
 
     # Cannot attack more than once every xx hours:
     now = time.time()
+    time_stat = Statistic("time", user_id)
     elapsed = now - G.USR[user_id].last_attack
+    elapsed *= time_stat.value()
     wait_time = G.IDLE.titan.min_hours * 3600
     if inventory.contains("sword_of_storms"):
-        wait_time /= 10
+        wait_time /= 2
     if elapsed < wait_time:
         out.add(G.LOC.commands.attack.toosoon.format(
             round((wait_time - elapsed) / 3600, 2)
@@ -476,7 +511,7 @@ def attack_logic(message):
                 continue
             if user_guild in user.attacks:
                 # Award tokens to this player.
-                G.USR[key].tokens += max(round(titan.base_reward, 0), 1)
+                G.USR[key].tokens += max(mpf(titan.base_reward), 1)
                 G.USR[key].tokens += max(calculate_token_reward(G.USR[key].titan_damage), 0)
                 G.USR[key].titan_damage = 0
                 G.USR[key].attacks.remove(user_guild)
@@ -496,12 +531,12 @@ def attack_logic(message):
 
 def calculate_token_reward(joules):
     """Formula used to calculate tokens to reward players when killing titans."""
-    return round(joules ** G.IDLE.titan.reward_damage_exponent, 0)
+    return round(power(joules, G.IDLE.titan.reward_damage_exponent), 0)
 
 
 # Ascension -----------------------------------------------------------------
 def tokens_from_joules(joules):
-    return joules ** G.IDLE.ascension.exponent
+    return power(log(joules), G.IDLE.ascension.exponent)
 
 
 def ascend_perm(message):
@@ -528,8 +563,7 @@ def ascend_logic(message):
         bonus_tokens = G.IDLE.ascension.bonus[G.USR[user_id].times_ascended]
     # Calculate minimum number of joules to have when ascending.
     min_joules = (
-        G.IDLE.ascension.min_joules *
-        G.IDLE.ascension.min_exp ** (G.USR[user_id].times_ascended + 1))
+        fmul(G.IDLE.ascension.min_joules, power(G.IDLE.ascension.min_exp, (G.USR[user_id].times_ascended + 1))))
     if lifetime_joules < min_joules:
         # Not enough joules produced.
         out.add(G.LOC.commands.ascend.notenough.format(
@@ -539,10 +573,10 @@ def ascend_logic(message):
     if elapsed > G.IDLE.ascension.elapsed:
         # Command was sent too long ago. Send "Are you sure?"
         if bonus_tokens == 0:
-            out.add(G.LOC.commands.ascend.confirm.format(tokens))
+            out.add(G.LOC.commands.ascend.confirm.format(tools.fn(tokens)))
         else:
             out.add(G.LOC.commands.ascend.confirm_bonus.format(
-                tokens, bonus_tokens
+                tools.fn(tokens), tools.fn(bonus_tokens)
             ))
         return out.parse()
 
@@ -564,7 +598,7 @@ def ascend_logic(message):
     tools.update_user(user_id=user_id, stat="times_ascended", increase=1)
 
     out.add(G.LOC.commands.ascend.success.format(
-        tools.fn(lifetime_joules), tokens
+        tools.fn(lifetime_joules), tools.fn(tokens)
     ))
 
     return out.parse()

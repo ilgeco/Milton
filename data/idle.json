@@ -1,6 +1,6 @@
 {
   "ascension": {
-    "exponent": 0.2,
+    "exponent": 1.1,
     "min_joules": 5000,
     "min_exp": 10,
     "elapsed": 30,
@@ -9,20 +9,23 @@
   "production": {
     "base": 0.05,
     "mult": 1.25,
-    "function": "exponential"
+    "function": "exponential",
+    "max_hours": 4
   },
   "titan":{
     "base_hp": 1000,
     "level_exp": 2,
-    "armor_constant": 0.01,
+    "armor_constant": 0.007,
     "reward_constant": 1.01,
     "reward_damage_exponent": 0.5,
-    "min_hours": 20
+    "min_hours": 4
   },
-  "maxTicks": {
-    "base": 14400,
-    "mult": 7,
-    "function": "log"
+  "time": {
+    "base": 1.0,
+    "mult": 1.1,
+    "level_threshold": 5,
+    "level_mult": 1.5,
+    "function": "linear_mult"
   },
   "attack": {
     "base": 100,
@@ -41,10 +44,10 @@
       "mult": 1.85,
       "function": "exponential"
     },
-    "maxTicks":{
-      "base": 200,
-      "mult": 1.5,
-      "function": "linear"
+    "time":{
+      "base": 10,
+      "mult": 10,
+      "function": "exponential"
     },
     "attack":{
       "base": 1000,
@@ -89,7 +92,7 @@
       "affected_stats": ["production"],
       "effect_level": "scaling.mult",
       "effect_function": "multiplicative",
-      "base": 1.50,
+      "base": 1.1,
       "cost": 99,
       "resell": 45,
       "priority": 10
@@ -126,10 +129,10 @@
     },
     "sword_of_storms":{
       "builds_from": ["bead_of_power"],
-      "affected_stats": ["attack"],
-      "effect_level": "value",
-      "effect_function": "multiplicative",
-      "base": 0.5,
+      "affected_stats": ["special"],
+      "effect_level": "special",
+      "effect_function": "special",
+      "base": 1,
       "cost": 100,
       "resell": 20,
       "priority": 10
@@ -142,6 +145,36 @@
       "base": 0.05,
       "cost": 15,
       "resell": 5,
+      "priority": 10
+    },
+    "inverse_hourglass":{
+      "builds_from": ["stopwatch", "frugality_leaf"],
+      "affected_stats": ["time"],
+      "effect_level": "scaling.mult",
+      "effect_function": "additive",
+      "base": -1,
+      "cost": 150,
+      "resell": 100,
+      "priority": 10
+    },
+    "stopwatch":{
+      "builds_from": null,
+      "affected_stats": ["time"],
+      "effect_level": "value",
+      "effect_function": "additive",
+      "base": 0.3,
+      "cost": 25,
+      "resell": 100,
+      "priority": 10
+    },
+    "quill_of_math":{
+      "builds_from": null,
+      "affected_stats": ["special"],
+      "effect_level": "special",
+      "effect_function": "special",
+      "base": 1,
+      "cost": 5,
+      "resell": 1,
       "priority": 10
     }
   }

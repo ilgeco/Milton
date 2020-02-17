@@ -18,7 +18,7 @@
         "info": "[Perla della Crescita] L'effetto di aumentare le statistiche è potenziato del 50%."
       },
       "frugality_leaf":{
-        "name": "Foglia della Frugalita",
+        "name": "Foglia della Frugalità",
         "info": "I prezzi per potenziare le statistiche sono dimezzati."
       },
       "beggar_horn":{
@@ -32,12 +32,24 @@
       },
       "sword_of_storms":{
         "name": "Spada della Tempesta",
-        "info": "[Perla della Potenza] Puoi attaccare dieci volte più in fretta, ma fai un quarto dei danni."
+        "info": "[Perla della Potenza] PPuoi attaccare due volte più velocemente."
       },
       "joules_bonsai":{
         "name": "Bonsai dei Joule",
         "info": "Produce un ventesimo della tua produzione di Joule, ma non è limitata dalla tua statistica di tempo.",
         "activation": "Il tuo bonsai ha prodotto {} Joules."
+      },
+      "inverse_hourglass":{
+        "name": "Clessidra Inversa",
+        "info": "[Foglia della Frugalità + Cronometro Incantato] La crescita del costo della statistica del tempo scenda da x10 a x9."
+      },
+      "stopwatch":{
+        "name": "Cronometro Incantato",
+        "info": "Aumenta la statistica del tempo di +0.3."
+      },
+      "quill_of_math":{
+        "name": "Penna Contabile",
+        "info": "Puoi raccogliere 2 ore extra di produzione (da 4 a 6)."
       }
     },
     "achievements": {
@@ -141,19 +153,19 @@
         "condition": "Fai 123456 danni ai titani ad ogni colpo. C'è qualcuno per uccidere un Elder Dragon? Io mi sono dimenticato di mangiare...",
         "include_help": true
       },
-      "maxTicks1": {
-        "name": "Buona Notte",
-        "condition": "Puoi raccogliere al massimo 8 ore di produzione. Buona notte!",
+      "time1": {
+        "name": "Biennio",
+        "condition": "Ogni tuo secondo ne vale due. Se solo funzionasse nella vita reale.",
         "include_help": true
       },
-      "maxTicks2": {
-        "name": "Buon Giorno",
-        "condition": "Puoi raccogliere almeno 24 ore di produzione. Che bella giornata.",
+      "time2": {
+        "name": "Decennio",
+        "condition": "Ogni tuo secondo ne vale dieci. Un'ora non è più così tanto.",
         "include_help": true
       },
-      "maxTicks3": {
-        "name": "AFK",
-        "condition": "Puoi raccogliere fino ad una settimana di produzione. Scusate ragazzi, me ne vado un momento.",
+      "time3": {
+        "name": "Centennario",
+        "condition": "Ogni tuo secondo ne vale cento.",
         "include_help": true
       },
       "tokens1": {
@@ -260,7 +272,7 @@
         "category": ["idle"],
         "help": "Raccogli i Joule che hai prodotto fino a questo momento.",
         "firstTime": "E' la tua prima volta che raccogli i Joule. Ecco {0} Joule per iniziare. Produci di base {1} Joule al minuto.",
-        "overproduced": "Hai prodotto più del tuo massimo. Dovresti aumentarlo! Prova ad utilizzare {}",
+        "overproduced": "Hai prodotto più di {} ore di Joule. Il tempo extra è stato perso.",
         "production": "Hai prodotto {0} Joule mentre eri via. Ora hai un totale di {1} Joule."
       },
       "upgrade": {
@@ -274,12 +286,12 @@
         "IDs": {
           "info": "opzioni",
           "production": "produzione",
-          "maxTicks": "tempo",
+          "time": "tempo",
           "attack": "attacco"
         },
         "info": "Ecco cosa puoi potenziare:",
         "upgradable": {
-          "maxTicks": "> {} - Tempo di raccolta massimo.|{} Ore >> {} Ore|Costo: {} Joule",
+          "time": "> {} - Moltiplicatore del Tempo.|x{} >> x{}|Costo: {} Joule",
           "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {} Joule.",
           "attack": "> {} - Danni inflitti ai Titani.|{} >> {}|Costo: {} Joule."
         }
@@ -371,11 +383,11 @@
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
         "joules": "> Hai {} Joule. Hai prodotto un totale di {} Joule in questa ascensione.",
-        "tokens": "> Hai {:.0f} Token. Se ascendi ora, otterrai {:.0f} (+ {:.0f} bonus) Token.",
-        "lifetime": "> Sei asceso {:.0f} volte, e hai sacrificato in totale {} Joule.",
-        "productionlevel": "> Hai potenziato la produzione {:.0f} volte. Produci {} Joule ogni minuto.",
-        "maxTickslevel": "> Hai potenziato il tempo {:.0f} volte. Puoi raccogliere al massimo {:.2f} ore di produzione.",
-        "attacklevel": "> Hai potenziato l'attacco {:.0f} volte. Fai {} danni ai Titani.",
+        "tokens": "> Hai {} Token. Se ascendi ora, otterrai {} (+ {} bonus) Token.",
+        "lifetime": "> Sei asceso {} volte, e hai sacrificato in totale {} Joule.",
+        "productionlevel": "> Hai potenziato la produzione {} volte. Produci {} Joule ogni minuto.",
+        "timelevel": "> Hai potenziato il tempo {} volte. Puoi raccogliere al massimo {} ore di produzione.",
+        "attacklevel": "> Hai potenziato l'attacco {} volte. Fai {} danni ai Titani.",
         "titandamage": "> Hai fatto un totale di {} danni al Titano. Il tuo attacco più potente ha inflitto {} danni.",
         "achieves": "> Hai {} achievement, per un bonus alla produzione di Joule totale di x{:.2f}.",
         "commandCount": "> Nella tua carriera, mi hai chiamato {0} volte.",
@@ -468,12 +480,24 @@
       },
       "sword_of_storms":{
         "name": "Sword of Storms",
-        "info": "[Bead of Power] You can attack ten times as often, but your attack damage is divided by 2."
+        "info": "[Bead of Power] You can attack twice as often."
       },
       "joules_bonsai":{
         "name": "Joule Bonsai",
         "info": "This bonsai produces a twentieth of your normal joule production, but is not limited by your time stat.",
         "activation": "Your Bonsai produced {} Joules."
+      },
+      "inverse_hourglass":{
+        "name": "Inverse Hourglass",
+        "info": "[Frugality leaf + Enchanted Stopwatch] The Hourglass reduces the cost of increasing the time stat from x10 to x9."
+      },
+      "stopwatch":{
+        "name": "Enchanted Stopwatch",
+        "info": "Increases the time statistic by +0.3."
+      },
+      "quill_of_math":{
+        "name": "Quill of Math",
+        "info": "YOu can harvest 2 extra hours of production (from 4 to 6)."
       }
     },
     "achievements": {
@@ -577,17 +601,17 @@
         "condition": "You deal x100 damage to Titans. Anyone around to kill an elder dragon?",
         "include_help": true
       },
-      "maxTicks1": {
+      "time1": {
         "name": "Good Night",
         "condition": "You can gather 8 hours of production. Have a good night!",
         "include_help": true
       },
-      "maxTicks2": {
+      "time2": {
         "name": "Good day!",
         "condition": "You can gather up to 24 hours of production. Have a nice day!",
         "include_help": true
       },
-      "maxTicks3": {
+      "time3": {
         "name": "AFK",
         "condition": "You can gather up to a week of production. Sorry guys, AFK.",
         "include_help": true
@@ -696,7 +720,7 @@
         "category": ["idle"],
         "help": "Gather the Joules you've generated up to now.",
         "firstTime": "It's the first time you're gathering. Here are {0} Joules to start with. You produce {1} Joules per minute.",
-        "overproduced": "You produced more than you can gather. You should try to icnrease it. Try using {}!",
+        "overproduced": "You produced more than the maximum of {} hours of production.",
         "production": "You produced {0} Joules while you were away. You now have {1} Joules."
       },
       "upgrade": {
@@ -710,12 +734,12 @@
         "IDs": {
           "info": "options",
           "production": "production",
-          "maxTicks": "time",
+          "time": "time",
           "attack": "attack"
         },
         "info": "Here's what you can upgrade (Es: $upgrade attack):",
         "upgradable": {
-          "maxTicks": "> {} - Increases maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Cost: {} Joules",
+          "time": "> {} - Increases maximum harvest time.|{:.2f} Hours >> {:.2f} Hours|Cost: {} Joules",
           "production": "> {} - Rate of production.|{} J/min >> {} J/min|Cost: {} Joules.",
           "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {} Joule.s"
         }
@@ -810,7 +834,7 @@
         "tokens": "> You have {:.0f} Tokens. If you ascend now, you'll obtain {:.0f} (+ {:.0f} bonus) Tokens.",
         "lifetime": "> You ascended {:.0f} times, sacrificing a total of {} Joules.",
         "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {} Joules each minute.",
-        "maxTickslevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
+        "timelevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
         "attacklevel": "> You upgraded titan attack {:.0f} times. You deal {} damage to Titans.",
         "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
         "items": "> You have these items in your inventory: {}.",

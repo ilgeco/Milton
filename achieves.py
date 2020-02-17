@@ -125,14 +125,14 @@ def make_achievements():
 
     # Time stat -----------------------------------------------------
     add_achievement(
-        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= 8 else False,
-        "maxTicks1")
+        lambda user: True if Statistic("time", user).value() >= 2 else False,
+        "time1")
     add_achievement(
-        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= 24 else False,
-        "maxTicks2")
+        lambda user: True if Statistic("time", user).value() >= 10 else False,
+        "time2")
     add_achievement(
-        lambda user: True if Statistic("maxTicks", user).value() / 3600 >= (24 * 7) else False,
-        "maxTicks3")
+        lambda user: True if Statistic("time", user).value() >= 24 else False,
+        "time3")
 
     # Titan Damage -----------------------------------------------------
     add_achievement(

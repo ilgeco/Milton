@@ -6,6 +6,7 @@ import munch
 from itertools import zip_longest
 from math import log
 import globals as G
+from mpmath import *
 
 
 def get_random_line(file: str) -> str:
@@ -25,22 +26,30 @@ def get_random_line(file: str) -> str:
 
 
 def save(file: Path, dictionary: dict) -> True:
-    """Write target dictionary to JSON file.
+    """Write target dirty to JSON file.
 
     Doesn't sort keys as it often breaks.
 
     Args:
         file: str
             Path to target file
-        dictionary: dict
+        dictionary: dirty
             Dictionary to write to file
     Returns:
         True
     """
+    def pre_process(dirty: dict) -> dict:
+        for key, item in dirty.items():
+            if isinstance(item, dict):
+                dirty[key] = pre_process(item)
+            if isinstance(item, mpf):
+                dirty[key] = nstr(item, 16)
+        return dirty
+
     file = Path(file)
     with file.open("w+") as file:
         # Don't make this sort keys as it breaks, for some reason
-        json.dump(obj=dictionary, fp=file, indent=2)
+        json.dump(obj=pre_process(dictionary), fp=file, indent=2)
     return True
 
 
@@ -67,7 +76,8 @@ def load(file, default: bool = False):
 
 def save_users():
     """Save user dictionary to default user.json path"""
-    return save(file=G.OPT.users_path, dictionary=G.USR)
+    save(file=G.OPT.users_path, dictionary=G.USR)
+    return G.reload_users()
 
 
 def save_guilds():
@@ -92,6 +102,8 @@ def update_user(user_id, stat, increase=None, set=None) -> True:
         raise ValueError("Cannot increase and set at the same time.")
     # Set or increase variable:
     if increase is not None:
+        if isinstance(G.USR[str(user_id)][stat], str):
+            G.USR[str(user_id)][stat] = mpf(G.USR[str(user_id)][stat])
         G.USR[str(user_id)][stat] += increase
     elif set is not None:
         G.USR[str(user_id)][stat] = set
@@ -117,12 +129,12 @@ def update_guild(guild_id, stat, increase=None, set=None) -> True:
 
 def exponential(base, multiplier, level):
     """Simple exponential formula"""
-    return base * (multiplier ** level)
+    return fmul(base, power(multiplier, level))
 
 
 def linear(base, multiplier, level):
     """Simple linear formula"""
-    return base * multiplier * (level + 1)
+    return base + fmul(multiplier, level)
 
 
 def logarithm(base, multiplier, level):
@@ -132,7 +144,7 @@ def logarithm(base, multiplier, level):
 
 def linear_multiplier(base, multiplier, level, level_multiplier, level_threshold):
     """Linear scaling with bonus multiplier at X levels"""
-    base_value = base * multiplier * (level + 1)
+    base_value = base + multiplier * level
     multiplier_times = (level // level_threshold)
     return base_value * (level_multiplier ** multiplier_times)
 
@@ -174,7 +186,7 @@ def count_achieves(user_id: str) -> int:
 def fn(number: float,
        threshold: int = 100_000,
        base: int = 1_000,
-       decimals: int = 0) -> str:
+       decimals: int = 3) -> str:
     """Short for 'format number'.
 
     Takes a number and formats it into human-readable form.
@@ -195,22 +207,10 @@ def fn(number: float,
     Returns:
         String with formatted number.
     """
-    if base % 10 != 0:
-        raise ValueError("Base must be a power of ten.")
-    if decimals > 0:
-        number = round(number, decimals)
-    elif decimals == 0:
-        number = math.floor(number)
+    number = mpf(number)
     if number < threshold:
         return str(number)
-    power_of_ten = round(log(base, 10), 0)
-    exponent = 0
-    while True:
-        if number < base:
-            break
-        number = number / base
-        exponent += 1
-    return str(int(number)) + "e" + str(int(power_of_ten) * exponent)
+    return nstr(number, decimals)
 
 
 class MsgBuilder:
