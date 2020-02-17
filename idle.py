@@ -408,7 +408,7 @@ class Titan:
     """Used to calculate initial values for titans"""
     def __init__(self, level):
         self.level = level
-        self.hp = level ** G.IDLE.titan.level_exp * G.IDLE.titan.base_hp
+        self.hp = mpf(level ** G.IDLE.titan.level_exp * G.IDLE.titan.base_hp)
         # This is a function that tends to 0 @ level -> inf
         # The smaller the armor constant the slower the armor grows.
         b = G.IDLE.titan.armor_constant
@@ -677,12 +677,12 @@ def titan_logic(message):
         return out.parse()
 
     level = G.GLD[str(message.author.guild.id)].titan_level
-    damage_dealt = G.GLD[str(message.author.guild.id)].titan_damage
+    damage_dealt = mpf(G.GLD[str(message.author.guild.id)].titan_damage)
     titan = Titan(level)
 
     out.add(G.LOC.commands.titan.info.format(
         level,
-        tools.fn(titan.hp),
+        tools.fn(mpf(titan.hp)),
         tools.fn(titan.hp - damage_dealt),
         round((titan.hp - damage_dealt) / titan.hp * 100, 2),
         round((1 - titan.armor) * 100, 2),
