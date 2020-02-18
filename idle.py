@@ -5,6 +5,7 @@ import munch
 import time
 import copy
 from mpmath import *
+import copy
 
 from items import Inventory
 
@@ -44,10 +45,8 @@ class Statistic:
         # The name of the stat is normalized as "stat_level"
         self.stat_level = G.USR[user_id][identifier + "_level"]
         self.currency = G.IDLE.prices[identifier].currency
-
         self.scaling = copy.deepcopy(G.IDLE[identifier])
         self.prices = copy.deepcopy(G.IDLE.prices[identifier])
-
         self.prices.base = mpf(self.prices.base)
         self.prices.mult = mpf(self.prices.mult)
         self.scaling.base = mpf(self.scaling.base)
@@ -63,6 +62,7 @@ class Statistic:
         # Update constants based on items owned
         self.scaling.base = self.apply_items(number=self.scaling.base, level="scaling.base")
         self.scaling.mult = self.apply_items(number=self.scaling.mult, level="scaling.mult")
+
 
         self.prices.base = self.apply_items(number=self.prices.base, level="prices.base")
         self.prices.mult = self.apply_items(number=self.prices.mult, level="prices.mult")

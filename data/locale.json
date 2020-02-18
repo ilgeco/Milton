@@ -1,5 +1,8 @@
 {
   "it": {
+    "games": {
+      "pacinco_win": "{} hai vinto {} e ora hai {}"
+    },
     "items": {
       "bead_of_growth":{
         "name": "Perla della Crescita",
@@ -288,6 +291,12 @@
       "generated_titan": "E' arrivato un titano!\n> **[Livello {}]** - {} HP | {}% Armatura."
     },
     "commands": {
+      "pacinco": {
+        "id": "pacinco",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "scommetti x soldini."
+      },
       "harvest": {
         "epoch": 0,
         "id": "raccogli",
