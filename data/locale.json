@@ -50,6 +50,18 @@
       "quill_of_math":{
         "name": "Penna Contabile",
         "info": "Puoi raccogliere 2 ore extra di produzione (da 4 a 6)."
+      },
+      "joule_condenser":{
+        "name": "Condensatore di Joule",
+        "info": "Hai trovato i progetti per questo aggeggo, ma sembra che non faccia nulla."
+      },
+      "reality_drop":{
+        "name": "Goccia di Realtà",
+        "info": "Potenzia la produzione di x11.11."
+      },
+      "atom":{
+        "name": "Atomo",
+        "info": "[Goccia di Realtà] Produci il doppio della Materia."
       }
     },
     "achievements": {
@@ -257,6 +269,11 @@
         "name": "Joulepocalipse",
         "condition": "Sei sopravvissuto alla Joulepocalipse.",
         "include_help": false
+      },
+      "condensed1": {
+        "name": "Distillato",
+        "condition": "Hai condensato la materia una volta.",
+        "include_help": false
       }
     },
     "msg": {
@@ -272,6 +289,7 @@
     },
     "commands": {
       "harvest": {
+        "epoch": 0,
         "id": "raccogli",
         "showHelp": true,
         "category": ["idle"],
@@ -281,27 +299,31 @@
         "production": "Hai prodotto {0} Joule mentre eri via. Ora hai un totale di {1} Joule."
       },
       "upgrade": {
+        "epoch": 0,
         "id": "aumenta",
         "showHelp": true,
         "category": ["idle"],
         "help": "Aumenta una certa statistica di un certo livello. Esempio: $aumenta produzione 1. Le possibili statistiche aumentabili sono:",
-        "onsuccess": "Hai speso {} Joule per potenziare {} di {} livello/i!",
-        "onfailure": "Non hai abbastanza Joule ({}) per potenziare {} ancora. Te ne servono {}.",
+        "onsuccess": "Hai speso {} {} per potenziare {} di {} livello/i!",
+        "onfailure": "Non hai abbastanza {} ({}) per potenziare {} ancora. Costa {}.",
         "notrecognized": "Non ho capito cosa vuoi potenziare. Prova ad usare uno di questi specificatori: {}.",
         "IDs": {
           "info": "opzioni",
           "production": "produzione",
           "time": "tempo",
-          "attack": "attacco"
+          "attack": "attacco",
+          "consistency": "consistenza"
         },
         "info": "Ecco cosa puoi potenziare:",
         "upgradable": {
           "time": "> {} - Moltiplicatore del Tempo.|x{} >> x{}|Costo: {} Joule",
           "production": "> {} - Rate di produzione.|{} J/min >> {} J/min|Costo: {} Joule.",
-          "attack": "> {} - Danni inflitti ai Titani.|{} >> {}|Costo: {} Joule."
+          "attack": "> {} - Danni inflitti ai Titani.|{} >> {}|Costo: {} Joule.",
+          "consistency": "> {} - Aumenta la produzione di materia|x{} >> x{}|Costo: {} Materia."
         }
       },
       "attack": {
+        "epoch": 0,
         "id": "attacca",
         "showHelp": true,
         "category": ["idle"],
@@ -316,12 +338,14 @@
         "onkill": "Hai inflitto {} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
+        "epoch": 0,
         "id": "aiuto",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà inviare questo messaggio."
       },
       "setnotification": {
+        "epoch": 0,
         "id": "notifiche",
         "showHelp": true,
         "category": ["general"],
@@ -330,12 +354,14 @@
         "notificationsdisabled": "Ok, sto zitto!"
       },
       "gameHelp": {
+        "epoch": 0,
         "id": "gioco?",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà inviare il messaggio d'aiuto per il gioco."
       },
       "help_achieve": {
+        "epoch": 0,
         "id": "premi",
         "showHelp": true,
         "category": ["general"],
@@ -343,6 +369,7 @@
         "intro": "Ecco qui gli achievement che si possono prendere (quelli che hai guadagnato sono in grassetto). Ogni achievement che hai sbloccato aumenta i Joule che raccogli del 3% (moltiplicativo): "
       },
       "help_achieve_short": {
+        "epoch": 0,
         "id": "!premi",
         "showHelp": true,
         "category": ["general"],
@@ -350,12 +377,14 @@
         "intro": "Gli achievement che hai sbloccato sono:"
       },
       "random": {
+        "epoch": 0,
         "id": "fatto",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà inviare un interessantissimo fatto reale al 100%."
       },
       "ascend": {
+        "epoch": 0,
         "id": "ascendi",
         "showHelp": true,
         "category": ["idle"],
@@ -366,6 +395,7 @@
         "help": "Ascendi per ottendere Token. Scarifichi **tutto** il tuo progresso, ma ottieni token in base ai Joule che hai prodotto in totale nella tua carriera."
       },
       "changeLang": {
+        "epoch": 0,
         "id": "lingua",
         "showHelp": true,
         "category": ["general"],
@@ -374,6 +404,7 @@
         "error": "Scusa, {0} non è una lingua disponibile. Posso parlare in {1}."
       },
       "roll": {
+        "epoch": 0,
         "id": "roll",
         "showHelp": true,
         "category": ["general"],
@@ -382,13 +413,15 @@
         "result": "Ho tirato un d{sides:d} e ho fatto... {result}."
       },
       "userInfo": {
+        "epoch": 0,
         "id": "info",
         "showHelp": true,
         "category": ["general"],
         "help": "Mi fà mostrare informazioni rispetto al tuo account.",
         "info": "Ecco cosa so su di te:",
         "joules": "> Hai {} Joule. Hai prodotto un totale di {} Joule in questa ascensione.",
-        "tokens": "> Hai {} Token. Se ascendi ora, otterrai {} (+ {} bonus) Token.",
+        "matterlevel": "> Hai {} materia.",
+        "tokens": "> Hai {} Token, che si traducono in un x{} alla produzione. Se ascendi ora, otterrai {} (+ {} bonus) Token.",
         "lifetime": "> Sei asceso {} volte, e hai sacrificato in totale {} Joule.",
         "productionlevel": "> Hai potenziato la produzione {} volte. Produci {} Joule ogni minuto.",
         "timelevel": "> Hai potenziato il tempo {} volte. Ogni secondo che passa è moltiplicato per x{}.",
@@ -400,6 +433,7 @@
         "noitems": "> Non possiedi oggetti."
       },
       "tierlist": {
+        "epoch": 0,
         "id": "classifica",
         "showHelp": true,
         "category": ["idle"],
@@ -410,6 +444,7 @@
         "rank_you": "Tu sei in {} posizione, con {} Joule totali."
       },
       "titan": {
+        "epoch": 0,
         "id": "titano",
         "showHelp": true,
         "category": ["idle"],
@@ -418,6 +453,7 @@
         "notitan": "Non c'è nessun titano. Prova più tardi."
       },
       "buy": {
+        "epoch": 0,
         "id": "compra",
         "showHelp": true,
         "category": ["idle"],
@@ -426,25 +462,41 @@
         "already_bought": "Hai già {} nell'inventario.",
         "unknown": "Non ho capito quale oggetto vuoi comprare...",
         "no_requirements": "Non hai gli oggetti necessari a comprare questo oggetto.",
-        "not_enough": "Non hai abbastanza Token ({}) per comprare questo oggetto. Costa {}.",
-        "success": "Fatto! Hai comprato {} spendendo {} Token!"
+        "not_enough": "Non hai abbastanza {} ({}) per comprare questo oggetto. Costa {}.",
+        "success": "Fatto! Hai comprato {} spendendo {} {}!"
       },
       "sell": {
+        "epoch": 0,
         "id": "vendi",
         "showHelp": true,
         "category": ["idle"],
         "help": "Usato per vendere oggetti dal tuo inventario in cambio di Token.",
         "unknown": "Non ho capito quale oggetto vuoi vendere...",
         "noitem": "Non hai {} nel tuo inventario.",
-        "success": "Fatto! Hai venduto {} per {} Token!"
+        "unsellable": "Tenti di vendere {}, ma per qualche motivo ricompare nel tuo inventario.",
+        "success": "Fatto! Hai venduto {} per {} {}!"
       },
       "shop": {
+        "epoch": 0,
         "id": "negozio",
         "showHelp": true,
         "category": ["idle"],
         "help": "Mi fà inviare un messaggio privato con quali oggetti ci sono nello shop.",
-        "item_template": "**{}**: {} -- *{} Token*",
-        "intro": "Ecco cosa puoi comprare:"
+        "item_template": "**{}**: {} -- *{} {}*",
+        "intro": "Ecco cosa puoi comprare:",
+        "currency_ids": {
+          "tokens": "Token",
+          "matter": "Materia"
+        }
+      },
+      "condense": {
+        "epoch": 1,
+        "id": "condensa",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Usato per sacrificare tutti i tuoi Joule nel Condensatore di Joule.",
+        "notenough": "Hai provato a condensare i tuoi Joule, ma il condensatore li ha risputati fuori.",
+        "created_matter": "Hai prodotto {} materia sacrificando {} joule!"
       }
     },
     "random_path": "./locFiles/random_EN.txt",
@@ -503,6 +555,18 @@
       "quill_of_math":{
         "name": "Quill of Math",
         "info": "YOu can harvest 2 extra hours of production (from 4 to 6)."
+      },
+      "joule_condenser":{
+        "name": "Joule Condenser",
+        "info": "You found the blueprints for this...thing. You're not sure what it does."
+      },
+      "reality_drop":{
+        "name": "Reality Drop",
+        "info": "Multiplies Joule production by x11.11."
+      },
+      "atom":{
+        "name": "Atom",
+        "info": "[Reality Drop] Your consistency stat is doubled."
       }
     },
     "achievements": {
@@ -710,6 +774,11 @@
         "name": "Joulepocalipse",
         "condition": "You survived the Joulepocalipse.",
         "include_help": false
+      },
+      "condensed1": {
+        "name": "Distilled",
+        "condition": "You condensed matter for the first time.",
+        "include_help": false
       }
     },
     "msg": {
@@ -745,13 +814,15 @@
           "info": "options",
           "production": "production",
           "time": "time",
-          "attack": "attack"
+          "attack": "attack",
+          "consistency": "consistency"
         },
         "info": "Here's what you can upgrade (Es: $upgrade attack):",
         "upgradable": {
           "time": "> {} - Increases maximum harvest time.|{} Hours >> {} Hours|Cost: {} Joules",
           "production": "> {} - Rate of production.|{} J/min >> {} J/min|Cost: {} Joules.",
-          "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {} Joule.s"
+          "attack": "> {} - Multiplier of Titan damage.|x{} >> x{}|Cost: {} Joules",
+          "consistency": "> {} - Increases matter production|x{} >> x{}|Cost: {} Matter."
         }
       },
       "attack": {
@@ -841,7 +912,8 @@
         "help": "Makes me show information about your account.",
         "info": "Here's what I know about you:",
         "joules": "> You have {} Joules. You produced a total of {} Joules during this ascension.",
-        "tokens": "> You have {} Tokens. If you ascend now, you'll obtain {} (+ {} bonus) Tokens.",
+        "matterlevel": "> You have {} matter.",
+        "tokens": "> You have {} Tokens, translated to a x{} production bonus. If you ascend now, you'll obtain {} (+ {} bonus) Tokens.",
         "lifetime": "> You ascended {} times, sacrificing a total of {} Joules.",
         "productionlevel": "> You upgraded Joule production {} times. You produce {} Joules each minute.",
         "timelevel": "> You upgraded max harvest time {} times. You can harvest a maximum of {} hours of production.",
@@ -889,15 +961,29 @@
         "help": "Used to sell items in exchange of tokens.",
         "unknown": "I didn't understand which item you're trying to sell...",
         "noitem": "You don't have {} in your inventory.",
-        "success": "Done! you sold {} for {} Tokens!"
+        "success": "Done! you sold {} for {} Tokens!",
+        "unsellable": "You tried to sell {}, but for some reason it reappeared in your inventory."
       },
       "shop": {
         "id": "shop",
         "showHelp": true,
         "category": ["idle"],
         "help": "Makes me send a private message with the items available to buy.",
-        "item_template": "**{}**: {} -- *{} Tokens*",
-        "intro": "Here's what I have on offer:"
+        "item_template": "**{}**: {} -- *{} {}*",
+        "intro": "Here's what I have on offer:",
+        "currency_ids": {
+          "tokens": "Token",
+          "matter": "Matter"
+        },
+      "condense": {
+        "epoch": 1,
+        "id": "condense",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "Used to sacrifice your joules in the Joule Condenser.",
+        "notenough": "You tried to condense your joules, but the Condenser rejected them.",
+        "created_matter": "You produced {} matter by sacrificing {} joules!"
+      }
       }
     },
     "random_path": "./locFiles/random_EN.txt",

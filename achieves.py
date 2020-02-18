@@ -19,10 +19,11 @@ class Achievement:
             Either "current" or "legacy", affects how the achievement is counted in the help messages.
             Legacy achievements are not included in any way except if unlocked.
     """
-    def __init__(self, trigger, identifier, status="current"):
+    def __init__(self, trigger, identifier, status="current", epoch=0):
         self.trigger = trigger
         self.id = identifier
         self.status = status
+        self.epoch = 0
 
     def award(self, user_id):
         """Award the achievement to the user
@@ -56,9 +57,9 @@ class Achievement:
             return True
 
 
-def add_achievement(trigger, identifier, status="current"):
+def add_achievement(trigger, identifier, status="current", epoch=0):
     """Adds achievement to global achievement list"""
-    G.ACHIEVES.append(Achievement(trigger, identifier, status))
+    G.ACHIEVES.append(Achievement(trigger, identifier, status, epoch))
     return True
 
 
@@ -190,6 +191,12 @@ def make_achievements():
     add_achievement(
         lambda user: True if len(Inventory(user).content) == G.IDLE.max_items else False,
         "full_inventory")
+
+    # Matter ----------------------------------------------------
+    add_achievement(
+        lambda user: True if G.USR[user].times_condensed > 1 else False,
+        "condensed1"
+    )
 
     # Other -----------------------------------------------------
     add_achievement(

@@ -129,9 +129,15 @@ def user_info_logic(message):
     # Information about tokens, token effects, and tokens gained on ascension.
     out.add(strings.tokens.format(
         tools.fn(G.USR[user_id].tokens, decimals=1),
+        tools.fn(1 + (log(1 + G.USR[user_id].tokens, 10))),
         tools.fn(tokens_from_joules(G.USR[user_id].lifetime_joules)),
         tools.fn(bonus_tokens, decimals=1)
     ))
+    # Information about matter level
+    if G.USR[user_id].epoch >= 1 and G.USR[user_id].matter > 0:
+        out.add(strings.matterlevel.format(
+            tools.fn(G.USR[user_id].matter)
+        ))
     # Information about lifetime statistics
     out.add(strings.lifetime.format(
         G.USR[user_id].times_ascended,
@@ -150,7 +156,7 @@ def user_info_logic(message):
     # Information about "attack" stat
     out.add(strings.attacklevel.format(
         stats.attack.stat_level,
-        tools.fn(stats.attack.value(), decimals=0)
+        tools.fn(stats.attack.value())
     ))
     # Information about "commandCount" stat
     out.add(strings.commandCount.format(

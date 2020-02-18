@@ -43,6 +43,7 @@ class Statistic:
         self.user = user_id
         # The name of the stat is normalized as "stat_level"
         self.stat_level = G.USR[user_id][identifier + "_level"]
+        self.currency = G.IDLE.prices[identifier].currency
 
         self.scaling = copy.deepcopy(G.IDLE[identifier])
         self.prices = copy.deepcopy(G.IDLE.prices[identifier])
@@ -180,8 +181,9 @@ def game_help_perm(message):
 def game_help_logic(message):
     out = tools.MsgBuilder()
     out.add(G.LOC.msg.gameHelp)
+    user_id = str(message.author.id)
     for command in G.LOC.commands.values():
-        if command.showHelp is True and "idle" in command.category:
+        if command.showHelp is True and "idle" in command.category and G.USR[user_id].epoch >= command.epoch:
             out.add(
                 "**" + G.OPT.prefix + command.id + "**:\n\t" + command.help
             )
@@ -246,9 +248,12 @@ def produce_joules(user_id, current_time, last_time):
         if inventory.contains("joules_bonsai"):
             bonsai_joules = bonsai_time * G.IDLE["items"].joules_bonsai.base * production.value()\
                                * G.IDLE.harvest.achievebonus ** tools.count_achieves(user_id)
+            joules_produced += bonsai_joules
             output.add(G.LOC["items"].joules_bonsai.activation.format(
                 tools.fn(bonsai_joules)
             ))
+
+        joules_produced *= 1 + G.USR[user_id].times_ascended
 
         tools.update_user(user_id=user_id, stat="joules", increase=joules_produced)
         tools.update_user(user_id=user_id, stat="lifetime_joules", increase=joules_produced)
@@ -260,20 +265,40 @@ def produce_joules(user_id, current_time, last_time):
         return output.parse()
 
 
-def produce_matter(user_id):
-    """Produce matter from joules"""
-    matter_constant = 6.6e+08
-    out = tools.MsgBuilder
+# Condense ----------------------------------------------------------------------------
 
-    matter_produced = G.USR[user_id].joules // matter_constant
-    leftover_joules = G.USR[user_id].joules % matter_constant
+def condense_perm(message):
+    user_id = str(message.author.id)
+    if message.content.startswith(G.OPT.prefix + G.LOC.commands.condense.id) and \
+            G.USR[user_id].epoch >= 1:
+        return True
+    return False
+
+
+def condense_logic(message):
+    """Produce matter from joules"""
+    user_id = str(message.author.id)
+    matter_constant = mpf('6.6e+12')
+    current_joules = G.USR[user_id].joules
+    consistency = Statistic("consistency", user_id)
+    out = tools.MsgBuilder()
+
+    if G.USR[user_id].joules < matter_constant:
+        out.add(G.LOC.commands.condense.notenough)
+        return out.parse()
+
+    matter_produced = power(10, log(current_joules, 10) / 12) * consistency.value()
 
     tools.update_user(user_id, "matter", increase=matter_produced)
-    tools.update_user(user_id, "joules", set=leftover_joules)
+    tools.update_user(user_id, "lifetime_matter", increase=matter_produced)
+    tools.update_user(user_id, "times_condensed", increase=1)
+    tools.update_user(user_id, "joules", set=0)
 
-    out.add(G.LOC.commands.harvest.created_matter.format(
-        tools.format_matter(user_id)
+    out.add(G.LOC.commands.condense.created_matter.format(
+        tools.fn(G.USR[user_id].matter),
+        tools.fn(current_joules)
     ))
+    return out.parse()
 
 
 # Upgrade stat -------------------------------------------------------------
@@ -302,6 +327,7 @@ def upgrade_logic(message):
     stats = make_all_stats(user_id)
     stat_names = [stat.name for stat in stats.values()]
     current_joules = G.USR[user_id].joules
+    current_matter = G.USR[user_id].matter
 
     if message.args[0] == G.LOC.commands.upgrade.IDs.info:
         # Send information message
@@ -333,6 +359,16 @@ def upgrade_logic(message):
         ).split("|"))
         if stats.attack.upgrade_price <= current_joules:
             out.append(" < OK!")
+        if G.USR[user_id].epoch >= 1:
+            # >> Upgrade consistency help
+            out.add(G.LOC.commands.upgrade.upgradable.consistency.format(
+                G.LOC.commands.upgrade.IDs.consistency,
+                tools.fn(stats.consistency.value()),
+                tools.fn(stats.consistency.value(1)),
+                tools.fn(stats.consistency.upgrade_price)
+            ).split("|"))
+            if stats.consistency.upgrade_price <= current_matter:
+                out.append(" < OK!")
 
         return out.pretty_parse()
 
@@ -356,11 +392,11 @@ def upgrade_logic(message):
         stat = [x for x in stats.values() if x.name == message.args[0]][0]
         price = stat.upgrade_price
         while i < times:
-            if G.USR[user_id].joules >= price:
+            if G.USR[user_id][stat.currency] >= price:
                 upgraded_once = True
                 # Enough joules to update
                 stat.upgrade()
-                tools.update_user(user_id=user_id, stat="joules", increase=-stat.upgrade_price)
+                tools.update_user(user_id=user_id, stat=stat.currency, increase=-stat.upgrade_price)
                 total_spent += price
                 price = stat.recalculate_price(increase_level=(i + 1))
             else:
@@ -372,12 +408,14 @@ def upgrade_logic(message):
         if upgraded_once:
             out.add(G.LOC.commands.upgrade.onsuccess.format(
                 tools.fn(total_spent),
+                stat.currency,
                 stat.name,
                 i
             ))
         if stopped_early:
             out.add(G.LOC.commands.upgrade.onfailure.format(
-                tools.fn(G.USR[user_id].joules),
+                stat.currency,
+                tools.fn(G.USR[user_id][stat.currency]),
                 stat.name,
                 tools.fn(price)
             ))
@@ -700,3 +738,4 @@ def make_commands():
     tools.add_command(logic=ascend_logic, permission=ascend_perm)
     tools.add_command(logic=titan_logic, permission=titan_perm)
     tools.add_command(logic=tier_list_logic, permission=tier_list_perm)
+    tools.add_command(logic=condense_logic, permission=condense_perm, epoch=1)

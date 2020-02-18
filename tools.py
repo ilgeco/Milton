@@ -150,9 +150,9 @@ def linear_multiplier(base, multiplier, level, level_multiplier, level_threshold
     return base_value * (level_multiplier ** multiplier_times)
 
 
-def add_command(logic, permission, where="channel"):
+def add_command(logic, permission, where="channel", epoch=0):
     """Adds command to global command list"""
-    G.COMMANDS.append(Command(logic, permission, where))
+    G.COMMANDS.append(Command(logic, permission, where, epoch))
 
 
 def break_message(message, length=2000):
@@ -299,7 +299,7 @@ class MsgParser:
 
 
 class Command:
-    def __init__(self, logic, permission=True, where="channel"):
+    def __init__(self, logic, permission=True, where="channel", epoch=0):
         """Class to package all command logic and permissions inside.
 
         Args:
@@ -317,3 +317,4 @@ class Command:
         self.logic = logic
         self.permission = permission
         self.where = where
+        self.epoch = epoch

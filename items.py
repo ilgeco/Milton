@@ -1,5 +1,6 @@
 import globals as G
 import tools
+from mpmath import *
 import munch
 
 
@@ -9,9 +10,22 @@ class Item:
     It just unpacks the dictionary as an object.
     """
     def __init__(self, key):
-        self.__dict__ = G.IDLE["items"][key]
+        self.unsellable = G.IDLE["items"][key].unsellable
+        self.epoch = G.IDLE["items"][key].epoch
+        self.builds_from = G.IDLE["items"][key].builds_from
+        self.affected_stats = G.IDLE["items"][key].affected_stats
+        self.effect_level = G.IDLE["items"][key].effect_level
+        self.effect_function = G.IDLE["items"][key].effect_function
+
+        self.base = G.IDLE["items"][key].base
+        self.cost = mpf(G.IDLE["items"][key].cost)
+        self.resell = mpf(G.IDLE["items"][key].resell)
+        self.priority = G.IDLE["items"][key].priority
+
         self.id = key
         self.name = G.LOC["items"][key].name
+        self.currency = ["tokens", "matter"][self.epoch]
+        self.currency_name = G.LOC.commands.shop.currency_ids[self.currency]
 
 
 class Inventory:
@@ -90,7 +104,7 @@ def buy_item_logic(message):
 
     for key, item in G.LOC["items"].items():
         # Search for the item in the localization file.
-        if arg == item.name.lower():
+        if arg == item.name.lower() and G.IDLE["items"][key].epoch <= G.USR[user_id].epoch:
             identifier = key
             new_item = Item(identifier)
             break
@@ -114,22 +128,28 @@ def buy_item_logic(message):
     else:
         required_items = set()
 
-    if len(inventory.content) >= (G.IDLE.max_items + len(required_items)):
+    unsellables = [x for x in inventory.content if x.unsellable is True]
+    if len(inventory.content) >= (G.IDLE.max_items + len(required_items) + len(unsellables)):
         # Cannot buy an item if inventory is full
         out.add(G.LOC.commands.buy.nospace.format(G.IDLE.max_items))
         return out.parse()
 
-    if G.USR[user_id].tokens <= new_item.cost:
+    if G.USR[user_id][new_item.currency] <= new_item.cost:
         # Cannot buy if we don't have enough tokens
         out.add(G.LOC.commands.buy.not_enough.format(
-            tools.fn(G.USR[user_id].tokens),
+            new_item.currency_name,
+            tools.fn(G.USR[user_id][item.currency]),
             tools.fn(new_item.cost)
         ))
         return out.parse()
 
     # If we get here, all requirements to buy the item are fulfilled
-    tools.update_user(user_id=user_id, stat="tokens", increase=-new_item.cost)
+    tools.update_user(user_id=user_id, stat=new_item.currency, increase=-new_item.cost)
     inventory.add_item(new_item.id)
+
+    # Update epoch if key items are bought
+    if inventory.contains("joule_condenser"):
+        tools.update_user(user_id, stat="epoch", set=1)
 
     if G.IDLE["items"][identifier].builds_from is not None:
         # Remove required items
@@ -141,7 +161,8 @@ def buy_item_logic(message):
 
     out.add(G.LOC.commands.buy.success.format(
         new_item.name,
-        tools.fn(new_item.cost)
+        tools.fn(new_item.cost),
+        new_item.currency_name
     ))
     return out.parse()
 
@@ -175,12 +196,20 @@ def sell_item_logic(message):
         out.add(G.LOC.commands.sell.noitem.format(new_item.name))
         return out.parse()
 
+    if new_item.unsellable:
+        out.add(G.LOC.commands.sell.unsellable.format(new_item.name))
+        return out.parse()
+
     # Remove the item
     inventory.remove_item(identifier)
     # Refund tokens
-    tools.update_user(user_id, "tokens", increase=new_item.resell)
+    tools.update_user(user_id, new_item.currency, increase=new_item.resell)
 
-    out.add(G.LOC.commands.sell.success.format(new_item.name, tools.fn(new_item.resell)))
+    out.add(G.LOC.commands.sell.success.format(
+        new_item.name,
+        tools.fn(new_item.resell),
+        new_item.currency_name
+    ))
     return out.parse()
 
 
@@ -198,13 +227,17 @@ def show_shop_logic(message):
     """
     out = tools.MsgBuilder()
     out.add(G.LOC.commands.shop.intro)
+    user_id = str(message.author.id)
 
     for identifier, item in G.LOC["items"].items():
-        out.add(G.LOC.commands.shop.item_template.format(
-            item.name,
-            item.info,
-            G.IDLE["items"][identifier].cost
-        ))
+        item_object = Item(identifier)
+        if G.USR[user_id].epoch >= G.IDLE["items"][identifier].epoch:
+            out.add(G.LOC.commands.shop.item_template.format(
+                item.name,
+                item.info,
+                G.IDLE["items"][identifier].cost,
+                item_object.currency_name
+            ))
     return out.parse()
 
 

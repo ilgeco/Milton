@@ -8,13 +8,13 @@
   },
   "production": {
     "base": 0.05,
-    "mult": 1.25,
+    "mult": 1.20,
     "function": "exponential",
     "max_hours": 4
   },
   "titan":{
     "base_hp": 1000,
-    "level_exp": 2,
+    "level_exp": 3,
     "armor_constant": 0.007,
     "reward_constant": 1.01,
     "reward_damage_exponent": 0.20,
@@ -34,30 +34,45 @@
     "level_mult": 2,
     "function": "linear_mult"
   },
+  "consistency": {
+    "base": 1,
+    "mult": 5,
+    "function": "exponential"
+  },
   "harvest": {
     "gift": 100,
     "achievebonus": 1.03
   },
   "prices": {
     "production": {
+      "currency": "joules",
       "base": 100,
-      "mult": 2,
+      "mult": 3,
       "function": "exponential"
     },
     "time":{
+      "currency": "joules",
       "base": 10,
       "mult": 10,
       "function": "exponential"
     },
     "attack":{
+      "currency": "joules",
       "base": 1000,
       "mult": 1.5,
+      "function": "exponential"
+    },
+    "consistency":{
+      "currency": "matter",
+      "base": 1,
+      "mult": 25,
       "function": "exponential"
     }
   },
   "max_items": 6,
   "items": {
     "bead_of_growth":{
+      "epoch": 0,
       "builds_from": null,
       "affected_stats": ["production"],
       "effect_level": "value",
@@ -65,19 +80,23 @@
       "base": 0.333,
       "cost": 10,
       "resell": 5,
-      "priority": 20
+      "priority": 20,
+      "unsellable": false
     },
     "bead_of_power":{
       "builds_from": null,
+      "epoch": 0,
       "affected_stats": ["attack"],
       "effect_level": "value",
       "effect_function": "additive",
       "base": 1000,
       "cost": 10,
       "resell": 5,
-      "priority": 20
+      "priority": 20,
+      "unsellable": false
     },
     "buddha_necklace":{
+      "epoch": 0,
       "builds_from": ["bead_of_growth", "bead_of_power"],
       "affected_stats": ["attack", "production"],
       "effect_level": "value",
@@ -85,9 +104,11 @@
       "base": 2,
       "cost": 50,
       "resell": 10,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "hedmad_stone":{
+      "epoch": 0,
       "builds_from": ["bead_of_growth"],
       "affected_stats": ["production"],
       "effect_level": "scaling.mult",
@@ -95,9 +116,11 @@
       "base": 1.199,
       "cost": 99,
       "resell": 45,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "frugality_leaf":{
+      "epoch": 0,
       "builds_from": null,
       "affected_stats": ["production", "attack"],
       "effect_level": "price",
@@ -105,9 +128,11 @@
       "base": 0.75,
       "cost": 20,
       "resell": 5,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "beggar_horn":{
+      "epoch": 0,
       "builds_from": ["frugality_leaf"],
       "affected_stats": ["production", "attack"],
       "effect_level": "prices.mult",
@@ -115,19 +140,23 @@
       "base": 0.9,
       "cost": 30,
       "resell": 5,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "hand_of_midas":{
+      "epoch": 0,
       "builds_from": ["bead_of_power"],
       "affected_stats": ["special"],
       "effect_level": "special",
       "effect_function": "special",
-      "base": 1.5,
+      "base": 1.2,
       "cost": 35,
       "resell": 15,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "sword_of_storms":{
+      "epoch": 0,
       "builds_from": ["bead_of_power"],
       "affected_stats": ["special"],
       "effect_level": "special",
@@ -135,9 +164,11 @@
       "base": 1,
       "cost": 100,
       "resell": 20,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "joules_bonsai":{
+      "epoch": 0,
       "builds_from": null,
       "affected_stats": ["special"],
       "effect_level": "special",
@@ -145,9 +176,11 @@
       "base": 0.05,
       "cost": 15,
       "resell": 5,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "inverse_hourglass":{
+      "epoch": 0,
       "builds_from": ["stopwatch", "frugality_leaf"],
       "affected_stats": ["time"],
       "effect_level": "prices.mult",
@@ -155,9 +188,11 @@
       "base": -1,
       "cost": 150,
       "resell": 100,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "stopwatch":{
+      "epoch": 0,
       "builds_from": null,
       "affected_stats": ["time"],
       "effect_level": "value",
@@ -165,9 +200,11 @@
       "base": 0.3,
       "cost": 25,
       "resell": 15,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
     },
     "quill_of_math":{
+      "epoch": 0,
       "builds_from": null,
       "affected_stats": ["special"],
       "effect_level": "special",
@@ -175,7 +212,44 @@
       "base": 1,
       "cost": 5,
       "resell": 1,
-      "priority": 10
+      "priority": 10,
+      "unsellable": false
+    },
+    "joule_condenser":{
+      "epoch": 0,
+      "builds_from": null,
+      "affected_stats": ["special"],
+      "effect_level": "special",
+      "effect_function": "special",
+      "base": 0,
+      "cost": 1e5,
+      "resell": 0,
+      "priority": 5,
+      "unsellable": true
+    },
+    "reality_drop":{
+      "epoch": 1,
+      "builds_from": null,
+      "affected_stats": ["production"],
+      "effect_level": "value",
+      "effect_function": "multiplicative",
+      "base": 111.11,
+      "cost": 1,
+      "resell": 0.5,
+      "priority": 10,
+      "unsellable": false
+    },
+    "atom":{
+      "epoch": 1,
+      "builds_from": ["reality_drop"],
+      "affected_stats": ["consistency"],
+      "effect_level": "scaling.mult",
+      "effect_function": "multiplicative",
+      "base": 1.5,
+      "cost": 100,
+      "resell": 5,
+      "priority": 10,
+      "unsellable": false
     }
   }
 }

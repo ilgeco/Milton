@@ -136,6 +136,8 @@ def main(token: str, language: str, options_path: str):
         for achieve in G.ACHIEVES:
             if achieve.status == "legacy":
                 continue
+            if G.USR[str(message.author.id)].epoch < achieve.epoch:
+                continue
             if achieve.check_trigger(str(message.author.id)) is True:
                 out = tools.MsgBuilder()
                 if achieve_intro:
