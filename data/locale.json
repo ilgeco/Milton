@@ -1,5 +1,8 @@
 {
   "it": {
+    "games": {
+      "pacinco_win": "{} hai vinto {} e ora hai {}"
+    },
     "items": {
       "bead_of_growth":{
         "name": "Perla della Crescita",
@@ -263,9 +266,15 @@
       "noachieves": "Non hai nessun achievement da mostrare...",
       "help": "Questo è il messaggio d'aiuto. I miei comandi sono:",
       "gameHelp": "> **Energy Idle - Aiuto** \n Produci Joule e dai energia al multiverso. I comandi relativi al gioco sono:",
-      "generated_titan": "E' arrivato un titano!\n> **[Livello {:.0f}]** - {} HP | {:.2f}% Armatura."
+      "generated_titan": "E' arrivato un titano!\n> **[Livello {}]** - {} HP | {:.2f}% Armatura."
     },
     "commands": {
+      "pacinco": {
+        "id": "pacinco",
+        "showHelp": true,
+        "category": ["idle"],
+        "help": "scommetti x soldini."
+      },
       "harvest": {
         "id": "raccogli",
         "showHelp": true,
@@ -308,7 +317,7 @@
         "notitan": "Non c'è nessun titano da attaccare. Prova più tardi.",
         "newrecord": "Nuovo record personale di danni!",
         "toosoon": "E' troppo presto per attaccare di nuovo. Devi ancora aspettare {:.2f} ore.",
-        "onkill": "Hai inflitto {} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {:.0f} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
+        "onkill": "Hai inflitto {} danni al titano, e lo hai ucciso! Tutti gli attaccanti hanno ricevuto {} Token come premio. Il prossimo titano arriverà allo scoccare dell'ora."
       },
       "help": {
         "id": "aiuto",
@@ -354,9 +363,9 @@
         "id": "ascendi",
         "showHelp": true,
         "category": ["idle"],
-        "confirm": "Sei sicuro? Riceverai {:.0f} token. Invia il comando di nuovo entro 30 secondi per ascendere.",
-        "confirm_bonus": "Sei sicuro? Riceverai {:.0f} (+ {:.0f} BONUS!) token. Invia il comando di nuovo entro 30 secondi per ascendere.",
-        "success": "Wooosh! Tutto il tuo progresso ({} joule) è stato sacrificato, e hai ottenuto {:.0f} Token.",
+        "confirm": "Sei sicuro? Riceverai {} token. Invia il comando di nuovo entro 30 secondi per ascendere.",
+        "confirm_bonus": "Sei sicuro? Riceverai {} (+ {} BONUS!) token. Invia il comando di nuovo entro 30 secondi per ascendere.",
+        "success": "Wooosh! Tutto il tuo progresso ({} joule) è stato sacrificato, e hai ottenuto {} Token.",
         "notenough": "Non hai ancora abbastanza Joule per ascendere. Te ne servono {}. Ne dovrai ancora produrre {}.",
         "help": "Ascendi per ottendere Token. Scarifichi **tutto** il tuo progresso, ma ottieni token in base ai Joule che hai prodotto in totale nella tua carriera."
       },
@@ -711,7 +720,7 @@
       "noachieves": "You don't have any achievements to show...",
       "help": "This is the help message. My commands are:",
       "gameHelp": "> **Energy Idle - Help** \n Produce Joule and give energy to the multiverse:",
-      "generated_titan": "A titan has come!\n> **[Level {:.0f}]** - {} HP | {:.2f}% Armor."
+      "generated_titan": "A titan has come!\n> **[Level {}]** - {} HP | {:.2f}% Armor."
     },
     "commands": {
       "harvest": {
@@ -756,7 +765,7 @@
         "notitan": "There are no titans to attack. Try again later.",
         "newrecord": "New personal damage record!",
         "toosoon": "It's too soon to attack again. You still have to wait {:.2f} hours.",
-        "onkill": "You dealt {} damage to the Titan, and killed it! All attackers received {:.0f} Tokens as a reward. The next titan will come soon."
+        "onkill": "You dealt {} damage to the Titan, and killed it! All attackers received {} Tokens as a reward. The next titan will come soon."
       },
       "help": {
         "id": "help",
@@ -802,9 +811,9 @@
         "id": "ascend",
         "showHelp": true,
         "category": ["idle"],
-        "confirm": "Are you sure? You'll gain {:.0f} tokens. Send the command again to ascend.",
-        "confirm_bonus": "Are you sure? You'll gain {:.0f} (+ {:.0f} BONUS) tokens. Send the command again to ascend.",
-        "success": "Wooosh! All you progress ({} joules) has been sacrificed, but you gained {:.0f} Tokens.",
+        "confirm": "Are you sure? You'll gain {} tokens. Send the command again to ascend.",
+        "confirm_bonus": "Are you sure? You'll gain {} (+ {} BONUS) tokens. Send the command again to ascend.",
+        "success": "Wooosh! All you progress ({} joules) has been sacrificed, but you gained {} Tokens.",
         "notenough": "You don't have enough lifetime joules to ascend. You need {}. You still have to produce {}.",
         "help": "Ascend to obtain Tokens. Tokens increase almost everything you can do. You will sacrifice **everything** you own, however."
       },
@@ -831,11 +840,11 @@
         "help": "Makes me show information about your account.",
         "info": "Here's what I know about you:",
         "joules": "> You have {} Joules. You produced a total of {} Joules during this ascension.",
-        "tokens": "> You have {:.0f} Tokens. If you ascend now, you'll obtain {:.0f} (+ {:.0f} bonus) Tokens.",
-        "lifetime": "> You ascended {:.0f} times, sacrificing a total of {} Joules.",
-        "productionlevel": "> You upgraded Joule production {:.0f} times. You produce {} Joules each minute.",
-        "timelevel": "> You upgraded max harvest time {:.0f} times. You can harvest a maximum of {:.2f} hours of production.",
-        "attacklevel": "> You upgraded titan attack {:.0f} times. You deal {} damage to Titans.",
+        "tokens": "> You have {} Tokens. If you ascend now, you'll obtain {} (+ {} bonus) Tokens.",
+        "lifetime": "> You ascended {} times, sacrificing a total of {} Joules.",
+        "productionlevel": "> You upgraded Joule production {} times. You produce {} Joules each minute.",
+        "timelevel": "> You upgraded max harvest time {} times. You can harvest a maximum of {:.2f} hours of production.",
+        "attacklevel": "> You upgraded titan attack {} times. You deal {} damage to Titans.",
         "titandamage": "> You dealt a total of {} damage to Titans. Your most powerful attack dealt {} damage.",
         "items": "> You have these items in your inventory: {}.",
         "noitems": "> You don't have any items.",

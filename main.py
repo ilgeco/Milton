@@ -10,6 +10,7 @@ import globals as G
 import munch as mun
 import logging
 import items
+import inspect
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
@@ -35,6 +36,10 @@ def main(token: str, language: str, options_path: str):
     Returns:
         None
     """
+    
+
+
+
     print("This is Milton, and I'm initializing.")
     client = ds.Client()
     # Initialize global variables and commands
@@ -82,6 +87,8 @@ def main(token: str, language: str, options_path: str):
         # Don't reply to yourself
         if message.author == client.user:
             return
+ #       if  str(message.author.name) != "ilgeco":
+  #          return    
 
         # Update locale for current guild
         G.update_loc(G.GLD[str(message.guild.id)].language)
@@ -113,14 +120,21 @@ def main(token: str, language: str, options_path: str):
         for command in G.COMMANDS:
             if command.permission(message) is True:
                 if command.where == "channel":
-                    for string in command.logic(message):
-                        await message.channel.send(string)
+                    if inspect.iscoroutinefunction(command.logic):
+                        S = await command.logic(message)
+                        continue
+                    S = command.logic(message)
+                    for string in S:
+                     await message.channel.send(string)
                 elif command.where == "user":
                     if message.author.dm_channel is None:
                         await message.author.create_dm()
                     for string in command.logic(message):
                         await message.author.dm_channel.send(string)
                     await message.delete()
+
+        
+
 
         # Achievements that contain strings:
         if message.content.startswith(G.OPT.prefix + "^^vv><><ba"):
@@ -206,17 +220,11 @@ def main(token: str, language: str, options_path: str):
 
 if __name__ == "__main__":
     import argparse
-
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("token", help="Bot token", type=str)
     parser.add_argument("--optionsPath", "-o", help="Path to config file",
                         type=str, nargs="?", default="./options.json")
     parser.add_argument("--language", "-a", help="Language",
                         type=str, nargs="?", default="it")
-
     args = parser.parse_args()
-
-    main(args.token,
-         args.language,
-         options_path=args.optionsPath)
+    token = "s"
+    main( token, args.language,  options_path=args.optionsPath)
