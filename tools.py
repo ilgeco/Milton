@@ -197,12 +197,8 @@ def fn(number: float,
             Number to format
         threshold: int
             Threshold under which not to format. Defaults at 100_000
-        base: int
-            Base to divide with when giving exponents. Must be a multiple of 10.
-            Defaults at 1_000
         decimals: int
             Number of decimal places to give to the number before formatting.
-            Uses round() to remove decimal places. Defaults at 0
 
     Returns:
         String with formatted number.

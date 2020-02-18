@@ -17,14 +17,14 @@
     "level_exp": 2,
     "armor_constant": 0.007,
     "reward_constant": 1.01,
-    "reward_damage_exponent": 0.5,
-    "min_hours": 4
+    "reward_damage_exponent": 0.20,
+    "min_hours": 5
   },
   "time": {
     "base": 1.0,
     "mult": 0.1,
     "level_threshold": 5,
-    "level_mult": 1.5,
+    "level_mult": 1.1,
     "function": "linear_mult"
   },
   "attack": {
@@ -92,24 +92,24 @@
       "affected_stats": ["production"],
       "effect_level": "scaling.mult",
       "effect_function": "multiplicative",
-      "base": 1.20,
+      "base": 1.199,
       "cost": 99,
       "resell": 45,
       "priority": 10
     },
     "frugality_leaf":{
       "builds_from": null,
-      "affected_stats": ["production", "attack", "time"],
+      "affected_stats": ["production", "attack"],
       "effect_level": "price",
       "effect_function": "multiplicative",
-      "base": 0.5,
+      "base": 0.75,
       "cost": 20,
       "resell": 5,
       "priority": 10
     },
     "beggar_horn":{
       "builds_from": ["frugality_leaf"],
-      "affected_stats": ["production", "attack", "time"],
+      "affected_stats": ["production", "attack"],
       "effect_level": "prices.mult",
       "effect_function": "multiplicative",
       "base": 0.9,
@@ -150,7 +150,7 @@
     "inverse_hourglass":{
       "builds_from": ["stopwatch", "frugality_leaf"],
       "affected_stats": ["time"],
-      "effect_level": "scaling.mult",
+      "effect_level": "prices.mult",
       "effect_function": "additive",
       "base": -1,
       "cost": 150,
@@ -164,7 +164,7 @@
       "effect_function": "additive",
       "base": 0.3,
       "cost": 25,
-      "resell": 100,
+      "resell": 15,
       "priority": 10
     },
     "quill_of_math":{

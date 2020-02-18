@@ -3,27 +3,27 @@
     "items": {
       "bead_of_growth":{
         "name": "Perla della Crescita",
-        "info": "Produci 20 joule in più al minuto."
+        "info": "Produci 20 joule in più al minuto. Si applica prima di altri oggetti."
       },
       "bead_of_power":{
         "name": "Perla della Potenza",
-        "info": "Infliggi 1000 danni in più ad ogni attacco."
+        "info": "Infliggi 1000 danni in più ad ogni attacco. Si applica prima di altri oggetti."
       },
       "buddha_necklace":{
         "name": "Collana di Budda",
-        "info": "[perla della crescita + perla della potenza] Sia l'attacco che la produzione sono raddoppiati."
+        "info": "[Perla della Crescita + Perla della Potenza] Sia l'attacco che la produzione sono raddoppiati."
       },
       "hedmad_stone":{
         "name": "Pietra di Hedmad",
-        "info": "[Perla della Crescita] L'effetto di aumentare le statistiche è potenziato del 50%."
+        "info": "[Perla della Crescita] L'effetto di aumentare la produzione è potenziato del 19.9%."
       },
       "frugality_leaf":{
         "name": "Foglia della Frugalità",
-        "info": "I prezzi per potenziare le statistiche sono dimezzati."
+        "info": "I prezzi per potenziare l'attacco e la produzione sono dimezzati."
       },
       "beggar_horn":{
         "name": "Corno del Mendicante",
-        "info": "[Foglia della Frugalità] La crescita dei prezzi di tutte le statistiche è ridotta del 10%."
+        "info": "[Foglia della Frugalità] La crescita dei prezzi dell'attacco e della produzione è ridotta del 10%."
       },
       "hand_of_midas":{
         "name": "Mano di Mida",
@@ -32,16 +32,16 @@
       },
       "sword_of_storms":{
         "name": "Spada della Tempesta",
-        "info": "[Perla della Potenza] PPuoi attaccare due volte più velocemente."
+        "info": "[Perla della Potenza] Il limite minimo di ore da aspettare per attaccare scende da 4 a 2."
       },
       "joules_bonsai":{
         "name": "Bonsai dei Joule",
-        "info": "Produce un ventesimo della tua produzione di Joule, ma non è limitata dalla tua statistica di tempo.",
+        "info": "Produce un ventesimo della tua produzione di Joule, ma non è limitata dalle ore di produzione massima.",
         "activation": "Il tuo bonsai ha prodotto {} Joules."
       },
       "inverse_hourglass":{
         "name": "Clessidra Inversa",
-        "info": "[Foglia della Frugalità + Cronometro Incantato] La crescita del costo della statistica del tempo scenda da x10 a x9."
+        "info": "[Foglia della Frugalità + Cronometro Incantato] La crescita del costo della statistica del tempo scende da x10 a x9."
       },
       "stopwatch":{
         "name": "Cronometro Incantato",
