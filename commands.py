@@ -6,6 +6,7 @@ from items import Inventory
 import random
 import asyncio
 import games
+from threading import Lock
 
 
 # I divided permissions and command logic due to the necessity of using
@@ -192,35 +193,42 @@ def pacinco_perm(message):
         return True
     return False
 
+lock=Lock()
 async def pacinco_logic(message):
-    out = tools.MsgBuilder()
-    user_id = str(message.author.id)    
-    arg = tools.MsgParser(message.content)
-    value = mpf(arg.args[0])
-    jl = G.USR[user_id]["joules"]
-    if value<0 or value>jl:
-        out.add("Negativo!")
-        await message.channel.send(out.parse()[0])
+    if not lock.acquire(False):
         return
-        
-    
-    pac = games.Pacinco()
-    toout, victory = pac.play()
-    m=list()
-    for i in toout:
-        if len(m) >=3:
-            await m.pop(0).delete()
+    else:
+        try:      
+            out = tools.MsgBuilder()
+            user_id = str(message.author.id)    
+            arg = tools.MsgParser(message.content)
+            value = mpf(arg.args[0])
+            jl = G.USR[user_id]["joules"]
+            if value<0 or value>jl:
+                out.add("Negativo!")
+                await message.channel.send(out.parse()[0])
+                return       
             
-        now = await message.channel.send(i)
-        await asyncio.sleep(0.5)
-        m.append(now)
-    for i in m[:-1]:
-        await i.delete()
-    m.clear() 
-    gain = victory*value-value
-    tools.update_user(user_id=user_id, stat="joules", set=jl+gain)
-    out.add(G.LOC.games.pacinco_win.format(G.USR[user_id].name, nstr(gain,5), nstr(jl+gain,5)))    
-    await message.channel.send(out.parse()[0])
+            pac = games.Pacinco()
+            toout, victory = pac.play()
+            m=list()
+            for i in toout:
+                if len(m) >=3:
+                    await m.pop(0).delete()
+                    
+                now = await message.channel.send(i)
+                await asyncio.sleep(0.5)
+                m.append(now)
+            for i in m[:-1]:
+                await i.delete()
+            m.clear() 
+            gain = victory*value-value
+            tools.update_user(user_id=user_id, stat="joules", set=jl+gain)
+            out.add(G.LOC.games.pacinco_win.format(G.USR[user_id].name, nstr(gain,5), nstr(jl+gain,5)))    
+            await message.channel.send(out.parse()[0])
+        finally:
+         lock.release()
+    
 
 
 
