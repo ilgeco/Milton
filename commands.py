@@ -211,17 +211,10 @@ async def pacinco_logic(message):
             
             pac = games.Pacinco()
             toout, victory = pac.play()
-            m=list()
-            for i in toout:
-                if len(m) >=3:
-                    await m.pop(0).delete()
-                    
-                now = await message.channel.send(i)
-                await asyncio.sleep(0.5)
-                m.append(now)
-            for i in m[:-1]:
-                await i.delete()
-            m.clear() 
+            sent = await message.channel.send(toout[0])
+            for i in toout[1:]:                    
+                await sent.edit(content=i)
+                await asyncio.sleep(0.5)                
             gain = victory*value-value
             tools.update_user(user_id=user_id, stat="joules", set=jl+gain)
             out.add(G.LOC.games.pacinco_win.format(G.USR[user_id].name, nstr(gain,5), nstr(jl+gain,5)))    
