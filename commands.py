@@ -216,8 +216,12 @@ async def pacinco_logic(message):
                 await sent.edit(content=i)
                 await asyncio.sleep(0.5)                
             gain = victory*value-value
-            tools.update_user(user_id=user_id, stat="joules", set=jl+gain)
-            out.add(G.LOC.games.pacinco_win.format(G.USR[user_id].name, nstr(gain,5), nstr(jl+gain,5)))    
+            if value > jl:
+                out.add("Negativo!")
+                await message.channel.send(out.parse()[0])
+                return  
+            tools.update_user(user_id=user_id, stat="joules", set=G.USR[user_id]["joules"]+gain)
+            out.add(G.LOC.games.pacinco_win.format(G.USR[user_id].name, nstr(gain,5), nstr(G.USR[user_id]["joules"]+gain,5)))    
             await message.channel.send(out.parse()[0])
         finally:
          lock.release()
